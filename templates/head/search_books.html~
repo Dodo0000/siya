@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block js %}
+
+
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+  <form class="form" method="get">
+    <div class="input-group">
+      <div class="input-group-btn">
+	<select class="btn" data-toggle="dropdown" aria-expanded="false" role="button" aria-haspopup="true" name="type">
+	  {% for each in types %}
+	  {% if each == type %}
+	  <option selected>{{each}}</option>
+	  {% else %}
+	  <option>{{each}}</option>
+	  {% endif %}
+	  {% endfor %}
+        </select>
+      </div>
+      <input type="text" name="search" class="form-control panel-success" value="{{ value|default:"" }}" aria-label="" required autofocus>
+      <div class="input-group-btn">
+	<input type="submit" value="Find" class="btn btn-success"></input>
+      </div>
+    </div><!-- /input-group -->
+  </form>
+</div>
+
+<hr>
+<div class="container-fluid">
+  {% if books %}
+  <br>
+  <div class="alert alert-info"<h2> Search results for <span class="label label-primary">{{ type|lower }}</span> containing <span class="label label-md label-primary">{{ value }}</span> found <span class="badge"> {{ books|length }}</span> results </h2></div>
+       <table class="table table-bordered table-hover">
+	 <thead>
+	   <tr>
+	     <th>Title</th>
+	     <th>Author(s)</th>
+	     <th>Keywords</th>
+	     <th>Publisher</th>
+	     <th>Call No.</th>
+	   </tr>
+	 </thead>
+	 {% for book in books %}
+	 <tr>
+	   <td><a href="{% url 'book' book.accession_number %}">{{book.title}}</a></td>
+	   <td>{{book.get_authors}}</td>
+	   <td>{{book.get_keywords}}</td>
+	   <td>{{book.get_publishers}}</td>
+	   <td>{{book.call_number}}</td>
+	 </tr>
+	 {% endfor %}
+       </table>
+       {% endif %}
+       {% if not_found == True %}
+       <h4><div class="alert alert-warning">
+	 The book with <span class="label label-warning">{{ value }}</span> as <span class="label label-warning">{{type}}</span> was not found.
+       </div></h4>
+       {% endif %}
+</div>
+
+{% endblock %}

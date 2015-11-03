@@ -1,2 +1,8 @@
-# alms
-ALMS - ALMS Library Management System is a complete django based library management system
+# YALMS - Yet Another Library Management System
+
+A complete Library Management System
+
+## In progress
+### will add docs when complete
+
+This is a test change

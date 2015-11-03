@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container-fluid">
+  {% if book.is_borrowed == True %}
+  <div class="alert alert-danger">
+    <strong>Oh, No!</strong>This book has been borrowed by <a href="{% url 'profile' username=book.get_borrower.username %}">{{ book.get_borrower.get_name }}</a>. Do you want to Reserve the book?
+  </div>
+  {% else %}
+  <div class="alert alert-success">
+    <strong>Yay!</strong> This book is available on shelf <span class="label label-primary">{{ book.call_number }}</span>
+  </div>
+  {% endif %}
+  
+  <table class="table table-hover table-responsive">
+    {% for each in book.get_all_attr %}
+    <tr>
+      <td>{{ each.0 }}</td>
+      {% if each.0 == "Author" %}
+      <td><a href="/?type=Author&search={{each.1}}">{{ each.1 }}</a></td>
+      {% else %}
+      <td>{{ each.1 }}</td>
+      {% endif %}
+    </tr>
+    {% endfor %}
+    <tr>
+      <td>Is Available</td>
+      <td>
+	{% if book.is_borrowed == False %}
+	<span class="text-success"><b>Yes</b></span>
+	{% else %}
+	<span class="text-danger"><b>No</b></span>
+	{% endif %}
+      </td>
+</div>      
+{% endblock %}

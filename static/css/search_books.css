@@ -1,0 +1,30 @@
+.search-results{
+}
+
+
+.book{
+  background-color: #ffffff;
+}
+.book:hover{
+ background-color: rgba(208,208,208,0.5);
+}
+
+.book > a{
+  color: #ffffff;
+}
+.book>a:hover{
+  color:#ffffff;
+}
+
+
+.title >a{
+  font-size: medium;
+  color: #31708F;
+}
+
+.authors:hover{
+ color: #000000; 
+}
+
+.more_info > a{
+}

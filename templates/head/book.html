@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container-fluid">
+  {% if is_borrowed == True %}
+  <div class="alert alert-danger">
+    <strong>Oh, No!</strong> This book with accession number <span class="label label-primary">{{ book.accession_number }}</span> has been borrowed by <a href="{% url 'profile' username=user.username %}">{{ book.get_borrower.get_name }}</a> {{ days_ago }} ({{ lends.lending_date }}).
+  </div>
+  {% elif book.is_discarded %}
+  <div class="alert alert-danger">
+    <strong>Oh, No!</strong> This book with accession number <span class="label label-primary">{{ book.accession_number }}</span> has been discarded!
+  </div>
+  {% else %}
+  <div class="alert alert-success">
+    <strong>Yay!</strong> This book is available on shelf <span class="label label-primary">{{ book.call_number }}</span>
+  </div>
+  {% endif %}
+
+  {% if book.is_discarded == False and user.is_authenticated == True %}
+  <div class="text-warning">
+    <a class="btn btn-warning" href="{% url 'delete_book_confirm' book.get_accession_number %}">Discard Book</a>
+  </div>
+  {% endif %}
+  <h3>
+    <div>
+      <i>
+        <span class="text-primary">
+          {{ book.title|title }}
+        </span>
+      </i>
+      <span class="text-info">
+        {% if book.get_authors != "" %}written by {{ book.get_authors }}{% endif %}
+      </span>
+    </div>
+  </h3>
+  <table class="table table-hover table-responsive">
+    {% for each in book.get_all_attr %}
+    <tr> 
+      <td>{{ each.0 }}</td>
+      {% if each.0 == "Author" %}
+      <td><a href="/search/book/?type=Author&search={{each.1}}">{{ each.1 }}</a></td>
+      {% else %}
+      <td style="{% if book.get_language.upper == "NP" %}font-family:preeti;font-size:20px{%endif %}">{{each.1}}</td>
+      {% endif %}
+    </tr>
+    {% endfor %}
+    <tr>
+      <td>Is the book available ?</td>
+      <td>
+	{% if book.is_borrowed == False %}
+	<span class="text-success"><b>Yes</b></span>
+	{% else %}
+	<span class="text-danger"><b>No</b></span>
+	{% endif %}
+      </td>
+    </tr>
+    <tr>
+      <td>
+	Is there any late fees?
+      </td>
+      <td>
+	{% if book.is_borrowed == False %}
+	<span class="text-success"> <b>No</b>, the book isn't borrowed</span>
+	{% elif late_fees != 0 %}
+	<span class="text-warning"><b>Yes</b>, late fees :<i> Rs.{{ late_fees }}</i></span>
+	{% elif late_fees == 0 %}
+	<span class="text-success"><b>No</b></span>
+	{% endif %}
+      </td>
+    </tr>
+  </table>
+  </font>
+</div>
+{% endblock %}

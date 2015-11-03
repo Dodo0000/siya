@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container">
+  <div class="col col-sm-12">
+    {% if borrowed == 1 %}
+        <div class="alert alert-success"><h3>
+	<a href="{% url 'profile' username=user.username %}"><div class="label label-info">{{ user.get_name }}</div></a> has borrowed the book <a href="{% url 'book' accNo=book.accession_number %}"><div class="label label-info">{{book.title}}</div>
+	  {% else %}
+	  <div class="alert alert-danger"><h3>
+	      The Book <div class="label label-warning"><a href="{% url 'book' accNo=book.accession_number %}">{{book.title}}</a></div> is currently being borrowed to <div class="label label-warning"><a href="{% url 'profile' username=book.get_borrower.username %}">{{ book.get_borrower.get_name }}</a></div>
+	  {% endif %}
+    </h3></div> <!-- alert -->
+  </div> <!-- col -->
+</div> <!-- container -->
+      
+{% endblock %}

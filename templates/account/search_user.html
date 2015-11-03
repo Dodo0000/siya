@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="text-primary" align=center>
+  <h3><u>Search for a member of {{ globals.yalms.org_short_name }}</u></h3>
+</div>
+<hr>
+<div class="container">
+<div class="col col-sm-6 col-sm-offset-3">
+  <form class="form" method="get">
+    <label for="username"><div class="text-info">Enter person's username</div></h4></label>
+      <div class="input-group">
+	<div class="input-group-btn">
+	</div>
+	<input type="text" name="username" class="form-control panel-success" value="" aria-label="" required autofocus>
+	<div class="input-group-btn">
+	  <input type="submit" value="Find" class="btn btn-success"></input>
+	</div>
+      </div><!-- /input-group -->
+        </form>
+</div> <!-- col -->
+</div>
+<br>
+{% if not_found %}
+<div class="container">
+  <div class="alert alert-warning">
+    <strong>Oops!</strong> Member with username <span class="label label-warning">{{ username }}</span> could not be found! Try searching for some other username
+  </div>
+{% endif %}
+{% endblock %}
+      

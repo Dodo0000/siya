@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+<div class="container-fluid">
+  <div align=center class="col col-sm-offset-3 col-sm-6">
+  <div class="well">
+    <h1>{{ user.get_name|title }}</h1>
+    <h4>{{ user.user_type.type|title }} since {{ user.date_joined|date:"l d N Y" }}</h4>
+    {% if user.is_male %}
+    <p>He has borrowed <span class="label label-info">{{ books_borrowed|length }}</span> books</p>
+    {% endif %}
+    {% if user.is_female %}
+    <p>She has borrowed <span class="label label-info">{{ user.no_of_books_borrowed|default:"Unknown" }}</span> books</p>
+    {% endif %}
+  </div> <!-- jumbotron -->
+  </div>
+  
+</div><!-- container -->
+
+<div class="container-fluid">
+</div>
+<div class="container-fluid">
+  <table class="table table-responsive table-hover">
+    {% for each in user.get_all_attr %}
+    <tr>
+      <td>{{each.0|title}}</td>
+      <td>{{each.1}}</td>
+    </tr>
+    {% endfor %}
+    <tr>
+     <td>School is Varified</td>
+    {% if user.school_varified == False %}
+     <td><span class="text-danger"><b>No</b></span></td>
+     {% else %}
+     <td><span class="text-success"><b>Yes</b></span></td>
+     {% endif %}
+    </tr>
+  </table>
+
+{% endblock %}

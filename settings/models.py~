@@ -1,0 +1,10 @@
+class Globals:
+    books = {
+        'columns':[
+            'Title',
+            'Author',
+            'Keyword',
+            'Accession Number',
+            'Publisher'
+        ]
+    }

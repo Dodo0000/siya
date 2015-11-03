@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% block css %}
+<link href="{% static 'css/dashboard.css' %}" rel="stylesheet">
+{% endblock %}
+
+
+
+
+
+{% block content %}
+
+<div class="container-fluid">
+  <h3><u>Summary of activities</u></h3>
+  <table class="table table-hover">
+    <thead>
+      <th>Time</th>
+      <th>Members</th>
+      <th>Books Cataloged</th>
+      <th>Late Fees Charged</th>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          Till {{ start_date }}
+        </td>
+        <td>
+          {{ members_added_before_tp|length }}
+        </td>
+        <td>
+          {{ books_cataloged_before_tp|length }}
+        </td>
+        <td>
+          {{ late_fees_charged_before_tp }}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          During the last {{ time_perdio }}from {{ start_date }} till {{ date }}
+        </td>
+        <td>
+          {{ members_added_during_tp|length }}
+        </td>
+        <td>
+          {{ books_cataloged_during_tp|length }}
+        </td>
+        <td>
+          {{ late_fees_charged_during_tp }}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Total
+        </td>
+        <td>
+          {{ total_members|length }}
+        </td>
+        <td>
+          {{ total_books|length }}
+        </td>
+        <td>
+          {{ total_fees_charged }}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3><u>Recently Added Books</u></h3>
+  <div class="table-responsive">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>Accession No.</th>
+          <th>Title</th>
+          <th>Call No.</th>
+          <th>Author</th>
+          <th>Publisher</th>
+          <th>Keywords</th>
+          <th>Date Added</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for book in recently_added_books %}
+        <tr>
+          <td>{{book.accession_number}}</td>
+          <td><a href="{% url 'book' book.accession_number %}">{{book.get_title}}</a></td>
+          <td>{{book.call_number}}</td>
+          <td>{{book.get_authors}}</td>
+          <td>{{book.get_publishers}}</td>
+          <td>{{book.get_keywords}}</td>
+          <td>{{book.accessioned_date}}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <h3><u>Recently added Members</u></h3>
+  <table class="table table-hover table-responsive">
+    <thead>
+      <tr>
+        <th>
+          Name
+        </th>
+        <th> Username </th>
+        <th> School Name </th>
+        <th> Date joined </th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for member in recently_added_members %}
+      <tr>
+        <td> {{ member.get_name }} </td>
+        <td> {{ member.username }} </td>
+        <td> {{ member.school_name }} </td>
+        <td> {{ member.date_joined.date }} </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+</div>
+{% endblock %}
+
+

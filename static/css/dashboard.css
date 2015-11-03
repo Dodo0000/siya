@@ -1,0 +1,38 @@
+body {
+  padding-top: 50px;
+}
+
+.circle-head {
+    min-width: 200px;
+    min-height: 150px;
+    font-size: 25px;
+    text-align: center;
+    border-radius: 20px;
+    box-shadow: 0px 5px 10px #333;
+
+}
+
+.circle-head > .text{
+    position: relative;
+    top: 45px; 
+}
+
+.circle-member {
+    background-color: purple;
+    color: white;
+}
+
+.circle-book {
+    background-color: orange;
+    color:white;
+}
+
+.circle-fee {
+    background-color: #00C8C8;
+    color: white;
+}
+
+.circle-toy {
+    background-color: #F8570C;
+    color: white;
+}

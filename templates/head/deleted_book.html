@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<div class="jumbotron">
+  The book <a href="{% url 'book' accNo=book.accession_number %}">{{ book.title|title }}</a> has been discarded</a>
+</div>
+{% endblock %}

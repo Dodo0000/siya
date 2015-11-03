@@ -1,0 +1,124 @@
+{% load static %}
+
+
+<!DOCTYPE html>
+
+<html lang="unicode">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>{{ globals.yalms.sft_short_name }} - {{ globals.yalms.org_short_name }}</title>
+    <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/styles.css' %}" rel="stylesheet">
+    <style>
+    </style>
+
+    {% block css %}
+    {% endblock %}
+
+  </head>
+  <body>
+    <div class="container-fluid">
+      {% block nav %}
+      <!-- navbar -->
+      <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <span class="navbar-brand">{{ globals.yalms.sft_short_name|upper }}</span>
+          </div>
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+              <li><a href="{% url 'home' %}"><span class="glyphicon glyphicon-home"></span>  Home</a></li>
+              <li> <a href="{% url 'entry' %}"> <span class="glyphicon glyphicon-plus"></span> Add New Record</a></li>
+              <li><a>{{ globals.yalms.org_long_name|title }}</a> </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+              <li><a>{{date}}</a></li>
+              {% if user.is_authenticated %}
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ user.get_name }}<span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                  <li><a href="{% url 'profile' username=user.username %}"> <span class="glyphicon glyphicon-user"></span>  View Profile</a></li>
+                  <li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-out"></span> logout</a></li>
+                </ul>
+              </li>
+	      {% else %}
+        <li><a href="{% url 'login' %}"><span class="glyphicon glyphicon-log-in"></span> login</a></li>
+              {% endif %}
+
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </nav>
+      <hr>
+      {% endblock %}
+    </div> <!-- container-fluid -->
+
+    {% block extras %}
+
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+          <ul class="nav nav-sidebar">
+            <li><a href="{% url 'dashboard' %}"><span class="glyphicon glyphicon-dashboard"></span> Dashboard</a></li>
+          </ul>
+          <ul class="nav nav-sidebar">
+            <li><a href="{% url 'search-book' %}"> <span class="glyphicon glyphicon-search"></span>  Find Book</a></li>
+            <li><a href="{% url 'search-member' %}"><span class="glyphicon glyphicon-search"></span> Find Person</a></li>
+          </ul>
+          <ul class="nav nav-sidebar">
+            <li>
+              <a href="{% url 'lend-book' %}">
+                <span class="glyphicon glyphicon-book"></span> Lend Book
+              </a>
+            </li>
+            <li>
+              <a href="{% url 'return-book' %}">
+                <span class="glyphicon glyphicon-book"></span> Return Book
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+          {% if logged_in == True %}
+          <div class="alert alert-success">
+            <strong>
+              Welcome, {{ user.get_name }}!
+            </strong>
+            You have been logged in to yalms.
+          </div>
+        </div>
+
+          {% endif %}
+          {% block jumbotron %}
+          {% endblock %}
+          <h2 class="page-header">{{ globals.yalms.org_long_name }} - <span class="text-info">{{ globals.yalms.org_motto }}</span></h2>
+
+          {% endblock %}
+
+          {% block content %}
+          {% endblock %}
+
+        </div>
+      </div>
+    </div>
+  </body>
+  {% block pre-js %}
+  {% endblock %}
+  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+  <script src="{% static 'bootstrap/js/jquery.js' %}"></script>
+  <!-- Include all compiled plugins (below), or include individual files as needed -->
+  <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+
+
+  {% block post-js %}
+  {% endblock %}
+</html>

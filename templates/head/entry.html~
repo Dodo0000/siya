@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extras %}
+{% endblock %}
+
+
+{% block css %}
+<link href="{% static 'css/entry.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block js %}
+<script>
+// the variables here should come before teh js/entry.js script
+{% autoescape off %}
+var cols_table = {{ columns_table_json }}
+var cols_entry = {{ columns_entry_json }}
+{% endautoescape %}
+
+var total_cols_table = cols_table.length
+var total_cols_entry = cols_entry.length
+var max_accession_number = parseInt("{{ largest_accession_number }}", 10)
+</script>
+
+<script src="{% static 'js/entry.js' %}"></script>
+{% endblock %}
+
+
+
+{% block jumbotron %}
+{% endblock %}
+
+
+{% block content %}
+
+<div class="container-fluid" id="entry-div">
+  {% for each in columns_for_entry %}
+  <div class="col {% if each.0 == 1 %}col-sm-offset-{{ div_offset }}{% endif %} col-sm-{{div_len}}">
+    <label>{{ each.1.0 }}</label>
+    <input type="text" id="{{ each.0 }}" name="{{ each.1.0 }}" placeholder="{{ each.1.0 }}" class="form-control input {{ each.1.2 }}" required {% if each.0 == 1 %} autofocus {% endif %} spellcheck>
+  </div>
+  {% endfor %}
+</div>
+
+
+<div class="container-fluid" id="display-div">
+  <table class="table table-hover table-responsive" id="table">
+    <thead>
+      {% for data in columns_for_table %}
+      <th>{{ data.1.0 }}</th>
+      {% endfor %}
+    </thead>
+    <tbody>
+
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}

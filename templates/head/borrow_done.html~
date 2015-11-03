@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container">
+  <div class="col col-sm-offset-2 col-sm-8">
+    <div class="alert alert-success"><h3>
+      <a href="{% url 'profile' username=user.username %}"><div class="label label-info">{{ user.get_name }}</div></a> has borrowed the book <a href="{% url 'book' accNo=book.accession_number %}"><div class="label label-info">{{book.title}}</div>
+    </h3></div> <!-- alert -->
+  </div> <!-- col -->
+</div> <!-- container -->
+      
+{% endblock %}
