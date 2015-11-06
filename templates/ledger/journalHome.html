@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+
+{% block css %}
+
+.footer-success{
+  background-color: green;
+}
+
+.footer-danger{
+  background-color: red;
+}
+
+.panel:hover{
+  background-color:#cdcdcd;
+  box-shadow: 10px 10px 4px #888888;
+}
+
+panel-footer: hover{
+  }
+
+{% endblock %}
+
+{% block post-js %}
+
+$('#creditModal').on('show.bs.modal', function (event) {
+var button = $(event.relatedTarget) // Button that triggered the modal
+var id = button.data('id') // Extract info from data-* attributes
+// If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+// Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+var modal = $(this)
+modal.find('#idModalInputHidden').val(id)
+})
+
+{% endblock %}
+
+
+{% block content%}
+
+<!-- creditModal -->
+<div class="modal fade" id="creditModal" tabindex="-1" role="dialog" aria-labelledby="creditModal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Add Credit</h4>
+      </div>
+      <div class="modal-body">
+        <div>
+          <form role="form" action="{% url 'addCredit'%}" method="GET">
+            <input type="hidden" class="form-control" id="idModalInputHidden" placeholder="Enter Particular">
+            <div class="form-group">
+              <label for="particulars">Particular</label>
+              <input type="text" class="form-control" id="particularsModelInput" placeholder="Enter Particular">
+            </div>
+            <div class="form-group">
+              <label for="crdt">Credit Amount</label>
+              <input type="text" class="form-control" id="crdt" placeholder="Enter Credit Amount">
+            </div>
+          </form>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- debitModal -->
+<div class="modal fade" id="debitModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Add Debit</h4>
+      </div>
+      <div class="modal-body">
+        <div>
+          <form role="form">
+            <div class="form-group">
+              <label for="email">Particular</label>
+              <input type="email" class="form-control" id="email" placeholder="Enter Particular">
+            </div>
+            <div class="form-group">
+              <label for="pwd">Debit Amount</label>
+              <input type="text" class="form-control" id="pwd" placeholder="Enter Debit Amount">
+            </div>
+          </form>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+
+{% for entry in dayEntries %}
+<div class="panel panel-default">
+  <div class="panel-body">
+    <div class="col col-sm-4">
+      {{ entry }}
+    </div>  <!-- 1/3 of panel -->
+    <div class="col col-sm-4">
+      Dr. {{ entry.getTotalDebit }} / Cr. {{ entry.getTotalCredit }}
+    </div>  <!-- 1/3 of panel -->
+    <div class="col col-sm-2">
+      <button class="btn btn-primary" data-toggle="modal" data-id="{{entry.id}}" data-target="#debitModal">Add Debit</button>
+    </div> <!-- 1/6 of panel -->
+    <div class="col col-sm-2">
+      <button class="btn btn-primary" data-toggle="modal" data-id="{{entry.id}}" data-target="#creditModal">Add Credit</button>
+    </div> <!-- 1/6 of panel -->
+  </div> 
+  <div class="{% if entry.totalBalanceMatchBool %}footer-success {% else %} footer-danger {% endif %}panel-footer">
+    <div class="pull-right">
+    </div>
+  </div>
+</div>
+{% endfor %}
+
+
+{% endblock %}

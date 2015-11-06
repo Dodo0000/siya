@@ -42,6 +42,7 @@ INSTALLED_APPS = (
     'head',
     'settings',
     'configs',
+    'ledger',
 )
 
 MIDDLEWARE_CLASSES = (

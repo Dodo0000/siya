@@ -13,10 +13,10 @@
     <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
     <link href="{% static 'css/styles.css' %}" rel="stylesheet">
     <style>
-    </style>
-
     {% block css %}
     {% endblock %}
+    </style>
+
 
   </head>
   <body>
@@ -111,14 +111,17 @@
       </div>
     </div>
   </body>
+  <script>
   {% block pre-js %}
   {% endblock %}
+  </script>
   <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
   <script src="{% static 'bootstrap/js/jquery.js' %}"></script>
   <!-- Include all compiled plugins (below), or include individual files as needed -->
   <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
 
-
+  <script>
   {% block post-js %}
   {% endblock %}
+  </script>
 </html>

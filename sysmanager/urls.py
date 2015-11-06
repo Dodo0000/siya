@@ -28,10 +28,11 @@ urlpatterns = [
     url(r'^search/member/$', 'account.views.search_member', name="search-member"),
     url(r'^login/$', 'account.views.login_user', name="login"),
     url(r'^logout/', 'account.views.logout_user', name="logout"),
-    url(r'^admin/', include(admin.site.urls)),
     url(r'^entry/$', 'head.views.entry', name="entry"),
     url(r'^book/validate$','head.views.validate_book',name='validate_book'),
     url(r'^book/add$', 'head.views.add_book', name="add_book"),
     url(r'^book/discard/confirm/(?P<accNo>[0-9]+)/$', 'head.views.deleteBookConfirm', name="delete_book_confirm"),
     url(r'^book/discard/(?P<accNo>[0-9]+)/$', 'head.views.deleteBook', name="delete_book"),
+    url(r'^admin/', include(admin.site.urls)),
+    url(r'^accounts/', include('ledger.urls'))
 ]
