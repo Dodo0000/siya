@@ -1,8 +1,16 @@
-# YALMS - Yet Another Library Management System
+# ALMS - ALMS Library Management System
 
-A complete Library Management System
+ALMS is a Django Based Library Management System
 
-## In progress
-### will add docs when complete
+###__What Can ALMS Do?__
+  * Catalog Books
+  * Manage Members, volunteers and librarians
+  * Lend books, return books
+  * Take care of your accounting journal, ledger and trial balances
+  * Search For Books based on all their properties
 
-This is a test change
+###__How To Install ALMS__
+
+Currently, ALMS is very rigid so I'd recomend notinstalling the whole system
+but rather using parts of it in your own system.
+You can also use ALMS as the base for your system.
