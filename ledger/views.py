@@ -1,26 +1,32 @@
 from django.shortcuts import render
+from django.http import HttpResponseRedirect
+from django.core.urlresolvers import reverse
 
 from settings.models import Globals
-from ledger.models import OneDaysEntry
+from ledger.models import OneDaysEntry, Credit, Debit
 
-from datetime import datetime
+import datetime
 # Create your views here.
 
 
-def journalHomeArgs(request,addCreditSuccess=False,addDebitSuccess=False):
+def journalHomeArgs(request,addCreditSuccess=None,addDebitSuccess=None,particularsNotFound=None,debitNotFound=None,creditNotFound=None):
     '''
     journalHome with extra arguments
     '''
     context = {
             'globals': Globals,
-            'date': datetime.today(),
-            'dayEntries': OneDaysEntry.objects.all(),
+            'date': datetime.date.today(),
+            'date_add': datetime.date.today().isoformat(),
+            'dayEntries': OneDaysEntry.objects.order_by("-date"),
             }
 
     context.update(
             [
                 ["creditSuccess",addCreditSuccess],
-                ["debitSuccess",addDebitSuccess]
+                ["debitSuccess",addDebitSuccess],
+                ['particularsNotFound',particularsNotFound],
+                ['debitNotFound', debitNotFound],
+                ['creditNotFound', creditNotFound],
             ])
 
     return render(request,'ledger/journalHome.html',context)
@@ -30,6 +36,53 @@ def journalHome(request):
     return journalHomeArgs(request)
 
 
+def addDebit(request):
+    id = request.POST.get("id",None)
+    particular = request.POST.get("particular",None)
+    amount = request.POST.get("debitAmount",None)
+    if id in [None]:
+        return journalHomeArgs(request,addCreditSuccess=False)
+    elif particular in [None, ""]:
+        return journalHomeArgs(request, particularsNotFound=True)
+    elif amount in  [None, ""]:
+        return journalHomeArgs(request, debitNotFound=True)
+    else:
+        oneDayEntry = OneDaysEntry.objects.get(id=id)
+        debit = Debit.objects.create(
+                                particulars=particular,
+                                amount=amount
+                                )
+        oneDayEntry.debits.add(debit)
+        oneDayEntry.save()
+        return HttpResponseRedirect(reverse("journalHome"))
+
+
 def addCredit(request):
-    if request.GET.get("id", None)== None:
-        pass
+    id = request.POST.get("id",None)
+    particular = request.POST.get("particular",None)
+    amount = request.POST.get("creditAmount",None)
+    if id == None or id == "":
+        return journalHomeArgs(request,addCreditSuccess=False)
+    elif particular in [None, ""]:
+        return journalHomeArgs(request, particularsNotFound=True)
+    elif amount in [None,""]:
+        return journalHomeArgs(request, creditNotFound=True)
+    else:
+        oneDayEntry = OneDaysEntry.objects.get(id=id)
+        credit = Credit.objects.create(
+                                particulars=particular,
+                                amount=amount
+                                )
+        oneDayEntry.credits.add(credit)
+        oneDayEntry.save()
+        return HttpResponseRedirect(reverse("journalHome"))
+
+def addOneDaysEntry(request):
+    date_val = request.POST.get("date",None)
+    if date_val == None:
+        date = datetime.date.today()
+    else:
+        date_arr = date_val.split("-")
+        date = datetime.date(int(date_arr[0]),int(date_arr[1]),int(date_arr[2]))
+    OneDaysEntry.objects.create(date=date)
+    return HttpResponseRedirect(reverse("journalHome"))
