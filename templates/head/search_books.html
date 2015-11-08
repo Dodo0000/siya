@@ -11,94 +11,106 @@
 
 {% block content %}
 <div class="text-primary" align=center>
-  <h3><u>Search for a Book in {{ globals.yalms.org_short_name }} archives</u></h3>
+        <h3><u>Search for a Book in {{ globals.yalms.org_short_name }} archives</u></h3>
 </div>
 <hr>
 <div class="container-fluid">
-  <form class="form" method="get">
-    <div class="col col-sm-8 col-sm-offset-2">
-      <label for="search"><span class="text-info">Enter your search query</span></label>
-      <div class="input-group">
-        <div class="input-group-btn">
-          <select class="btn" data-toggle="dropdown" aria-expanded="false" role="button" aria-haspopup="true" name="type">
-            {% for each in types %}
-            {% if each == type %}
-            <option selected>{{each}}</option>
-            {% else %}
-            <option>{{each}}</option>
-            {% endif %}
-            {% endfor %}
-          </select>
-        </div>
-        <input type="text" name="search" class="form-control panel-success" value="{{ value|default:"" }}" aria-label="" required autofocus>
-        <div class="input-group-btn">
-          <input type="submit" value="Find" class="btn btn-success"></input>
-        </div>
-      </div><!-- /input-group -->
-    </div>
-  </form>
+        <form class="form" method="get">
+                <div class="col col-sm-8 col-sm-offset-2">
+                        <label for="search"><span class="text-info">Enter your search query</span></label>
+                        <div class="input-group">
+                                <div class="input-group-btn">
+                                        <select class="btn" data-toggle="dropdown" aria-expanded="false" role="button" aria-haspopup="true" name="type">
+                                                {% for each in types %}
+                                                {% if each == type %}
+                                                <option selected>{{each}}</option>
+                                                {% else %}
+                                                <option>{{each}}</option>
+                                                {% endif %}
+                                                {% endfor %}
+                                        </select>
+                                </div>
+                                <input type="text" name="search" class="form-control panel-success" value="{{ value|default:"" }}" aria-label="" required {% if not_found == None %}autofocus{% endif %}>
+                                <div class="input-group-btn">
+                                        <input type="submit" value="Find" class="btn btn-success"></input>
+                                </div>
+                        </div><!-- /input-group -->
+                </div>
+        </form>
 </div>
 
 <hr>
 <div class="container-fluid search-results">
-  {% if books %}
-  <br>
-  <div class="alert alert-info"<h2> Search results for <span class="label label-primary">{{ type|lower }}</span> containing <span class="label label-md label-primary">{{ value }}</span> found <span class="badge"> {{ books|length }}</span> results </h2></div>
-  <table class="table table-bordered table-hover">
-    <tbody>
-      {% for book in books %}
-      <tr{% if book.get_language == "NP" %}  style="font-family:preeti;font-size:20px;"{% endif %}>
-          <div class="well book">
-              <div class="title">
-               <a href="{% url 'book' book.accession_number %}"> <span class="glyphicon glyphicon-book text-primary"></span> {{book.get_title}}</a>
-              </div> <!-- title div -->
-            <div class="authors">
-              Written By {{book.get_authors}}
-            </div> <!-- authors div -->
-            <div class="keywords">
-              Keywords : {{book.get_keywords}}
-            </div> <!-- keywords div -->
-            <div class="publishers">
-              Published By : {{book.get_publishers}}
-            </div> <!-- publishers div -->
-            <div class="misc">
-              <div class="col col-sm-3 accession_number">
-                Accession Number : {{book.accession_number}}
-              </div> <!-- accession number div -->
-              <div class="col col-sm-3 call_number">
-                Call Number : {{book.get_call_number}}
-              </div> <!-- call_number div -->
-              <div class="col col-sm-3 series">
-                Series : {{book.get_series}}
-              </div> <!-- series div -->
-              <div class="col col-sm-3 edition">
-                Edition : {{book.edition}}
-              </div> <!-- edition -->
-            </div>
-            <div class="is_available">
-              {% if book.is_borrowed == False %}
-              <span class="text-success glyphicon glyphicon-ok">Available</span>
-              {% else %}
-              <span class="text-danger glyphicon glyphicon-remove">Borrowed By <a href="{% url 'profile' book.get_borrower%}">{{book.get_borrower.get_name}}</a></span>
-              {% endif %}
-            <br>
-            <div class="more_info" align=center>
-              <a href="{% url 'book' book.accession_number %}"><u class="text-success">more info</u></a>
-            </div> <!-- more_info div -->
-          </div>
-
-        </a>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-  {% endif %}
-  {% if not_found == None %}
-  {% elif not_found == True %}
-  <h4><div class="alert alert-warning">
-      The book with <span class="label label-warning">{{ type }}</span> containing <span class="label label-warning">{{ value }}</span> was not found.
-    </div></h4>
-    {% endif %}
+        {% if not_found == False %}
+        <ul class="pagination">
+                {% for each in book_pages %}
+                <li {% if each == books.number %} class="active" {% endif%}><a href="?search={{value}}&type={{type}}&page={{ each }}">{{ each }}</a></li>
+                {% endfor %}
+        </ul>
 </div>
+<br>
+<div class="alert alert-info"<h2> Search results for <span class="label label-primary">{{ type|lower }}</span> containing <span class="label label-md label-primary">{{ value }}</span> found <span class="badge"> {{ books|length }}</span> results </h2></div>
+<table class="table table-bordered table-hover">
+        <tbody>
+                {% for book in books %}
+                <tr{% if book.get_language == "NP" %}  style="font-family:preeti;font-size:20px;"{% endif %}>
+                        <div class="well book">
+                                <div class="book_prop title">
+                                        <a href="{% url 'book' book.accession_number %}"> <span class="glyphicon glyphicon-book text-primary"></span> {{book.get_title}}</a>
+                                </div> <!-- title div -->
+                                <div class="book_prop authors">
+                                        Written By<i> {{book.get_authors}}</i>
+                                </div> <!-- authors div -->
+                                <div class="book_prop keywords">
+                                        Keywords :<i> {{book.get_keywords}}</i>
+                                </div> <!-- keywords div -->
+                                <div class="book_prop publishers">
+                                        Published By <i> {{book.get_publishers}}</i>
+                                </div> <!-- publishers div -->
+                                <div class="misc">
+                                        <div class="book_prop col col-sm-3 accession_number">
+                                                Accession Number : {{book.accession_number}}
+                                        </div> <!-- accession number div -->
+                                        <div class="book_prop col col-sm-3 call_number">
+                                                Call Number : {{book.get_call_number}}
+                                        </div> <!-- call_number div -->
+                                        <div class="book_prop col col-sm-3 series">
+                                                Series : {{book.get_series}}
+                                        </div> <!-- series div -->
+                                        <div class="book_prop col col-sm-3 edition">
+                                                Edition : {{book.edition}}
+                                        </div> <!-- edition -->
+                                </div>
+                                <div class="is_available">
+                                        {% if book.is_borrowed == False %}
+                                        <span class="text-success glyphicon glyphicon-ok">Available</span>
+                                        {% else %}
+                                        <span class="text-danger glyphicon glyphicon-remove">Borrowed By <a href="{% url 'profile' book.get_borrower%}">{{book.get_borrower.get_name}}</a></span>
+                                        {% endif %}
+                                        <br>
+                                        <div class="more_info" align=center>
+                                                <a href="{% url 'book' book.accession_number %}"><u class="text-success">more info</u></a>
+                                        </div> <!-- more_info div -->
+                                </div>
 
-{% endblock %}
+                                </a>
+                        </div>
+                </tr>
+                {% endfor %}
+        </tbody>
+</table>
+<ul class="pagination">
+        {% for each in book_pages %}
+        <li {% if each == books.number %} class="active" {% endif%}><a href="?search={{value}}&type={{type}}&page={{ each }}">{{ each }}</a></li>
+        {% endfor %}
+</ul>
+{% endif %}
+{% if not_found == None %}
+{% elif not_found == True %}
+<h4><div class="alert alert-warning">
+                The book with <span class="label label-warning">{{ type }}</span> containing <span class="label label-warning">{{ value }}</span> was not found.
+        </div></h4>
+        {% endif %}
+                        </div>
+
+                        {% endblock %}

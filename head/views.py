@@ -34,6 +34,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.text import slugify
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 import datetime
 import json
@@ -54,6 +55,8 @@ TIME_PERIOD = Globals.report['time_period']  #months
 LATE_FEES_PRICE = Globals.late_fees_price #rupees per day
 NO_DAYS_TO_BORROW_BOOK = Globals.books['borrow']['max_days'] # number of days for which a book is to be borrowed
 MAX_NUM_OF_BOOKS_TO_BORROW = int(Globals.books['borrow']['max_books']) # max number of books member can borrow at once
+
+NO_OF_BOOKS_PER_PAGE = 25
 
 GLOBAL_CONTEXT = {
         "globals": Globals,
@@ -519,7 +522,6 @@ def deleteBook(request,accNo):
     return render(request, "head/deleted_book.html", context_dict)
 
 
-@login_required(login_url="/login")
 def searchBook(request):
     value = request.GET.get("search", None)
     type_ = request.GET.get("type", None)
@@ -534,16 +536,11 @@ def searchBook(request):
               most of the words in the query
     < Note : In Step 2c, meaning the word "most" is very flexible. >
     '''
+    page = request.GET.get("page", 1)
 
     if value is not None:
         value = value.split(" ")
         if type_ in TYPES:
-            ## type_ is the type of property of book to search
-            ## eg. Title, Call No. etc
-            ## different search methods are used for each peoperty
-            ## value is a list of words to search 
-            ## (each word is seperated by a space)
-
             if type_ == "Title":
                 books = Book.objects.filter(title__contains=value[0])
                 for each in value[1:]:
@@ -590,12 +587,21 @@ def searchBook(request):
     else:
         value = []
         not_found = None
+
+    paginator = Paginator(booklist, NO_OF_BOOKS_PER_PAGE)
+    try:
+        booklist = paginator.page(page)
+    except PageNotAnInteger:
+        booklist = paginator.page(1)
+    except EmptyPage:
+        booklist = paginator.page(paginator.num_pages)
     return render(request,
                   "head/search_books.html",
                   {
                       'globals': Globals,
                       'date': datetime.date.today(),
                       "books": booklist,
+                      "book_pages": list(range(1, paginator.num_pages+1)),
                       "value": " ".join(value),
                       "type": type_,
                       "types": TYPES,
