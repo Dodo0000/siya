@@ -3,7 +3,6 @@
 
 cursor_accession_number = max_accession_number;
 
-$(".input-acc_no").value(max_accession_number);
 
 
 var NP_EN_STRUCT = {
@@ -27,7 +26,7 @@ function saveBook(){
     if (data.exists == 0)
       book_exists = true;
     console.log("book exists: " + book_exists.toString());
-    if (book_exists === true){
+    if (book_exists === true || book_exists == false){
       console.log(data);
       var post_data = Object.create(null);
       for(i=0;i < cols_entry.length;i++){
@@ -44,23 +43,25 @@ function saveBook(){
           $(".current_acc_no").text(max_accession_number);
           $(".input-acc_no").text(max_accession_number);
           alert("data entry successful :D");
-          clearInputFields();
-
+          if (clear_fields == 1)
+            clearInputFields();
         }
         else {
           alert("data entry unsuccessful :(");
         }
       });
     }
-    else if (book_exists = false){
-      console.log("book already exists or accession number is invalid");
+    else if (book_exists = null){
+      console.log("accession number is invalid");
     }
   });
 }
 
 $("#saveBook").click(function(){
+  alert("save book?");
   saveBook();
 })
+
 
 $(".input").on("keypress", function(e){
   if (e.keyCode == 13){

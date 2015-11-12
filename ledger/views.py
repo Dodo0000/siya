@@ -1,15 +1,24 @@
 from django.shortcuts import render
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 
-from settings.models import Globals
+from settings.models import Globals, addGlobalContext
 from ledger.models import OneDaysEntry, Credit, Debit
 
 import datetime
 # Create your views here.
 
 
-def journalHomeArgs(request,addCreditSuccess=None,addDebitSuccess=None,particularsNotFound=None,debitNotFound=None,creditNotFound=None):
+
+
+def journalHomeArgs(request,
+        addCreditSuccess=None,
+        addDebitSuccess=None,
+        particularsNotFound=None,
+        debitNotFound=None,
+        creditNotFound=None,
+        debitNotInt=None,
+        creditNotInt=None):
     '''
     journalHome with extra arguments
     '''
@@ -27,7 +36,9 @@ def journalHomeArgs(request,addCreditSuccess=None,addDebitSuccess=None,particula
                 ['particularsNotFound',particularsNotFound],
                 ['debitNotFound', debitNotFound],
                 ['creditNotFound', creditNotFound],
-            ])
+                ['debitNotInt', debitNotInt],
+                ['creditNotInt', creditNotInt]
+                ])
 
     return render(request,'ledger/journalHome.html',context)
 
@@ -46,12 +57,14 @@ def addDebit(request):
         return journalHomeArgs(request, particularsNotFound=True)
     elif amount in  [None, ""]:
         return journalHomeArgs(request, debitNotFound=True)
+    elif str(amount).isdigit() is False:
+        return journalHomeArgs(request, debitNotInt=True)
     else:
         oneDayEntry = OneDaysEntry.objects.get(id=id)
         debit = Debit.objects.create(
-                                particulars=particular,
-                                amount=amount
-                                )
+                particulars=particular,
+                amount=amount
+                )
         oneDayEntry.debits.add(debit)
         oneDayEntry.save()
         return HttpResponseRedirect(reverse("journalHome"))
@@ -67,12 +80,14 @@ def addCredit(request):
         return journalHomeArgs(request, particularsNotFound=True)
     elif amount in [None,""]:
         return journalHomeArgs(request, creditNotFound=True)
+    elif str(amount).isdigit() is False:
+        return journalHomeArgs(request, creditNotInt=True)
     else:
         oneDayEntry = OneDaysEntry.objects.get(id=id)
         credit = Credit.objects.create(
-                                particulars=particular,
-                                amount=amount
-                                )
+                particulars=particular,
+                amount=amount
+                )
         oneDayEntry.credits.add(credit)
         oneDayEntry.save()
         return HttpResponseRedirect(reverse("journalHome"))
@@ -86,3 +101,21 @@ def addOneDaysEntry(request):
         date = datetime.date(int(date_arr[0]),int(date_arr[1]),int(date_arr[2]))
     OneDaysEntry.objects.create(date=date)
     return HttpResponseRedirect(reverse("journalHome"))
+
+
+
+def showJournal(request,year,month):
+    year = int(year)
+    month = int(month)
+    month = min(month,12)  #the value of month cannot be greater than 12
+    date = datetime.date(year,month,1)
+    date_str= date.strftime("%B of %Y")
+
+    context = addGlobalContext()
+
+    context.update({
+            "day": date
+        })
+
+
+    return render(request, "ledger/journalDay.html",context)

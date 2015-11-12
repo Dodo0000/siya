@@ -1,5 +1,7 @@
 from django.db import models
 
+import datetime
+
 from configs.models import Organization as configsOrganization
 
 class Global:
@@ -31,7 +33,7 @@ class Globals:
             ('Edition', 0.5, 'edtn'),
             ("volume", 0.5, 'vol'),
             ('Accession Number', 1, "acc_no"),
-            ('Keywords', 1, "kwds"),
+            ('Subject & Keywords', 1, "kwds"),
             ("Gifted By", 1, "gftd_name"),
             ("Doner's Phone Number", 1, "gftd_phn"),
             ("Donor's Email", 1, "gftd_email")
@@ -77,3 +79,16 @@ class AccessionNumberCount(models.Model):
             return acc_nos[0].accession_number
         else:
             return 0
+
+
+def addGlobalContext(context=None):
+    global_dict = {
+                "globals": Globals,
+                "date": datetime.date.today()
+            }
+    if context.__class__ == dict:
+        return context.update(global_dict)
+    elif context == None:
+        return global_dict
+    else:
+        raise TypeError("context is not a dictionary")

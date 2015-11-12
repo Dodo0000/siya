@@ -1,11 +1,18 @@
 '''
- ____             _   _       ___       ____            _ 
+  ____             _   _       ___       ____            _ 
  |  _ \  ___  __ _| |_| |__   |_ _|___  |  _ \ ___  __ _| |
  | | | |/ _ \/ _` | __| '_ \   | |/ __| | |_) / _ \/ _` | |
  | |_| |  __/ (_| | |_| | | |  | |\__ \ |  _ <  __/ (_| | |
  |____/ \___|\__,_|\__|_| |_| |___|___/ |_| \_\___|\__,_|_|
                                                            
-
+If you can keep your head when all about you   
+    Are losing theirs and blaming it on you,   
+If you can trust yourself when all men doubt you,
+    But make allowance for their doubting too;   
+If you can wait and not be tired by waiting,
+    Or being lied about, don't deal in lies,
+Or being hated, don't give way to hating,
+    And yet don't look too good, nor talk too wise: 
 
 '''
 from django.db import models
@@ -78,6 +85,14 @@ class Publisher(models.Model):
     name = models.CharField(max_length=255)
     place = models.CharField(max_length=255)
     year = models.CharField(max_length=10)
+
+    def get_name(self):
+        return smart_str(self.name)
+
+    def get_place(self):
+        return smart_str(self.place)
+    def get_year(self):
+        return smart_str(self.year)
     
     def __str__(self):
         if self.year == u"0" and self.place != None and self.name != None:
@@ -197,6 +212,15 @@ class Gifter(models.Model):
     gifter_name = models.CharField(max_length=255)
     email = models.EmailField(null=True)
     phone = models.IntegerField(null=True)
+
+    def get_email(self):
+        return self.email
+
+    def get_phone_no(self):
+        return self.phone
+
+    def get_name(self):
+        return smart_str(self.gifter_name)
 
     def __str__(self):
         if self.email is None:

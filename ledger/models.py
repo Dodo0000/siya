@@ -1,3 +1,29 @@
+'''
+
+ _____ _             ____      _              ___   __ 
+|_   _| |__   ___   / ___|_ __(_) ___  ___   / _ \ / _|
+  | | | '_ \ / _ \ | |   | '__| |/ _ \/ __| | | | | |_ 
+  | | | | | |  __/ | |___| |  | |  __/\__ \ | |_| |  _|
+  |_| |_| |_|\___|  \____|_|  |_|\___||___/  \___/|_|  
+                                                       
+  ____ _     _ _     _                  _   _            _     __  __      
+ / ___| |__ (_) | __| |_ __ ___ _ __   | | | |_   _ _ __| |_  |  \/  | ___ 
+| |   | '_ \| | |/ _` | '__/ _ \ '_ \  | |_| | | | | '__| __| | |\/| |/ _ \
+| |___| | | | | | (_| | | |  __/ | | | |  _  | |_| | |  | |_  | |  | |  __/
+ \____|_| |_|_|_|\__,_|_|  \___|_| |_| |_| |_|\__,_|_|   \__| |_|  |_|\___|
+                                                                           
+
+If you can dream-and not make dreams your master;   
+    If you can think-and not make thoughts your aim;   
+If you can meet with Triumph and Disaster
+    And treat those two impostors just the same;   
+If you can bear to hear the truth you've spoken
+    Twisted by knaves to make a trap for fools,
+Or watch the things you gave your life to, broken,
+    And stoop and build 'em up with worn-out tools: 
+'''
+
+
 from django.db import models
 
 # Create your models here.

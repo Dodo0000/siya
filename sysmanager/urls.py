@@ -19,8 +19,13 @@ from django.contrib import admin
 urlpatterns = [
     url(r'^$', 'head.views.home', name='home'),
     url(r'^dashboard/$', 'head.views.dashboard', name='dashboard'),
+    url(r'^entry/$', 'head.views.entry', name="entry"),
+    url(r'^entry/(?P<acc_no>[0-9]+)$', 'head.views.editEntry', name="editEntry"),
     url(r'^book/(?P<accNo>[0-9]+)/$', 'head.views.bookInfo',name='book'),
-    url(r'^user/(?P<username>[a-z]+)/$', 'account.views.profile', name='profile'),
+    url(r'^book/validate$','head.views.validate_book',name='validate_book'),
+    url(r'^book/add$', 'head.views.add_book', name="add_book"),
+    url(r'^book/discard/confirm/(?P<accNo>[0-9]+)/$', 'head.views.deleteBookConfirm', name="delete_book_confirm"),
+    url(r'^book/discard/(?P<accNo>[0-9]+)/$', 'head.views.deleteBook', name="delete_book"),
     url(r'^book/borrow/$', 'head.views.borrow', name='lend-book'),
     url(r'^book/return/check/$', 'head.views.return_check_fees', name='return-book'),
     url(r'^report/$', 'head.views.report', name='report'),
@@ -28,11 +33,7 @@ urlpatterns = [
     url(r'^search/member/$', 'account.views.search_member', name="search-member"),
     url(r'^login/$', 'account.views.login_user', name="login"),
     url(r'^logout/', 'account.views.logout_user', name="logout"),
-    url(r'^entry/$', 'head.views.entry', name="entry"),
-    url(r'^book/validate$','head.views.validate_book',name='validate_book'),
-    url(r'^book/add$', 'head.views.add_book', name="add_book"),
-    url(r'^book/discard/confirm/(?P<accNo>[0-9]+)/$', 'head.views.deleteBookConfirm', name="delete_book_confirm"),
-    url(r'^book/discard/(?P<accNo>[0-9]+)/$', 'head.views.deleteBook', name="delete_book"),
+    url(r'^user/(?P<username>[a-z]+)/$', 'account.views.profile', name='profile'),
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^accounts/', include('ledger.urls'))
+    url(r'^accounts/', include('ledger.urls')),
 ]

@@ -17,6 +17,44 @@
 | | | | (_| |\ V /  __/ | | | | (_) | | | |  _|  __/
 |_| |_|\__,_| \_/ \___| |_| |_|\___/  |_|_|_|  \___|
                                                     
+
+
+If you can keep your head when all about you
+ Are losing theirs and blaming it on you,
+If you can trust yourself when all men doubt you,
+  But make allowance for their doubting too;
+If you can wait and not be tired by waiting,
+  Or being lied about, don't deal in lies,
+Or being hated, don't give way to hating,
+  And yet don't look too good, nor talk too wise:
+
+If you can dream-and not make dreams your master;
+  If you can think-and not make thoughts your aim;
+If you can meet with Triumph and Disaster
+  And treat those two impostors just the same;
+If you can bear to hear the truth you've spoken
+  Twisted by knaves to make a trap for fools,
+Or watch the things you gave your life to, broken,
+  And stoop and build 'em up with worn-out tools:
+
+If you can make one heap of all your winnings
+  And risk it on one turn of pitch-and-toss,
+And lose, and start again at your beginnings
+  And never breathe a word about your loss;
+If you can force your heart and nerve and sinew
+  To serve your turn long after they are gone,
+And so hold on when there is nothing in you
+  Except the Will which says to them: "Hold on!"
+
+If you can talk with crowds and keep your virtue,
+  Or walk with Kings-nor lose the common touch,
+If neither foes nor loving friends can hurt you,
+  If all men count with you, but none too much;
+If you can fill the unforgiving minute
+  With sixty seconds' worth of distance run,
+Yours is the Earth and everything that's in it,
+  And-which is more-you'll be a Man, my son.
+
 '''
 
 from head.models import Book, Lend, Author, KeyWord, Publisher, Gifter
@@ -24,7 +62,7 @@ from account.models import ModUser
 from settings.models import Globals, AccessionNumberCount
 
 from django.http import JsonResponse
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.http import HttpResponseNotFound
 from django.core.urlresolvers import reverse
 from django.http import Http404
@@ -141,6 +179,9 @@ def add_book(request):
     all_attrs = [_[2] for _ in Globals.books['columns']] + ["language"]
     each = dict()   ## store post data
     STATE = 0
+    
+    return HttpResponse(each)
+
     for _ in all_attrs:
         each[_] =  request.POST.get(_)
     CURRENT_LANGUAGE = request.POST.get("language", "EN")
@@ -156,11 +197,13 @@ def add_book(request):
     else:
         acc_list = [each['acc_no']]
 
+
     for val in acc_list:
         if val.__class__ == str:
             accession_number = val.strip(" ")
         else:
             accession_number = val
+
 
                     
         if accession_number in [None,"None", 0,"0",""] or "-" in accession_number:
@@ -172,11 +215,15 @@ def add_book(request):
         if each['title'] in [None, "", 0, "0"]:
             STATE = -1
             continue
-        
-        book = Book.objects.create(accession_number=toint(accession_number),
-                            title=each['title'],
-                            no_of_pages=toint(
-                                each['no_of_pages']))
+
+        # either create a new book or edit an already existing book
+        try:
+            book = Book.objects.get(accession_number=toint(accession_number))
+        except DoesNotExist:
+            book = Book.objects.create(accession_number=toint(accession_number),
+                    title=each['title'],
+                    no_of_pages=toint(
+                        each['no_of_pages']))
         
         for author_name in each['auth'].split("%"):
             author_name = author_name.strip(" ")
@@ -364,9 +411,19 @@ def add_book(request):
 
 
 
-@login_required(login_url="/login")
-def entry(request):
 
+@login_required(login_url="/login")
+def editEntry(request,acc_no):
+    if acc_no != None:
+        books = Book.objects.filter(accession_number=acc_no)
+        if len(books) < 1:
+            return HttpResponseRedirect(reverse("entry"))
+        else:
+            book = books[0]
+        clear_fields = False
+    else:
+        book = None
+        clear_fields = True
     total_entry_space = 12
     
     columns_for_table =  list(enumerate(Globals.books['columns'], 1))
@@ -393,13 +450,20 @@ def entry(request):
                       "columns_for_entry": columns_for_entry,
                       "columns_for_entry_div": columns_for_entry_div,
                       'div_len': div_len,
+                      'book': book,
                       'div_offset': div_offset,
                       'total_columns_table': total_no_of_cols_table,
                       'total_columns_entry': total_no_of_cols_entry,
                       'columns_entry_json': json.dumps(columns_for_entry, indent=4),
                       'columns_table_json': json.dumps(columns_for_table, indent=4),
-                      'largest_accession_number': AccessionNumberCount.get_no()
+                      'largest_accession_number': AccessionNumberCount.get_no(),
+                      'clear_fields': int(clear_fields)
                   })
+
+
+@login_required(login_url="/login/")
+def entry(request):
+    return editEntry(request,None)
 
 
 @login_required(login_url="/login")

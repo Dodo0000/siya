@@ -17,8 +17,11 @@
   {% endif %}
 
   {% if book.is_discarded == False and user.is_authenticated == True %}
-  <div class="text-warning">
-    <a class="btn btn-warning" href="{% url 'delete_book_confirm' book.get_accession_number %}">Discard Book</a>
+  <div class="text-warning btn-group">
+    <a class="btn btn-warning" href="{% url 'delete_book_confirm' book.get_accession_number %}">
+      <span class="glyphicon glyphicon-remove"></span> Discard Book</a>
+    <a class="btn btn-info" href="{% url 'editEntry' acc_no=book.get_accession_number %}">
+      <span class="glyphicon glyphicon-edit"></span> Edit Book</a>
   </div>
   {% endif %}
   <h3>

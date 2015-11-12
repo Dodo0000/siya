@@ -18,7 +18,8 @@
     </style>
     {% block css %}
     {% endblock %}
-
+  {% block head %}
+  {% endblock %}
   </head>
   <body>
     <div class="container-fluid">
@@ -112,17 +113,21 @@
       </div>
     </div>
   </body>
-  <script>
-  {% block pre-js %}
+  {% block pre-js-external %}
   {% endblock %}
+  <script>
+{% block pre-js-internal %}
+{% endblock %}
   </script>
   <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
   <script src="{% static 'bootstrap/js/jquery.js' %}"></script>
   <!-- Include all compiled plugins (below), or include individual files as needed -->
   <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
 
-  <script>
-  {% block post-js %}
+  {% block post-js-external %}
   {% endblock %}
+  <script>
+{% block post-js-internal %}
+{% endblock %}
   </script>
 </html>

@@ -1,3 +1,35 @@
+'''
+
+
+ _____                 _   _                       _                  _ _ 
+| ____|_ __ ___  _ __ | |_(_)_ __   ___  ___ ___  (_)___    _____   _(_) |
+|  _| | '_ ` _ \| '_ \| __| | '_ \ / _ \/ __/ __| | / __|  / _ \ \ / / | |
+| |___| | | | | | |_) | |_| | | | |  __/\__ \__ \ | \__ \ |  __/\ V /| | |
+|_____|_| |_| |_| .__/ \__|_|_| |_|\___||___/___/ |_|___/  \___| \_/ |_|_|
+                |_|                                                       
+
+
+
+If you can make one heap of all your winnings
+    And risk it on one turn of pitch-and-toss,
+And lose, and start again at your beginnings
+    And never breathe a word about your loss;
+If you can force your heart and nerve and sinew
+    To serve your turn long after they are gone,   
+And so hold on when there is nothing in you
+    Except the Will which says to them: 'Hold on!'
+
+If you can talk with crowds and keep your virtue,   
+    Or walk with Kings-nor lose the common touch,
+If neither foes nor loving friends can hurt you,
+    If all men count with you, but none too much;
+If you can fill the unforgiving minute
+    With sixty seconds' worth of distance run,   
+Yours is the Earth and everything that's in it,   
+    And-which is more-you'll be a Man, my son!
+
+'''
+
 from django.db import models
 from django.conf import settings
 from django.utils import timezone
@@ -36,7 +68,14 @@ class UserManager(BaseUserManager):
     '''
     Dont grant this user staff access!!
     '''
-    def create(self, username, user_type, super_user=False, first_name=None, last_name=None, password=None, **extra_fields):
+    def create(self,
+            username,
+            user_type,
+            super_user=False,
+            first_name=None,
+            last_name=None,
+            password=None, 
+            **extra_fields):
         if not username:
             raise ValueError("Email is required to create User")
 
