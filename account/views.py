@@ -35,7 +35,7 @@ def search_member(request):
             user = user[0]
             return HttpResponseRedirect(reverse('profile', kwargs={"username":user.username}))
         else:
-            return render(request, 'account/search_user.html', {'not_found': True, 'username': username, 'globals': Globals, 'date': dartetime.date.today()})
+            return render(request, 'account/search_user.html', {'not_found': True, 'username': username, 'globals': Globals, 'date': datetime.date.today()})
     else:
         return render(request, 'account/search_user.html', {"globals": Globals, 'date': datetime.date.today()})
 

@@ -77,6 +77,8 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import datetime
 import json
 
+from fuzz.search import searchBookTitle, searchBookAuthor,searchBookKeywords
+
 # Create your views here.
 
 TYPES = [
@@ -587,6 +589,7 @@ def deleteBook(request,accNo):
 
 
 def searchBook(request):
+
     value = request.GET.get("search", None)
     type_ = request.GET.get("type", None)
     booklist = []
@@ -606,26 +609,14 @@ def searchBook(request):
         value = value.split(" ")
         if type_ in TYPES:
             if type_ == "Title":
-                books = Book.objects.filter(title__contains=value[0])
-                for each in value[1:]:
-                    bookf = books.filter(title__contains=each)
-                    if len(bookf) > 0:
-                        books = bookf
-                    else:
-                        break
+                books = searchBookTitle(" ".join(value), Book.objects.all())
             elif type_ == "Call No":
                 books = Book.objects.filter(call_number__contains=value[0]).order_by("call_number")
             elif type_ == "Acc No":
                 books = Book.objects.filter(accession_number__contains=value[0]).order_by("-accession_number")
 
             elif type_ == "Keyword":
-                books = Book.objects.filter(keywords__name__contains=value[0]).order_by("keywords")
-                for each in value[1:]:
-                    bookf = books.filter(keywords__name__contains=each).order_by("keywords")
-                    if len(bookf) > 0:
-                        books = bookf
-                    else:
-                        break
+                books = searchBookKeywords(" ".join(value), Book.objects.all())
             elif type_ == "Publisher":
                 books = Book.objects.filter(publisher__name__contains=value[0]).order_by("publisher__name")
                 for each in value[1:]:
@@ -635,13 +626,7 @@ def searchBook(request):
                     else:
                         break
             elif type_ == "Author":
-                books = Book.objects.filter(author__name__contains=value[0]).order_by("author__name")
-                for each in value[1:]:
-                    bookf = books.filter(author__name__contains=each).order_by("author__name")
-                    if len(bookf) > 0:
-                        books = bookf
-                    else:
-                        break
+                books = searchBookAuthor(" ".join(value), Book.objects.all())
         booklist = books
         if len(booklist) == 0:
             not_found = True
@@ -663,6 +648,7 @@ def searchBook(request):
                   "head/search_books.html",
                   {
                       'globals': Globals,
+                      'total_books_len': len(Book.objects.all()),
                       'date': datetime.date.today(),
                       "books": booklist,
                       "book_pages": list(range(1, paginator.num_pages+1)),
