@@ -11,6 +11,6 @@ ALMS is a Django Based Library Management System
 
 ###__How To Install ALMS__
 
-Currently, ALMS is very rigid so I'd recomend notinstalling the whole system
+Currently, ALMS is very rigid so I'd recomend not installing the whole system
 but rather using parts of it in your own system.
 You can also use ALMS as the base for your system.
