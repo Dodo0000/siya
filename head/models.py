@@ -82,9 +82,9 @@ class Publisher(models.Model):
     '''
     Model that holds the attributes of a publisher
     '''
-    name = models.CharField(max_length=255)
-    place = models.CharField(max_length=255)
-    year = models.CharField(max_length=10)
+    name = models.CharField(max_length=255, db_index=True)
+    place = models.CharField(max_length=255, db_index=True)
+    year = models.CharField(max_length=10, db_index=True)
 
     def get_name(self):
         return smart_str(self.name)
@@ -134,7 +134,7 @@ class Author(models.Model):
     Describes the properties of an author
     '''
     name = models.CharField(max_length=100)
-    slug = models.SlugField()
+    slug = models.SlugField(db_index=True)
 
     def get_name(self):
         '''
@@ -162,19 +162,19 @@ class KeyWord(models.Model):
     synonymn to tags.
     '''
     name = models.CharField(max_length=255)
-    slug = models.SlugField()
+    slug = models.SlugField(db_index=True)
 
     def __str__(self):
         return smart_str(self.name.title())
 
 
 class Lend(models.Model):
-    user = models.ForeignKey(ModUser)
-    book = models.ForeignKey('Book')
-    lending_date = models.DateField()
-    returned_date = models.DateField(null=True)
-    returned = models.BooleanField(default=False)
-    borrowed = models.BooleanField(default=False)
+    user = models.ForeignKey(ModUser, db_index=True)
+    book = models.ForeignKey('Book', db_index=True)
+    lending_date = models.DateField(db_index=True)
+    returned_date = models.DateField(null=True, db_index=True)
+    returned = models.BooleanField(default=False, db_index=True)
+    borrowed = models.BooleanField(default=False, db_index=True)
 
 
     def get_borrowed_time(self):
@@ -208,7 +208,7 @@ class Gifter(models.Model):
     '''
     This class describes the person who gifted this book
     '''
-    date_given = models.DateField(auto_now_add=True)
+    date_given = models.DateField(auto_now_add=True, db_index=True)
     gifter_name = models.CharField(max_length=255)
     email = models.EmailField(null=True)
     phone = models.IntegerField(null=True)
@@ -244,32 +244,32 @@ class Book(models.Model):
     accession number increases by +1 for each new entry; kinda like the
     primary number. Each book as a unique accession number
     '''
-    accession_number = models.CharField(max_length=9)
-    accessioned_date = models.DateField(auto_now=True)
+    accession_number = models.CharField(max_length=9, db_index=True)
+    accessioned_date = models.DateField(auto_now=True, db_index=True)
     '''
     call number describes the type of book, such as - is it a story book?
     Is it a nepali book? english book? Hindi book? Is it fiction? reference?
     etc
     '''
-    call_number = models.CharField(max_length=20, null=True,blank=True)
-    author = models.ManyToManyField(Author)  # author of the book
-    title = models.CharField(max_length=255)    # name of the book
-    no_of_pages = models.IntegerField()
+    call_number = models.CharField(max_length=20, null=True,blank=True, db_index=True)
+    author = models.ManyToManyField(Author,db_index=True)  # author of the book
+    title = models.CharField(max_length=255,db_index=True)    # name of the book
+    no_of_pages = models.IntegerField(db_index=True)
     '''
     If the book is part of a series,
     this tells the number in which the book falls into the series
     '''
 
-    language = models.CharField(max_length=5,default="EN")
-    publisher = models.ForeignKey(Publisher,null=True,blank=True)
-    series = models.CharField(max_length=20,blank=True,null=True)
-    edition = models.CharField(max_length=100,blank=True,null=True)
-    price = models.CharField(max_length=255,null=True,blank=True)
-    volume = models.CharField(max_length=10,null=True,blank=True)
-    keywords = models.ManyToManyField(KeyWord)
+    language = models.CharField(max_length=5,default="EN",db_index=True)
+    publisher = models.ForeignKey(Publisher,null=True,blank=True,db_index=True)
+    series = models.CharField(max_length=20,blank=True,null=True,db_index=True)
+    edition = models.CharField(max_length=100,blank=True,null=True,db_index=True)
+    price = models.CharField(max_length=255,null=True,blank=True,db_index=True)
+    volume = models.CharField(max_length=10,null=True,blank=True,db_index=True)
+    keywords = models.ManyToManyField(KeyWord,db_index=True)
 
     
-    isbn = models.CharField(max_length=13,null=True)
+    isbn = models.CharField(max_length=13,null=True,db_index=True)
     '''
     State has three values: 
     0 - Is available
@@ -277,12 +277,12 @@ class Book(models.Model):
     2 - Is borrowed
     defaults to {0}
     '''
-    state = models.IntegerField(default=0)
+    state = models.IntegerField(default=0,db_index=True)
     '''
     The keywords describe in a more specific manner, the "personality" of the
     book which the call number failed to explain
     '''
-    gifted_by = models.ForeignKey(Gifter,null=True)
+    gifted_by = models.ForeignKey(Gifter,null=True,db_index=True)
 
 
 

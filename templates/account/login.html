@@ -14,9 +14,6 @@
 
 
 {% block content %}
-{% if code != 0 and code != 4 %}
-<div class="alert alert-warning"><strong>Oh, no! </strong>{{ code_msg }}</div>
-{% endif %}
 
 <div class="alert alert-info">
   <div align=center>
@@ -25,6 +22,11 @@
   </div>
 </div>
 
+{% if code != 0 and code != 4 %}
+<div class="container">
+  <div class="alert alert-danger" align=center><strong>Oh, no! </strong>{{ code_msg }}</div>
+</div>
+{% endif %}
 
 <div class="col col-sm-offset-3 col-sm-6">
   <form class="form-signin" method="POST">
@@ -40,4 +42,3 @@
 
 
 {% endblock %}
-
