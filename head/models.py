@@ -197,10 +197,14 @@ class Lend(models.Model):
          self.book.state = 0
          self.book.save()
 
+    def get_returning_date(self):
+        return self.lending_date + datetime.timedelta(days=Globals.books['borrow']['max_days'])
+
     def __str__(self):
-        return "{0}, {1}".format(
+        return "{0},borrowed on {1}, till {2}".format(
                 str(self.book),
-                self.lending_date.strftime("%A %eth %B, %Y")
+                self.lending_date.strftime("%A %eth %B, %Y"),
+                self.get_returning_date().strftime("%A %eth %B, %Y")
                 )
 
 
