@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load group_filters %}
+{% load static %}
+
+{% block css %}
+<link href="{% static 'css/almsGroups/styles.css'%}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+
+<h3> Group Hugs - {{ globals.yalms.org_short_name }}</h3>
+
+{% for group in all_groups %}
+<div class="well">
+  <h4>Name {{ group }}</h4>
+  <h4> Permissions {{ group.permissions.all|getFormattedPermissions|safe }} </h4>
+</div>
+{% endfor %}
+
+{% endblock %}

@@ -9,7 +9,7 @@ class Global:
     this is a wrapper arpund the configs.models.Organization class
     to support the Globals class data structure.
     '''
-    ## somthing to fix ^
+    ## todo :write this class: somthing to fix ^
 
 
 
@@ -86,8 +86,9 @@ def addGlobalContext(context=None):
                 "globals": Globals,
                 "date": datetime.date.today()
             }
-    if context.__class__ == dict:
-        return context.update(global_dict)
+    if context != None and context.__class__ == dict:
+        context.update(global_dict)
+        return context
     elif context == None:
         return global_dict
     else:

@@ -36,4 +36,5 @@ urlpatterns = [
     url(r'^user/(?P<username>[a-z]+)/$', 'account.views.profile', name='profile'),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^accounts/', include('ledger.urls')),
+    url(r'^groups/', include('almsGroups.urls')),
 ]

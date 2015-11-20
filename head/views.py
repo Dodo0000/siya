@@ -96,7 +96,7 @@ LATE_FEES_PRICE = Globals.late_fees_price #rupees per day
 NO_DAYS_TO_BORROW_BOOK = Globals.books['borrow']['max_days'] # number of days for which a book is to be borrowed
 MAX_NUM_OF_BOOKS_TO_BORROW = int(Globals.books['borrow']['max_books']) # max number of books member can borrow at once
 
-NO_OF_BOOKS_PER_PAGE = 25
+NO_OF_BOOKS_PER_PAGE = 10
 
 GLOBAL_CONTEXT = {
         "globals": Globals,
@@ -604,19 +604,20 @@ def searchBook(request):
     < Note : In Step 2c, meaning the word "most" is very flexible. >
     '''
     page = request.GET.get("page", 1)
+    all_books = Book.objects.all()
 
     if value is not None:
         value = value.split(" ")
         if type_ in TYPES:
             if type_ == "Title":
-                books = searchBookTitle(" ".join(value), Book.objects.all())
+                books = searchBookTitle(" ".join(value), all_books)
             elif type_ == "Call No":
                 books = Book.objects.filter(call_number__contains=value[0]).order_by("call_number")
             elif type_ == "Acc No":
                 books = Book.objects.filter(accession_number__contains=value[0]).order_by("-accession_number")
 
             elif type_ == "Keyword":
-                books = searchBookKeywords(" ".join(value), Book.objects.all())
+                books = searchBookKeywords(" ".join(value), all_books)
             elif type_ == "Publisher":
                 books = Book.objects.filter(publisher__name__contains=value[0]).order_by("publisher__name")
                 for each in value[1:]:
@@ -626,7 +627,7 @@ def searchBook(request):
                     else:
                         break
             elif type_ == "Author":
-                books = searchBookAuthor(" ".join(value), Book.objects.all())
+                books = searchBookAuthor(" ".join(value), all_books)
         booklist = books
         if len(booklist) == 0:
             not_found = True
@@ -648,7 +649,7 @@ def searchBook(request):
                   "head/search_books.html",
                   {
                       'globals': Globals,
-                      'total_books_len': len(Book.objects.all()),
+                      'total_books_len': len(all_books),
                       'date': datetime.date.today(),
                       "books": booklist,
                       "book_pages": list(range(1, paginator.num_pages+1)),
@@ -662,7 +663,12 @@ def searchBook(request):
 
 
 def bookInfo(request, accNo):
-    book = get_object_or_404(Book, accession_number=accNo)
+    books = Book.objects.filter(accession_number=accNo)
+    if len(books) == 0:
+        return HttpResponse("Book Not Found")
+    else:
+        book = books[0]
+
     lends =  Lend.objects.filter(book=book)
     if_borrowed = False
     
