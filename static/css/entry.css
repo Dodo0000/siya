@@ -40,3 +40,7 @@ body{
 .btn-menu{
   border-radius: 0px;
 }
+
+label{
+  margin-bottom: unset;
+}

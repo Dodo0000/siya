@@ -1,11 +1,18 @@
 {% extends 'base.html' %}
 
+{% load static %}
+
+{% block css %}
+<link href="{% static 'css/almsGroups/styles.css'%}" rel="stylesheet">
+{% endblock %}
+
+
 {% block content %}
 
 <h3>Add New Group</h3>
 
-<form class="form-horizontal">{% csrf_token %}
-  <input class="form-control" type="text" id="name" name="name" placeholder="Name">
+<form class="form-horizontal" method="POST">{% csrf_token %}
+  <input class="form-control" type="text" id="name" name="name" placeholder="Name" autofocus=True>
 
   {% for perm in all_permissions%}
   <div class="checkbox">
@@ -15,5 +22,7 @@
     </label>
   </div>
   {% endfor %}
+  <br>
+  <input class="btn btn-success" type="submit" value="Create Group">
 </form>
 {% endblock %}

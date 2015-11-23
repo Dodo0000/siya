@@ -34,27 +34,12 @@ body{
   opacity: 0.8;
 }
 
-.btn-primary{
-  background: #1c6585;
+.btn-info,.btn-primary,.btn-success,.btn-warning,.btn-danger{
+  background: #eeeeee;
+  color: #000000;
+  border-width:1px;
 }
 
-.btn-success{
-  background-color: #1c6585;
-  border-color: #1c6585;
-}
-
-.btn-success:active{
-  background-color:#4f98b8;
-  border-color: #1c6585;
-}
-.btn-success:hover{
-  background-color:#4f98b8;
-  border-color: #1c6585;
-}
-.btn-success:active{
-  background-color:#4f98b8;
-  border-color: #1c6585;
-}
 
 .navbar > .container .navbar-brand, .navbar > .container-fluid .navbar-brand{
     margin-left: 35px;
@@ -223,5 +208,407 @@ a:active{
 }
 .main .page-header {
   margin-top: 0;
+}
+
+
+
+.glyphicon-0:before{
+    content: "\0030"
+}
+
+.glyphicon-1:before{
+    content: "\0031"
+}
+
+.glyphicon-2:before{
+    content: "\0032"
+}
+
+.glyphicon-3:before{
+    content: "\0033"
+}
+
+.glyphicon-4:before{
+    content: "\0034"
+}
+
+.glyphicon-5:before{
+    content: "\0035"
+}
+
+.glyphicon-6:before{
+    content: "\0036"
+}
+
+.glyphicon-7:before{
+    content: "\0037"
+}
+
+.glyphicon-8:before{
+    content: "\0038"
+}
+
+.glyphicon-9:before{
+    content: "\0039"
+}
+
+.glyphicon-10:before{
+    content: "\0031\0030"
+}
+
+.glyphicon-11:before{
+    content: "\0031\0031"
+}
+
+.glyphicon-12:before{
+    content: "\0031\0032"
+}
+
+.glyphicon-13:before{
+    content: "\0031\0033"
+}
+
+.glyphicon-14:before{
+    content: "\0031\0034"
+}
+
+.glyphicon-15:before{
+    content: "\0031\0035"
+}
+
+.glyphicon-16:before{
+    content: "\0031\0036"
+}
+
+.glyphicon-17:before{
+    content: "\0031\0037"
+}
+
+.glyphicon-18:before{
+    content: "\0031\0038"
+}
+
+.glyphicon-19:before{
+    content: "\0031\0039"
+}
+
+.glyphicon-20:before{
+    content: "\0032\0030"
+}
+
+.glyphicon-21:before{
+    content: "\0032\0031"
+}
+
+.glyphicon-22:before{
+    content: "\0032\0032"
+}
+
+.glyphicon-23:before{
+    content: "\0032\0033"
+}
+
+.glyphicon-24:before{
+    content: "\0032\0034"
+}
+
+.glyphicon-25:before{
+    content: "\0032\0035"
+}
+
+.glyphicon-26:before{
+    content: "\0032\0036"
+}
+
+.glyphicon-27:before{
+    content: "\0032\0037"
+}
+
+.glyphicon-28:before{
+    content: "\0032\0038"
+}
+
+.glyphicon-29:before{
+    content: "\0032\0039"
+}
+
+.glyphicon-30:before{
+    content: "\0033\0030"
+}
+
+.glyphicon-31:before{
+    content: "\0033\0031"
+}
+
+.glyphicon-32:before{
+    content: "\0033\0032"
+}
+
+.glyphicon-33:before{
+    content: "\0033\0033"
+}
+
+.glyphicon-34:before{
+    content: "\0033\0034"
+}
+
+.glyphicon-35:before{
+    content: "\0033\0035"
+}
+
+.glyphicon-36:before{
+    content: "\0033\0036"
+}
+
+.glyphicon-37:before{
+    content: "\0033\0037"
+}
+
+.glyphicon-38:before{
+    content: "\0033\0038"
+}
+
+.glyphicon-39:before{
+    content: "\0033\0039"
+}
+
+.glyphicon-40:before{
+    content: "\0034\0030"
+}
+
+.glyphicon-41:before{
+    content: "\0034\0031"
+}
+
+.glyphicon-42:before{
+    content: "\0034\0032"
+}
+
+.glyphicon-43:before{
+    content: "\0034\0033"
+}
+
+.glyphicon-44:before{
+    content: "\0034\0034"
+}
+
+.glyphicon-45:before{
+    content: "\0034\0035"
+}
+
+.glyphicon-46:before{
+    content: "\0034\0036"
+}
+
+.glyphicon-47:before{
+    content: "\0034\0037"
+}
+
+.glyphicon-48:before{
+    content: "\0034\0038"
+}
+
+.glyphicon-49:before{
+    content: "\0034\0039"
+}
+
+.glyphicon-50:before{
+    content: "\0035\0030"
+}
+
+.glyphicon-51:before{
+    content: "\0035\0031"
+}
+
+.glyphicon-52:before{
+    content: "\0035\0032"
+}
+
+.glyphicon-53:before{
+    content: "\0035\0033"
+}
+
+.glyphicon-54:before{
+    content: "\0035\0034"
+}
+
+.glyphicon-55:before{
+    content: "\0035\0035"
+}
+
+.glyphicon-56:before{
+    content: "\0035\0036"
+}
+
+.glyphicon-57:before{
+    content: "\0035\0037"
+}
+
+.glyphicon-58:before{
+    content: "\0035\0038"
+}
+
+.glyphicon-59:before{
+    content: "\0035\0039"
+}
+
+.glyphicon-60:before{
+    content: "\0036\0030"
+}
+
+.glyphicon-61:before{
+    content: "\0036\0031"
+}
+
+.glyphicon-62:before{
+    content: "\0036\0032"
+}
+
+.glyphicon-63:before{
+    content: "\0036\0033"
+}
+
+.glyphicon-64:before{
+    content: "\0036\0034"
+}
+
+.glyphicon-65:before{
+    content: "\0036\0035"
+}
+
+.glyphicon-66:before{
+    content: "\0036\0036"
+}
+
+.glyphicon-67:before{
+    content: "\0036\0037"
+}
+
+.glyphicon-68:before{
+    content: "\0036\0038"
+}
+
+.glyphicon-69:before{
+    content: "\0036\0039"
+}
+
+.glyphicon-70:before{
+    content: "\0037\0030"
+}
+
+.glyphicon-71:before{
+    content: "\0037\0031"
+}
+
+.glyphicon-72:before{
+    content: "\0037\0032"
+}
+
+.glyphicon-73:before{
+    content: "\0037\0033"
+}
+
+.glyphicon-74:before{
+    content: "\0037\0034"
+}
+
+.glyphicon-75:before{
+    content: "\0037\0035"
+}
+
+.glyphicon-76:before{
+    content: "\0037\0036"
+}
+
+.glyphicon-77:before{
+    content: "\0037\0037"
+}
+
+.glyphicon-78:before{
+    content: "\0037\0038"
+}
+
+.glyphicon-79:before{
+    content: "\0037\0039"
+}
+
+.glyphicon-80:before{
+    content: "\0038\0030"
+}
+
+.glyphicon-81:before{
+    content: "\0038\0031"
+}
+
+.glyphicon-82:before{
+    content: "\0038\0032"
+}
+
+.glyphicon-83:before{
+    content: "\0038\0033"
+}
+
+.glyphicon-84:before{
+    content: "\0038\0034"
+}
+
+.glyphicon-85:before{
+    content: "\0038\0035"
+}
+
+.glyphicon-86:before{
+    content: "\0038\0036"
+}
+
+.glyphicon-87:before{
+    content: "\0038\0037"
+}
+
+.glyphicon-88:before{
+    content: "\0038\0038"
+}
+
+.glyphicon-89:before{
+    content: "\0038\0039"
+}
+
+.glyphicon-90:before{
+    content: "\0039\0030"
+}
+
+.glyphicon-91:before{
+    content: "\0039\0031"
+}
+
+.glyphicon-92:before{
+    content: "\0039\0032"
+}
+
+.glyphicon-93:before{
+    content: "\0039\0033"
+}
+
+.glyphicon-94:before{
+    content: "\0039\0034"
+}
+
+.glyphicon-95:before{
+    content: "\0039\0035"
+}
+
+.glyphicon-96:before{
+    content: "\0039\0036"
+}
+
+.glyphicon-97:before{
+    content: "\0039\0037"
+}
+
+.glyphicon-98:before{
+    content: "\0039\0038"
+}
+
+.glyphicon-99:before{
+    content: "\0039\0039"
 }
 

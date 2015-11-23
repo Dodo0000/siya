@@ -43,7 +43,8 @@ INSTALLED_APPS = (
     'settings',
     'configs',
     'ledger',
-    'almsGroups'
+    'almsGroups',
+    'configurations',
 )
 
 MIDDLEWARE_CLASSES = (

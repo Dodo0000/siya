@@ -8,13 +8,48 @@
 
 {% block content %}
 
-<h3> Group Hugs - {{ globals.yalms.org_short_name }}</h3>
+<h3>
+  <label>
+    <span class="text-primary">
+      HUGS
+    </span>
+    - 
+    <span class="text-primary">H</span>
+  </label>abu's 
+  <label>
+    <span class="text-primary">U</span>
+  </label>nremarkable 
+  <label>
+    <span class="text-primary">
+      G</span>
+  </label>roup<label><span class="text-primary">S</span></label>
+</h3>
 
+{% if group_added == 1 %}
+<span class="well">
+  <span class="text-success">
+    The Group <span class="label">{{ group.name }}</label> was created :)
+  </span>
+</span>
+{% endif %}
+
+<div class="container-fluid buttons">
+  <a href="{% url 'addNewGroup' %}" class="btn btn-primary">
+    <span class="glyphicon glyphicon-plus"></span> Create Group</span>
+</a>
+</div>
+
+<hr>
+
+<div class="container-fluid group-list">
 {% for group in all_groups %}
 <div class="well">
-  <h4>Name {{ group }}</h4>
-  <h4> Permissions {{ group.permissions.all|getFormattedPermissions|safe }} </h4>
+  <div class="col col-sm-1">
+    <font size=24>{{ group.permissions.all|length|makeGlyphicon|safe }}</font>
+  </div>
+  <h4>Name - <i>{{ group.name|title }}</i></h4>
+  <h4> Permissions - <i>{{ group|getReasonablePermissions|getFormattedPermissions|safe }}</i> </h4>
 </div>
 {% endfor %}
-
+</div>
 {% endblock %}

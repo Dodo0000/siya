@@ -336,6 +336,9 @@ class Book(models.Model):
     def get_accession_number(self):
         return smart_str(self.accession_number)
 
+    def get_pretty_accession_number(self):
+        return self.get_accession_number
+
     def get_call_number(self):
         if self.language == "EN":
             return smart_str(self.call_number)
@@ -343,16 +346,38 @@ class Book(models.Model):
             call_no = "".join([str(cint(_,_ in NP_NUM.keys(), lang=self.language)) for _ in self.call_number])
             return smart_str(call_no)
 
+    def get_pretty_call_nnumber(self):
+        return self.get_call_number()
+
     def get_language(self):
         return smart_str(self.language)
 
+
+    def get_pretty_language(self):
+        return self.get_language()
+
     def get_series(self):
+        if self.series == None:
+            return ""
+        else:
+            return smart_str(self.series)
+
+
+    def get_pretty_series(self):
         if self.series == None:
             return "No series"
         else:
             return smart_str(self.series)
 
+
     def get_edition(self):
+        if self.edition == None:
+            return ""
+        else:
+            return smart_str(self.edition)
+
+
+    def get_pretty_edition(self):
         if self.edition == None:
             return "No edition"
         else:
@@ -360,9 +385,17 @@ class Book(models.Model):
 
     def get_price(self):
         if self.price == None:
+            return ""
+        else:
+            return smart_str(self.price)
+
+
+    def get_pretty_price(self):
+        if self.price == None:
             return "No price"
         else:
             return smart_str(self.price)
+
 
     def get_volume(self):
         if self.volume is None:
@@ -372,12 +405,22 @@ class Book(models.Model):
 
     def get_gifted_by(self):
         if self.gifted_by == None:
+            return ""
+        else:
+            return smart_str(self.gifted_by.__str__())
+
+
+    def get_pretty_gifted_by(self):
+        if self.gifted_by == None:
             return "Not Gifted By Anyone"
         else:
             return smart_str(self.gifted_by.__str__())
 
     def get_title(self):
-        return self.title
+        return smart_str(self.title)
+
+    def get_pretty_title(self):
+        return self.get_title()
 
     def __str__(self):
         if self.title is not None:
@@ -409,16 +452,29 @@ class Book(models.Model):
     def get_authors(self):
         author_list =  self.author.all()
         if len(author_list) > 0:
-            return ",".join([smart_str(x.get_name()) for x in author_list])
+            return "%".join([smart_str(x.get_name()) for x in author_list])
+        else:
+            return ""
+
+    def get_pretty_authors(self):
+        author_list =  self.author.all()
+        if len(author_list) > 0:
+            return ", ".join([smart_str(x.get_name()) for x in author_list])
         else:
             return "No Authors"
+
 
     def get_publishers(self):
         if self.publisher is not None:
             return self.publisher.__str__()
         else:
-            return "No Publishers"
+            return ""
     
+    def get_pretty_publishers(self):
+        if self.publisher is not None:
+            return self.publisher.__str__()
+        else:
+            return "No Publishers"
 
     def get_catalog_publishers(self):
         if self.publisher is not None:
@@ -427,6 +483,13 @@ class Book(models.Model):
             return ""
 
     def get_keywords(self):
+        if self.keywords is not None:
+            return ", ".join([smart_str(
+                each.__str__()) for each in self.keywords.all() if each.__str__() is not None])
+        else:
+            return ""
+
+    def get_pretty_keywords(self):
         if self.keywords is not None:
             return ", ".join([smart_str(
                 each.__str__()) for each in self.keywords.all() if each.__str__() is not None])

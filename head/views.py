@@ -182,7 +182,6 @@ def add_book(request):
     each = dict()   ## store post data
     STATE = 0
     
-    return HttpResponse(each)
 
     for _ in all_attrs:
         each[_] =  request.POST.get(_)
@@ -219,14 +218,24 @@ def add_book(request):
             continue
 
         # either create a new book or edit an already existing book
+        book_was_created = True
         try:
             book = Book.objects.get(accession_number=toint(accession_number))
+            book_was_created = False
         except DoesNotExist:
             book = Book.objects.create(accession_number=toint(accession_number),
                     title=each['title'],
                     no_of_pages=toint(
                         each['no_of_pages']))
+
+        # if the book was found, the title, page No. and accession number
+        # can also to change
+        if book_was_created is False:
+            book.title = each['title']
+            book.no_of_pages = toint(each['no_of_pages'])
+
         
+        book.author.all().delete()
         for author_name in each['auth'].split("%"):
             author_name = author_name.strip(" ")
             author = Author.objects.get_or_create(
@@ -278,10 +287,10 @@ def add_book(request):
                         gifter_name=gifter_name,
                     )
             gifter = gifter[0]
-            if gifter_phn != "" and gifter_phn.isdigit():
+            if gifter_phn.isdigit():
                 gifter.phone = gifter_phn
-            if gifter_email != "" and validateEmail(gifter_email):
-                gifter.email = email
+            if validateEmail(gifter_email):
+                gifter.email = gifter_email
             gifter.save()
             book.gifted_by = gifter
 
@@ -310,103 +319,6 @@ def add_book(request):
     else:
         return JsonResponse({"success": False,'acc_no': AccessionNumberCount.get_no()})
 
-'''
-def add_book(request):
-    all_attrs = [_[2] for _ in Globals.books['columns']]
-    required_attrs = all_attrs[:3]
-    optional_attrs = all_attrs[3:]
-
-    if len(
-            [
-                1 for each in required_attrs
-                if request.POST.get(each, None) is None
-            ]
-           ) != 0:
-        return JsonResponse({"exists": False, "success": False, "reason_failure": "all necessary attrs not found " + str(request.GET.get('no_of_pages', "NULL"))})
-   
-    attr_values = {each:request.POST.get(each, None) for each in all_attrs}
-
-    
-    #check if book exists brefore creating it
-    if (len(Book.objects.filter(
-                accession_number=attr_values['acc_no']
-                )
-            ) > 0 ) is True:
-        return JsonResponse({"exists": False, success:False, "reason_failure": "book does not exist"})
-    
-    if "," in attr_values['acc_no']:
-        acc_list = [_.strip(' ') for _ in attr_values['acc_no'].split(",")]
-    elif "-" in attr_values['acc_no']:
-        acc_strip = [int(_) for _ in attr_values['acc_no'].split("-")]
-        if len(acc_strip) != 2:
-            raise TypeError("Range Too Many or Too Few(not 2)")
-        acc_list = list(range(acc_strip[0],acc_strip[1]+1))
-    else:
-        acc_list = [attr_values['acc_no']]
-
-    for each in acc_list:
-
-        book = Book.objects.get_or_create(
-                accession_number=each,
-                title=attr_values['title'],
-                no_of_pages=toint(attr_values['no_of_pages'])
-                )
-
-        if book[1] == True:
-            continue
-
-        #book.call_number = attr_values['call_no']
-        book.call_number = "attr_values"
-
-        authors = attr_values['auth'].split("%")
-        for name in authors:
-            if name != "":
-                author = Author.objects.get_or_create(
-                        name=name,
-                        slug=slugify(name))
-                book.author.add(author[0])
-                author[0].save()
-
-        if len([
-            attr_values[_] is None 
-            for _ in [
-                'pub_name',
-                'pub_place',
-                'pub_year'
-                ]]) > 0:
-                pass #### value of publisher_* wasn't given
-        else:
-            publisher = Publisher.objects.get_or_create(
-                    name=attr_values['publisher_name'],
-                    place=attr_values['publisher_place'],
-                    year=attr_values['publisher_year'])
-            Book.publisher = publisher[0]
-            publisher[0].save()
-
-        book.series = attr_values['ser']
-
-        book.edition = attr_values['edtn']
-
-        book.price = attr_values['price']
-
-        book.volume = attr_values['vol']
-
-        kwds = attr_values['kwds'].split(",")
-        for each in kwds:
-            kwrd = KeyWord.objects.get_or_create(name=each,slug=slugify(each))
-            book.keywords.add(kwrd[0])
-            kwrd[0].save()
-
-        ## add all attributes to book before saving it.
-        book.save()
-
-
-    return JsonResponse({"call_no": book.call_number,"success":  True})
-'''
-
-
-
-        
 
 
 ##############################################################################
@@ -416,6 +328,7 @@ def add_book(request):
 
 @login_required(login_url="/login")
 def editEntry(request,acc_no):
+    book_exists = True
     if acc_no != None:
         books = Book.objects.filter(accession_number=acc_no)
         if len(books) < 1:
@@ -424,6 +337,7 @@ def editEntry(request,acc_no):
             book = books[0]
         clear_fields = False
     else:
+        book_exists = False
         book = None
         clear_fields = True
     total_entry_space = 12

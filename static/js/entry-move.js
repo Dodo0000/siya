@@ -18,6 +18,7 @@ var NP_EN_STRUCT = {
   ')': 0
 };
 
+$("#dataEntrySuccessful").hide();
 
 function saveBook(){
   acc_no = $(".input-acc_no").val();
@@ -42,7 +43,7 @@ function saveBook(){
           max_accession_number = data.acc_no;
           $(".current_acc_no").text(max_accession_number);
           $(".input-acc_no").text(max_accession_number);
-          alert("data entry successful :D");
+          $("#dataEntrySuccessful").show().delay(2000).hide("slow");
           if (clear_fields == 1)
             clearInputFields();
         }
@@ -58,7 +59,6 @@ function saveBook(){
 }
 
 $("#saveBook").click(function(){
-  alert("save book?");
   saveBook();
 })
 

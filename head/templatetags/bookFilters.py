@@ -48,7 +48,7 @@ def getBookValue(value,arg):
             return value.get_accession_number()
         elif arg == 'kwds':
             return value.get_keywords()
-        elif arg == 'gfted_name':
+        elif arg == 'gftd_name':
             if value.gifted_by == None:
                 return ""
             else:
@@ -58,7 +58,7 @@ def getBookValue(value,arg):
                 return ''
             else:
                 return value.gifted_by.get_phone_no()
-        elif arg == "gfted_email":
+        elif arg == "gftd_email":
             if value.gifted_by == None:
                 return ''
             else:

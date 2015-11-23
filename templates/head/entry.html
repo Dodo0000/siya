@@ -49,19 +49,30 @@ var language = "EN";
   </div>
   <br>
   <div class="container-fluid">
-    <div class="col col-sm-12 btn-group">
-      <div class="dropdown">
-        <a href="#" class="btn btn-info btn-menu dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Select Language<span class="caret"></span></a>
-        <ul class="dropdown-menu">
-          <li><a id="EN" href="#" onclick="changeLang('EN')">English</a></li>
-          <li><a id="NP" href="#" onclick="changeLang('NP')">Nepali</a></li>
-        </ul>
-        <button class="btn btn-info btn-menu" onclick="clearInputFields()">Clear Fields</button>
-        <button class="btn btn-success btn-menu" id="saveBook">Save Book</button>
+    <div class="col col-sm-12">
+      <div class="btn-group">
+        <div class="dropdown">
+          <a href="#" class="btn btn-info btn-menu dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Select Language<span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a id="EN" href="#" onclick="changeLang('EN')">English</a></li>
+            <li><a id="NP" href="#" onclick="changeLang('NP')">Nepali</a></li>
+          </ul>
+          <button class="btn btn-info btn-menu" onclick="clearInputFields()">Clear Fields</button>
+          {% if book != None %}
+          <a class="btn btn-info btn-menu" href="{% url 'book' accNo=book.accession_number%}">Read Book Data</a>
+          {% endif %}
+          <button class="btn btn-success btn-menu" id="saveBook">Save Book</button>
+        </div> <!-- button group -->
       </div>
     </div>
     <hr/>
   </div>
+  
+  <div id="dataEntrySuccessful" class="well">
+    Book Was Saved :D
+  </div>
+
+
   <br> 
   {% csrf_token %}
   <div class="container">
