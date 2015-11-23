@@ -4,10 +4,13 @@ from django.contrib.auth.models import Group, Permission
 from django.db.models import Q
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.encoding import smart_str
+from django.contrib.auth.decorators import login_required
 
 from settings.models import addGlobalContext
 # Create your views here.
 
+
+@login_required(login_url="/login")
 def homeWithArgs(request,group_added,group_name):
     all_groups = Group.objects.order_by("-id")
     context = addGlobalContext({
@@ -18,10 +21,12 @@ def homeWithArgs(request,group_added,group_name):
     return render(request,'almsGroups/home.html',context=context)
 
 
+@login_required(login_url="/login")
 def home(request):
     return homeWithArgs(request,group_added=False,group_name=None)
 
 
+@login_required(login_url="/login")
 def addGroup(request):
     all_perms = Permission.objects.filter(Q(codename__contains="Book")|Q(codename__contains="ModUser"))
     if request.method == "POST":

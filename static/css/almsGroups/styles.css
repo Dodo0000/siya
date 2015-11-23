@@ -1,3 +1,15 @@
 .label{
   padding: .1em .6em .1em;
 }
+
+.well:hover{
+  background: #fff;
+}
+
+.group_delete_link{
+  color: #bbb;
+}
+
+.group_delete_link:hover{
+  color: red;
+}
