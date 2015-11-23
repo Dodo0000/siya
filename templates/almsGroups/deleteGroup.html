@@ -1,0 +1,50 @@
+
+
+{% extends 'base.html' %}
+{% load group_filters %}
+{% load static %}
+
+{% block css %}
+<link href="{% static 'css/almsGroups/styles.css'%}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+
+<h3>
+  <label>
+    <span class="text-primary">
+      HUGS
+    </span>
+    - 
+    <span class="text-primary">H</span>
+  </label>abu's 
+  <label>
+    <span class="text-primary">U</span>
+  </label>nremarkable 
+  <label>
+    <span class="text-primary">
+      G</span>
+  </label>roup<label><span class="text-primary">S</span></label>
+</h3>
+{% if deleted == False %}
+
+<div class="well" align=center>
+  <label>
+    Do You Really Want To Delete This Group?
+  </label>
+  <form method="POST">{% csrf_token %}
+    <input type="hidden" value="1" name="really_delete">
+    <input type="submit" class="btn btn-success" value="Yes">
+  </form>
+</div>
+
+{% elif group_found == False %}
+<div class="well">
+  Oops! The group you are looking for was not found :P
+</div>
+{% elif deleted == True %}
+<div class="well">
+  group "{{ group.name }}" was successfully deleted! <a href="{% url 'almsGroupsHome'%}"> <span class="text-primary">Go Back To Groups</span></a>
+</div>
+{% endif %}
+{% endblock %}

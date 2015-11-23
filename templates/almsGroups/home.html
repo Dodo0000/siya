@@ -53,12 +53,17 @@
         <h4>Name - <i>{{ group.name|title }}</i></h4>
       </div>
       <div class="col col-sm-1" align=right>
-        <font size="5"><a href="" class="group_delete_link"><span class="glyphicon glyphicon-trash"></span></a></font>
+        <font size="5"><a href="{% url 'deleteGroup' group_id=group.id %}" class="group_delete_link"><span class="glyphicon glyphicon-trash"></span></a></font>
       </div>
-      <h4> Permissions - <i>{{ group|getReasonablePermissions|getFormattedPermissions|safe }}</i> </h4>
+      <div class="col col-sm-11">
+        <h4> Permissions - <i>{{ group|getReasonablePermissions|getFormattedPermissions|safe }}</i> </h4>
+      </div>
+      <div class="col col-sm-1" align=right>
+        <font size="5"><a href="{% url 'editGroup' group_id=group.id %}" class="group_edit_link"><span class="glyphicon glyphicon-edit"></span></a></font>
+      </div>
     </div>
   </div>
 </div>
 {% endfor %}
 </div>
-{% endblock %xz
+{% endblock %}

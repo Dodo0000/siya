@@ -26,3 +26,7 @@ def makeGlyphicons(value):
         return temp.format(value)
     else:
         return ""
+
+@register.filter(name="hasPerm")
+def hasPerm(value, arg):
+    return int(len(value.permissions.filter(codename=arg)) > 0)

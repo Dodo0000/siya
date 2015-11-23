@@ -13,3 +13,12 @@
 .group_delete_link:hover{
   color: red;
 }
+
+
+.group_edit_link{
+  color: #bbb;
+}
+
+.group_edit_link:hover{
+  color: orange;
+}

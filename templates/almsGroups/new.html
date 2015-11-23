@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load group_filters %}
 
 {% load static %}
 
@@ -9,20 +10,40 @@
 
 {% block content %}
 
+<h3>
+  <label>
+    <span class="text-primary">
+      HUGS
+    </span>
+    - 
+    <span class="text-primary">H</span>
+  </label>abu's 
+  <label>
+    <span class="text-primary">U</span>
+  </label>nremarkable 
+  <label>
+    <span class="text-primary">
+      G</span>
+  </label>roup<label><span class="text-primary">S</span></label>
+</h3>
 <h3>Add New Group</h3>
 
-<form class="form-horizontal" method="POST">{% csrf_token %}
-  <input class="form-control" type="text" id="name" name="name" placeholder="Name" autofocus=True>
-
-  {% for perm in all_permissions%}
-  <div class="checkbox">
-    <label>
-      <input type="checkbox" value="" name="perm_{{ perm.codename }}">
-      {{ perm.name}}
-    </label>
-  </div>
-  {% endfor %}
-  <br>
-  <input class="btn btn-success" type="submit" value="Create Group">
-</form>
+<div class="col col-sm-6">
+  <form class="form-horizontal" method="POST">{% csrf_token %}
+    <label for="name">Group Name</label>
+    <input class="form-control" type="text" id="name" name="name" placeholder="Name" value="{{ found_group.name }}" autofocus=True spellcheck=True>
+    <br>
+    <label for="perm">Choose Permissions For This Group</label>
+    {% for perm in all_permissions%}
+    <div class="checkbox">
+      <label>
+        <input type="checkbox" value="" name="perm_{{ perm.codename }}" {% if found_group|hasPerm:perm.codename == True %}checked {% endif %}>
+        {{ perm.name}}
+      </label>
+    </div>
+    {% endfor %}
+    <br>
+    <input class="btn btn-success" type="submit" value="Create Group">
+  </form>
+</div>
 {% endblock %}

@@ -86,20 +86,35 @@ class Publisher(models.Model):
     place = models.CharField(max_length=255, db_index=True)
     year = models.CharField(max_length=10, db_index=True)
 
+
+    def get_all_attr_for_spreadsheet(self):
+        return (
+                    ("Name", self.get_name()),
+                    ("Place Of Publication", self.get_place()),
+                    ("Year Of Publication", self.get_year())
+                )
+
     def get_name(self):
+        if self.name in [None,"None"]:
+            return ""
         return smart_str(self.name)
 
     def get_place(self):
+        if self.place in [None,"None"]:
+            return ""
         return smart_str(self.place)
+
     def get_year(self):
+        if self.year in [None,"None"]:
+            return ""
         return smart_str(self.year)
     
     def __str__(self):
-        if self.year == u"0" and self.place != None and self.name != None:
+        if self.year == u"0" and self.place not in [None,'None'] and self.name not in [None,'None']:
             return smart_str(u"{0}, {1}".format(
                 self.name,
                 self.place))
-        elif self.place == None and self.year != None and self.name != None:
+        elif self.place in [None,'None'] and self.year not in [None,'None'] and self.name not in [None,'None']:
             return smart_str(u"{0} in {1}".format(
                 self.name,
                 self.year))
@@ -136,11 +151,18 @@ class Author(models.Model):
     name = models.CharField(max_length=100)
     slug = models.SlugField(db_index=True)
 
+    def get_all_attr_for_spreadsheet(self):
+        return (
+                    ("Name", self.get_name()),
+                )
+
     def get_name(self):
         '''
         the data entered for an anuthor is in the format:
         last_name, first_name
         '''
+        if self.name in [None,"None"]:
+            return ""
         name_list = self.name.split(",")
         name_list.reverse()
         return " ".join(name_list)
@@ -218,10 +240,14 @@ class Gifter(models.Model):
     phone = models.IntegerField(null=True)
 
     def get_email(self):
-        return self.email
+        if self.email in [None, "None"]:
+            return ""
+        return smart_str(self.email)
 
     def get_phone_no(self):
-        return self.phone
+        if self.phone in [None,"None"]:
+            return ""
+        return smart_str(self.phone)
 
     def get_name(self):
         return smart_str(self.gifter_name)
@@ -332,6 +358,64 @@ class Book(models.Model):
             ("Gifted By", self.get_gifted_by()),
         )
 
+    def get_all_attr_for_spreadsheet(self):
+        value = (
+            ('Accession Number', self.get_accession_number()),
+            ('Call Number', self.get_call_number()),            
+            ('Title', self.get_title()),
+            ('Author', self.get_authors()),
+            ('Publisher Name', self.get_publisher_name()),
+            ('Year Of Publication', self.get_published_year()),
+            ('Place Of Publication', self.get_published_place()),
+            ('No. of Pages', self.no_of_pages),
+            ('keywords', smart_str(self.get_keywords())),
+            ('Date Added', self.accessioned_date),
+            ("Series", self.get_series()),
+            ("Edition", self.get_edition()),
+            ("Price", self.get_price()),
+            ("Volume", self.get_volume()),
+            ("Gifted By", self.get_gifted_by_name()),
+            ("Email Of Gifter", self.get_gifted_by_email()),
+            ("Phone No. Of Gifter", self.get_gifted_by_phone_no())
+        )
+        return value
+
+    def get_publisher_name(self):
+        if self.publisher in [None,'None']:
+            return ""
+        else:
+            return smart_str(self.publisher.get_name())
+
+    def get_published_year(self):
+        if self.publisher in [None,'None']:
+            return ""
+        else:
+            return self.publisher.get_year()
+
+    def get_published_place(self):
+        if self.publisher in [None,'None']:
+            return ""
+        else:
+            return smart_str(self.publisher.get_place())
+
+    def get_gifted_by_name(self):
+        if self.gifted_by in [None,'None']:
+            return ""
+        else:
+            return self.gifted_by.get_name()
+
+    def get_gifted_by_email(self):
+        if self.gifted_by in [None,'None']:
+            return ""
+        else:
+            return self.gifted_by.get_email()
+
+    def get_gifted_by_phone_no(self):
+        if self.gifted_by in [None, "None"]:
+            return ""
+        else:
+            return self.gifted_by.get_phone_no()
+
     
     def get_accession_number(self):
         return smart_str(self.accession_number)
@@ -340,16 +424,20 @@ class Book(models.Model):
         return self.get_accession_number
 
     def get_call_number(self):
+        if self.call_number in [None,'None']:
+            return ""
         if self.language == "EN":
             return smart_str(self.call_number)
         else:
-            call_no = "".join([str(cint(_,_ in NP_NUM.keys(), lang=self.language)) for _ in self.call_number])
+            call_no = "".join([smart_str(cint(_,_ in NP_NUM.keys(), lang=self.language)) for _ in self.call_number])
             return smart_str(call_no)
 
     def get_pretty_call_nnumber(self):
         return self.get_call_number()
 
     def get_language(self):
+        if self.language in [None,"None"]:
+            return ''
         return smart_str(self.language)
 
 
@@ -357,66 +445,68 @@ class Book(models.Model):
         return self.get_language()
 
     def get_series(self):
-        if self.series == None:
+        if self.series in  [None,"None"]:
             return ""
         else:
             return smart_str(self.series)
 
 
     def get_pretty_series(self):
-        if self.series == None:
+        if self.series in [None,"None"]:
             return "No series"
         else:
             return smart_str(self.series)
 
 
     def get_edition(self):
-        if self.edition == None:
+        if self.edition in [None, "None"]:
             return ""
         else:
             return smart_str(self.edition)
 
 
     def get_pretty_edition(self):
-        if self.edition == None:
+        if self.edition in [None, "None"]:
             return "No edition"
         else:
             return smart_str(self.edition)
 
     def get_price(self):
-        if self.price == None:
+        if self.price in [None, 'None']:
             return ""
         else:
             return smart_str(self.price)
 
 
     def get_pretty_price(self):
-        if self.price == None:
+        if self.price in [None,"None"]:
             return "No price"
         else:
             return smart_str(self.price)
 
 
     def get_volume(self):
-        if self.volume is None:
+        if self.volume in [None,'None']:
             return 1
         else:
             return smart_str(self.volume)
 
     def get_gifted_by(self):
-        if self.gifted_by == None:
+        if self.gifted_by in [None,"None"]:
             return ""
         else:
             return smart_str(self.gifted_by.__str__())
 
 
     def get_pretty_gifted_by(self):
-        if self.gifted_by == None:
+        if self.gifted_by in [None,'None']:
             return "Not Gifted By Anyone"
         else:
             return smart_str(self.gifted_by.__str__())
 
     def get_title(self):
+        if self.title in [None,"None"]:
+            return ''
         return smart_str(self.title)
 
     def get_pretty_title(self):
@@ -485,7 +575,7 @@ class Book(models.Model):
     def get_keywords(self):
         if self.keywords is not None:
             return ", ".join([smart_str(
-                each.__str__()) for each in self.keywords.all() if each.__str__() is not None])
+                each.__str__()) for each in self.keywords.all() if each.__str__() not in [None, "None", ""]])
         else:
             return ""
 

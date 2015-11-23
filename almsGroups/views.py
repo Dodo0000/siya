@@ -27,12 +27,47 @@ def home(request):
 
 
 @login_required(login_url="/login")
-def addGroup(request):
-    all_perms = Permission.objects.filter(Q(codename__contains="Book")|Q(codename__contains="ModUser"))
+def deleteGroup(request,group_id):
+    group_found = None
+    try:
+        group = Group.objects.get(id=group_id)
+        group_found = True
+        really_delete = int(request.POST.get("really_delete", False))
+        if really_delete == True:
+            group.delete()
+            deleted = True
+        else:
+            deleted=False
+        print group_found, deleted
+        return render(
+                request,
+                "almsGroups/deleteGroup.html",
+                context = addGlobalContext(
+                    {
+                        "deleted": deleted,
+                        "group": group
+                    }))
+    except ObjectDoesNotExist:
+        return render(
+                request,
+                "almsGroups/deleteGroup.html",
+                context = addGlobalContext(
+                    {
+                        "group_found": group_found
+                    }))
+
+
+@login_required(login_url="/login")
+def editGroup(request, group_id):
+    all_perms = Permission.objects.filter(Q(codename__contains="Book")|Q(codename__contains="ModUser")|Q(codename__contains="lend"))
     if request.method == "POST":
         name = request.POST.get("name", None)
         if name != None:
-            groups = Group.objects.filter(name=name)
+            if group_id == None:
+                groups = Group.objects.filter(name=name)
+            else:
+                groups = Group.objects.filter(id=group_id)
+                groups[0].permissions.clear()
             if len(groups) > 0:
                 group_exists = True
             else:
@@ -44,11 +79,20 @@ def addGroup(request):
                 group = Group.objects.create(name=name)
             else:
                 group = groups[0]
+                group.name = name
             for perm in permissions.items():
                 if perm[1] is not False:
                     try:
                         group.permissions.get(codename=perm[0])
                     except ObjectDoesNotExist:
+                        perm_spl =  perm[0].split("_")
+                        print perm_spl
+                        if perm_spl[1].lower() == "book":
+                            group.permissions.add(Permission.objects.get(codename=perm_spl[0]+"_author"))
+                            group.permissions.add(Permission.objects.get(codename=perm_spl[0]+"_publisher"))
+                            group.permissions.add(Permission.objects.get(codename=perm_spl[0]+"_gifter"))
+                        elif perm_spl[1].lower() == "moduser":
+                            group.permissions.add(Permission.objects.get(codename=perm_spl[0]+"usertype"))
                         group.permissions.add(Permission.objects.get(codename=perm[0]))
             group.save()
             group_added = True
@@ -67,9 +111,22 @@ def addGroup(request):
                         'group': group
                     })
     else:
+        if group_id is not None:
+            try:
+                found_group = Group.objects.get(id=group_id)
+            except ObjectDoesNotExist:
+                found_group = None
+        else:
+            found_group=None
         context = addGlobalContext({
                         "all_permissions": all_perms,
+                        "found_group": found_group
                     })
 
 
     return render(request, 'almsGroups/new.html', context=context)
+
+
+@login_required(login_url="/login")
+def addGroup(request):
+    return editGroup(request, group_id=None)

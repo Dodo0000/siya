@@ -37,4 +37,6 @@ urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^accounts/', include('ledger.urls')),
     url(r'^groups/', include('almsGroups.urls')),
+    url(r'^booktool/', include('booktool.urls')),
+    url(r'^spreadsheet/', include('spreadsheet.urls')),
 ]
