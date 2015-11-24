@@ -60,6 +60,7 @@ Yours is the Earth and everything that's in it,
 from head.models import Book, Lend, Author, KeyWord, Publisher, Gifter
 from account.models import ModUser
 from settings.models import Globals, AccessionNumberCount
+from restructuredText.models import RestructuredText
 
 from django.http import JsonResponse
 from django.http import HttpResponseRedirect, HttpResponse
@@ -71,7 +72,7 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.utils.text import slugify
 from django.core.validators import validate_email
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 import datetime
@@ -197,15 +198,14 @@ def add_book(request):
         acc_list = list(range(acc_strip[0], acc_strip[1]+1))
     else:
         acc_list = [each['acc_no']]
-
+    
+    print each
 
     for val in acc_list:
         if val.__class__ == str:
             accession_number = val.strip(" ")
         else:
             accession_number = val
-
-
                     
         if accession_number in [None,"None", 0,"0",""] or "-" in accession_number:
             STATE = -1
@@ -222,21 +222,21 @@ def add_book(request):
         try:
             book = Book.objects.get(accession_number=toint(accession_number))
             book_was_created = False
-        except DoesNotExist:
+        except ObjectDoesNotExist:
             book = Book.objects.create(accession_number=toint(accession_number),
-                    title=each['title'],
+                    title=each['title'].lower(),
                     no_of_pages=toint(
                         each['no_of_pages']))
 
         # if the book was found, the title, page No. and accession number
         # can also to change
         if book_was_created is False:
-            book.title = each['title']
+            book.title = each['title'].lower()
             book.no_of_pages = toint(each['no_of_pages'])
 
         
         book.author.all().delete()
-        for author_name in each['auth'].split("%"):
+        for author_name in each['auth'].lower().split("%"):
             author_name = author_name.strip(" ")
             author = Author.objects.get_or_create(
                 name=author_name,
@@ -254,8 +254,8 @@ def add_book(request):
                 each['pub_name'] is None
         ) is False:
             publisher = Publisher.objects.get_or_create(
-                place=each['pub_place'],
-                name=each['pub_name'],
+                place=each['pub_place'].lower(),
+                name=each['pub_name'].lower(),
                 year=toint(each['pub_year']))
             if publisher[1]:
                 publisher = publisher[0]
@@ -267,10 +267,10 @@ def add_book(request):
         book.call_number = each['call_no']
 
         if (each['ser'] is None) is False:
-            book.series = each['ser']
+            book.series = each['ser'].lower()
 
         if (each['edtn'] is None) is False:
-            book.edition = each['edtn']
+            book.edition = each['edtn'].lower()
 
 
         if (each['isbn'] is None) is False:
@@ -280,7 +280,7 @@ def add_book(request):
             book.price = each['price']
         
         if (each['gftd_name'] is None) is False:
-            gifter_name = each['gftd_name']
+            gifter_name = each['gftd_name'].lower()
             gifter_phn = each['gftd_phn']
             gifter_email = each['gftd_email']
             gifter = Gifter.objects.get_or_create(
@@ -302,7 +302,7 @@ def add_book(request):
         else:
             book.volume = acc_list.index(val) + 1
 
-        for keyword in each['kwds'].split(","):
+        for keyword in each['kwds'].lower().split(","):
             keyword = keyword.strip(' ')
             kw = KeyWord.objects.get_or_create(name=keyword,slug=slugify(keyword))
             if kw[1]:
@@ -312,7 +312,9 @@ def add_book(request):
                 kw = kw[0]
             book.keywords.add(kw)
         book.save()
-        AccessionNumberCount.add1()
+        if request.POST.get('is_edit', 0) is 0:
+            AccessionNumberCount.add1()
+            print "Accession number incrimented", each
         STATE = 0
     if STATE == 0:
         return JsonResponse({"success": True,'acc_no': AccessionNumberCount.get_no()})
@@ -367,6 +369,7 @@ def editEntry(request,acc_no):
                       "columns_for_entry_div": columns_for_entry_div,
                       'div_len': div_len,
                       'book': book,
+                      'is_edit': int(book_exists),
                       'div_offset': div_offset,
                       'total_columns_table': total_no_of_cols_table,
                       'total_columns_entry': total_no_of_cols_entry,
@@ -426,7 +429,7 @@ def report(request):
 
 
 def home(request):
-    return render(request, 'head/home.html', {'globals':Globals, 'date': datetime.date.today()})
+    return render(request, 'head/home.html', {'globals':Globals, 'date': datetime.date.today(), "body_code": RestructuredText.objects.get(name="homeBody").get_html()})
 
 
 

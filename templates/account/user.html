@@ -6,9 +6,9 @@
 <div class="container-fluid">
   <div align=center class="col col-sm-offset-3 col-sm-6">
   <div class="well">
-    <h1>{{ user.get_name|title }}</h1>
-    <h4>{{ user.user_type.type|title }} since {{ user.date_joined|date:"l d N Y" }}</h4>
-    <p>{% if user.is_male %}He{% else %}She{% endif %} has borrowed <span class="label label-info">{{ len_books_borrowed }}</span> {% if len_books_borrowed == 1 %}book{% else %}books{% endif %}</p>
+    <h1>{{ search_user.get_name|title }}</h1>
+    <h4>{{ search_user.user_type.type|title }} since {{ search_user.date_joined|date:"l d N Y" }}</h4>
+    <p>{% if search_user.is_male %}He{% else %}She{% endif %} has borrowed <span class="label label-info">{{ len_books_borrowed }}</span> {% if len_books_borrowed == 1 %}book{% else %}books{% endif %}</p>
   </div> <!-- jumbotron -->
   </div>
   
@@ -18,7 +18,7 @@
 </div>
 <div class="container-fluid">
   <table class="table table-responsive table-hover">
-    {% for each in user.get_all_attr %}
+    {% for each in search_user.get_all_attr %}
     <tr>
       <td>{{each.0|title}}</td>
       <td>{{each.1}}</td>
@@ -26,7 +26,7 @@
     {% endfor %}
     <tr>
      <td>School is Varified</td>
-    {% if user.school_varified == False %}
+    {% if search_user.school_varified == False %}
      <td><span class="text-danger"><b>No</b></span></td>
      {% else %}
      <td><span class="text-success"><b>Yes</b></span></td>

@@ -199,6 +199,13 @@ class Lend(models.Model):
     borrowed = models.BooleanField(default=False, db_index=True)
 
 
+    def get_all_attr_for_spreadsheet(self):
+        return self.book.get_all_attr_for_spreadsheet() + (
+                    ("Borrowed By", self.user.username),
+                    ("Lended Date", self.lending_date)
+                )
+
+
     def get_borrowed_time(self):
         dt = datetime.date.today() - self.lending_date
         return int(dt.days)
@@ -533,6 +540,13 @@ class Book(models.Model):
         lends = Lend.objects.filter(book=self,returned=False)
         if len(lends) == 1:
             return lends[0].user
+        else:
+            return None
+
+    def get_lend_obj(self):
+        lends = Lend.objects.filter(book=self,returned=False)
+        if len(lends) == 1:
+            return lends[0]
         else:
             return None
 

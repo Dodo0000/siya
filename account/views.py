@@ -22,7 +22,7 @@ def profile(request, username):
     user = get_object_or_404(ModUser,username=username)
     books_borrowed = Lend.objects.filter(user=user,returned=False)
     len_books_borrowed = len(books_borrowed)
-    return render(request, 'account/user.html', {'globals': Globals,'date': datetime.date.today(), 'user': user, 'books_borrowed': books_borrowed, 'len_books_borrowed': len_books_borrowed })
+    return render(request, 'account/user.html', {'globals': Globals,'date': datetime.date.today(), 'search_user': user, 'books_borrowed': books_borrowed, 'len_books_borrowed': len_books_borrowed })
 
 
 

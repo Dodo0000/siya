@@ -44,3 +44,7 @@ body{
 label{
   margin-bottom: unset;
 }
+
+.current_acc_no{
+  font-weight: 700;
+}

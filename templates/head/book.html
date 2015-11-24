@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="container-fluid">
-  {% if is_borrowed == True %}
+  {% if book.is_borrowed == True %}
   <div class="alert alert-danger">
     <strong>Oh, No!</strong> This book with accession number <span class="label label-primary">{{ book.accession_number }}</span> has been borrowed by <a href="{% url 'profile' username=user.username %}">{{ book.get_borrower.get_name }}</a> {{ days_ago }} ({{ lends.lending_date }}).
   </div>
@@ -34,18 +34,18 @@
         </span>
       </i>
       <span class="text-info">
-        {% if book.get_authors != "" %}written by {{ book.get_authors }}{% endif %}
+        {% if book.get_authors != "" %}written by {{ book.get_authors|title }}{% endif %}
       </span>
     </div>
   </h3>
   <table class="table table-hover table-responsive">
     {% for each in book.get_all_attr %}
     <tr> 
-      <td>{{ each.0 }}</td>
+      <td>{{ each.0|title }}</td>
       {% if each.0 == "Author" %}
-      <td><a href="/search/book/?type=Author&search={{each.1}}">{{ each.1 }}</a></td>
+      <td><a href="/search/book/?type=Author&search={{each.1}}">{{ each.1|title }}</a></td>
       {% else %}
-      <td style="{% if book.get_language.upper == "NP" %}font-family:preeti;font-size:20px{%endif %}">{{each.1}}</td>
+      <td style="{% if book.get_language.upper == "NP" %}font-family:preeti;font-size:20px{%endif %}">{{each.1|title}}</td>
       {% endif %}
     </tr>
     {% endfor %}

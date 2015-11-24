@@ -34,6 +34,7 @@ function saveBook(){
         loc = cols_entry[i][1][2];
         post_data[loc] = $(".input-"+loc).val();
       }
+      post_data.is_edit = is_edit;
       post_data.csrfmiddlewaretoken = document.getElementsByName("csrfmiddlewaretoken")[0].value;
       console.log(post_data);
 
@@ -43,6 +44,7 @@ function saveBook(){
           max_accession_number = data.acc_no;
           $(".current_acc_no").text(max_accession_number);
           $(".input-acc_no").text(max_accession_number);
+          $("html, body").animate({ scrollTop: 0 }, "slow");
           $("#dataEntrySuccessful").show().delay(2000).hide("slow");
           if (clear_fields == 1)
             clearInputFields();
@@ -64,62 +66,59 @@ $("#saveBook").click(function(){
 
 
 $(".input").on("keypress", function(e){
-  if (e.keyCode == 13){
+  // keycode 13 - enter
+  // keycode 
+  if (e.keyCode == 13 && e.ctrlKey){
+    console.log("save me1");
     saveBook();
   }
-  if (e.keyCode == 38){
+  else if (e.shiftKey && e.keyCode == 13){
     e.preventDefault();
-    cursor_accession_number -= 1;
-    var tr = $("#"+cursor_accession_number).children();
-    var data = [];
-    var tc = $("#" + cursor_accession_number).children();
-    for (i=0;i < tc.length; i++){
-      console.log(cols_table[i][1][2]);
-      data.push(tc[i].textContent);
-      data.push();
-    }
-    console.log(data);
-  }
-  if (e.shiftKey && e.keyCode == 37){
-    if (e.currentTarget.id == "1"){
-      e.preventDefault();
-      document.getElementById(total_cols_entry.toString()).focus();
+    var element_id = (parseInt(e.currentTarget.id, 10)-2);
+    var element = document.getElementById(element_id.toString());
+    if (element == null){
+      if (element_id % 2 == 0)
+        document.getElementById((total_cols_entry - element_id).toString()).focus();
+      else
+        document.getElementById(total_cols_entry.toString()).focus();
     }
     else{
-      e.preventDefault();
-      document.getElementById((parseInt(e.currentTarget.id, 10)-1).toString()).focus();
+      element.focus();
     }
   }
-
-  else if (e.shiftKey && e.keyCode == 39){
-    if (e.currentTarget.id == total_cols_entry.toString()){
-      e.preventDefault();
-      document.getElementById("1").focus();
+  else if (e.keyCode == 13){
+    e.preventDefault();
+    var element_id = (parseInt(e.currentTarget.id, 10)+2);
+    var element = document.getElementById(element_id.toString());
+    if (element == null){
+      if (element_id % 2 == 0)
+        document.getElementById("2").focus();
+      else
+        document.getElementById("1").focus();
     }
     else{
-      e.preventDefault();
-      document.getElementById((parseInt(e.currentTarget.id, 10)+1).toString()).focus();
+      element.focus();
     }
   }
 })
 
 
 $("#"+total_cols_entry.toString()).on('keypress', function(e){
-  if (e.keyCode == 9){
+  if (e.shiftKey && e.keyCode == 9){
+    e.preventDefault();
+    $("#"+(total_cols_entry-1).toString()).focus();
+  }
+  else if (e.keyCode == 9){
+    console.log("it is a me a mario");
     e.preventDefault();
     document.getElementById("1").focus();
   }
-  if ( e.shiftKey && ( e.keyCode == 9 ) ){
-    e.preventDefault();
-    document.getElementById((total_cols_entry - 1).toString()).focus();
-  }
-
 });
 
 $("#1").on('keypress', function(e){
-  if (e.shiftKey && ( e.keyCode == 9 ))
+  if (e.shiftKey && e.keyCode == 9)
   {
     e.preventDefault();
-    document.getElementById(total_cols_entry.toString()).focus();
+    $("#"+total_cols_entry.toString()).focus();
   }
 });

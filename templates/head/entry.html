@@ -21,6 +21,7 @@ var total_cols_table = cols_table.length
 var total_cols_entry = cols_entry.length
 var max_accession_number = parseInt("{{ largest_accession_number }}", 10);
 var language = "EN";
+var is_edit = {{ is_edit }};
 {% endblock %}
 <!-- The bootstrap and Jquery libraries will be in the middle, here -->
 
@@ -43,7 +44,16 @@ var language = "EN";
     </div>
     <div class="col col-sm-4" style="padding-top:1%;">
       <span class="text-info">
-        <h5><i>Current accession number count: <span class="current_acc_no">{{ largest_accession_number }}</span></i></h5>
+        <h5>
+          <i>
+            Current accession number count
+            <font size=4>
+              <span class="current_acc_no text-success label label-warning">
+                {{ largest_accession_number }}
+              </span>
+            </font>
+          </i>
+        </h5>
       </span>
     </div>
   </div>
@@ -68,8 +78,8 @@ var language = "EN";
     <hr/>
   </div>
   
-  <div id="dataEntrySuccessful" class="well">
-    Book Was Saved :D
+  <div id="dataEntrySuccessful" class="well label-success">
+    <span class="text-success">Book Was Saved :D</span>
   </div>
 
 

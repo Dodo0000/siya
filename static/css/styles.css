@@ -47,7 +47,7 @@ body{
 
 
 .navbar-default{
-    opacity:0.8;
+    opacity:1;
     background-color:#1c6585;
 
 }
@@ -73,18 +73,6 @@ body{
     background-color:#1c6585;
     color:white;
     box-shadow: 0px 5px 10px #333;
-}
-
-a{
-    color:black;
-}
-
-a:hover {
-    color:black;
-}
-
-a:active{
-    color:black;
 }
 
 .page-header{

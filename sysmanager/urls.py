@@ -18,6 +18,7 @@ from django.contrib import admin
 
 urlpatterns = [
     url(r'^$', 'head.views.home', name='home'),
+    url('^markdown/', include( 'django_markdown.urls')),
     url(r'^dashboard/$', 'head.views.dashboard', name='dashboard'),
     url(r'^entry/$', 'head.views.entry', name="entry"),
     url(r'^entry/(?P<acc_no>[0-9]+)$', 'head.views.editEntry', name="editEntry"),
@@ -39,4 +40,5 @@ urlpatterns = [
     url(r'^groups/', include('almsGroups.urls')),
     url(r'^booktool/', include('booktool.urls')),
     url(r'^spreadsheet/', include('spreadsheet.urls')),
+    url(r'^rst/', include('restructuredText.urls')),
 ]

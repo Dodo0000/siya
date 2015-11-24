@@ -92,7 +92,7 @@ def editGroup(request, group_id):
                             group.permissions.add(Permission.objects.get(codename=perm_spl[0]+"_publisher"))
                             group.permissions.add(Permission.objects.get(codename=perm_spl[0]+"_gifter"))
                         elif perm_spl[1].lower() == "moduser":
-                            group.permissions.add(Permission.objects.get(codename=perm_spl[0]+"usertype"))
+                            group.permissions.add(Permission.objects.get(codename=perm_spl[0]+"_usertype"))
                         group.permissions.add(Permission.objects.get(codename=perm[0]))
             group.save()
             group_added = True

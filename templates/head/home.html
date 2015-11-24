@@ -3,16 +3,12 @@
 {% load static %}
 {% block css %}
 <link href="{% static 'css/dashboard.css' %}" rel="stylesheet">
+<link href="{% static 'css/home.css' %}" rel="stylesheet">
 {% endblock %}
-
-
 
 
 {% block content %}
 
-<div class="alert alert-info">
-  <h4>  This page will conatain basic info about the library, how to find books, about the <span class="text-success">Theme Of The Month</span>, schedules and such information.</h4>
-</div>
-
+{{ body_code|safe }}
 
 {% endblock %}
