@@ -11,6 +11,7 @@ from django.contrib.auth import authenticate, login, logout
 from .models import ModUser
 from head.models import Book, Lend
 from head.views import home
+from settings.models  import addGlobalContext
 
 from settings.models import Globals
 
@@ -110,3 +111,22 @@ def logout_user(request):
     logout(request)
     return HttpResponseRedirect(reverse("home"))
     
+
+def addMember(request):
+    fields = (
+                ("First Name","first_name"),
+                ("Last Name", "last_name"),
+                ("Gender", "gender"),
+                ("Ward No.", "ward_no"),
+                ("Tole", "tole"),
+                ("City", "city"),
+                ("Home Phone No.", "home_phone"),
+                ("Parent's Name", "parent_name"),
+                ("Parent's Phone No.", "Parent's Phone No."),
+                ("School Name", "school_name"),
+                ("School Telephone", "school_phone"),
+                ("Class", "school_class"),
+                ("Roll No.", "roll_no"),
+                ("Date Of Birth","date_of_birth"),
+            )
+    render(request, "accounts/addMember.html", addGlobalContext({"fields": fields}))

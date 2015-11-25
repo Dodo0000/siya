@@ -83,24 +83,29 @@ from fuzz.search import searchBookTitle, searchBookAuthor,searchBookKeywords
 # Create your views here.
 
 TYPES = [
+    "Keyword",
     "Title",
     "Author",
-    "Keyword",
     "Acc No",
     "Call No",
     "Publisher"
 ]
 
-TIME_PERIOD = Globals.report['time_period']  #months
+config = Globals()
 
-LATE_FEES_PRICE = Globals.late_fees_price #rupees per day
-NO_DAYS_TO_BORROW_BOOK = Globals.books['borrow']['max_days'] # number of days for which a book is to be borrowed
-MAX_NUM_OF_BOOKS_TO_BORROW = int(Globals.books['borrow']['max_books']) # max number of books member can borrow at once
+TIME_PERIOD = config.config.getint('misc', 'report_time_period')  #months
+
+LATE_FEES_PRICE = config.misc['late_fees_price'] #rupees per day
+NO_DAYS_TO_BORROW_BOOK = config.books['borrow_max_days'] # number of days for which a book is to be borrowed
+MAX_NUM_OF_BOOKS_TO_BORROW = int(config.books['borrow_max_books']) # max number of books member can borrow at once
 
 NO_OF_BOOKS_PER_PAGE = 10
 
+
+NO_OF_ROWS_IN_ENTRY = 2
+
 GLOBAL_CONTEXT = {
-        "globals": Globals,
+        "globals": config,
         "date": datetime.date.today()
         }
 
@@ -179,7 +184,7 @@ def validate_book(request):
 
 
 def add_book(request):
-    all_attrs = [_[2] for _ in Globals.books['columns']] + ["language"]
+    all_attrs = [_[2] for _ in config.books['columns']] + ["language"]
     each = dict()   ## store post data
     STATE = 0
     
@@ -199,7 +204,6 @@ def add_book(request):
     else:
         acc_list = [each['acc_no']]
     
-    print each
 
     for val in acc_list:
         if val.__class__ == str:
@@ -314,7 +318,6 @@ def add_book(request):
         book.save()
         if request.POST.get('is_edit', 0) is 0:
             AccessionNumberCount.add1()
-            print "Accession number incrimented", each
         STATE = 0
     if STATE == 0:
         return JsonResponse({"success": True,'acc_no': AccessionNumberCount.get_no()})
@@ -324,8 +327,6 @@ def add_book(request):
 
 
 ##############################################################################
-
-
 
 
 @login_required(login_url="/login")
@@ -344,10 +345,10 @@ def editEntry(request,acc_no):
         clear_fields = True
     total_entry_space = 12
     
-    columns_for_table =  list(enumerate(Globals.books['columns'], 1))
+    columns_for_table =  list(enumerate(config.books_columns.items(), 1))
     columns_for_entry = list(enumerate(( _[1] for _ in columns_for_table),1 ))
     
-    columns_for_entry_div = [ columns_for_entry[c:c+2] for c in range(0,len(columns_for_entry)+1,2)]
+    columns_for_entry_div = [ columns_for_entry[c:c+NO_OF_ROWS_IN_ENTRY] for c in range(0,len(columns_for_entry)+1,NO_OF_ROWS_IN_ENTRY)]
 
     total_no_of_cols_table = len(columns_for_table)
     total_no_of_cols_entry = len(columns_for_entry)
@@ -362,11 +363,12 @@ def editEntry(request,acc_no):
     
     return render(request,
                   "head/entry.html", {
-                      'globals': Globals,
+                      'globals': config,
                       'date': datetime.date.today(),
                       "columns_for_table": columns_for_table,
                       "columns_for_entry": columns_for_entry,
                       "columns_for_entry_div": columns_for_entry_div,
+                      'no_of_rows': NO_OF_ROWS_IN_ENTRY,
                       'div_len': div_len,
                       'book': book,
                       'is_edit': int(book_exists),
@@ -416,7 +418,7 @@ def report(request):
 
     return render(request,
                   "head/report.html",
-                  {'globals':Globals,
+                  {'globals':config,
                    'date': datetime.date.today(),
                    'this_date': this_date,
                    'start_date': start_date,
@@ -429,7 +431,7 @@ def report(request):
 
 
 def home(request):
-    return render(request, 'head/home.html', {'globals':Globals, 'date': datetime.date.today(), "body_code": RestructuredText.objects.get(name="homeBody").get_html()})
+    return render(request, 'head/home.html', {'globals':config, 'date': datetime.date.today(), "body_code": RestructuredText.objects.get(name="homeBody").get_html()})
 
 
 
@@ -454,7 +456,7 @@ def dashboard(request):
     total_books = Book.objects.all()
         
     return render(request, "head/dashboard.html", {
-        'globals':Globals,
+        'globals':config,
         "members_added_during_tp": members_added_during_tp,
         "members_added_before_tp": total_members.exclude(date_joined__gte=start_date),
         'total_members': total_members,
@@ -565,7 +567,7 @@ def searchBook(request):
     return render(request,
                   "head/search_books.html",
                   {
-                      'globals': Globals,
+                      'globals': config,
                       'total_books_len': len(all_books),
                       'date': datetime.date.today(),
                       "books": booklist,
@@ -610,7 +612,7 @@ def bookInfo(request, accNo):
     return render(request,
                   "head/book.html",
                   {
-                      'globals':Globals,
+                      'globals':config,
                       'date': datetime.date.today(),
                       "book": book,
                       'lends': lends,
@@ -634,7 +636,7 @@ def borrow(request):
     if username is None or bookID is None:
         return render(request,
                       "head/borrow.html", {
-                          'globals': Globals,
+                          'globals': config,
                           "borrowed": 4,
                           "date_add": date.isoformat(),
                           'date': datetime.date.today()
@@ -670,7 +672,7 @@ def borrow(request):
     ## 4 - username and bookID were not given
     
     return render(request, 'head/borrow.html', {
-        'globals': Globals,
+        'globals': config,
         'date': datetime.date.today(),
         'date_val': date,
         'borrowed': borrowed,
@@ -698,7 +700,7 @@ def return_check_fees(request):
             return render(request,
                           'head/return.html',
                           {
-                              'globals': Globals,
+                              'globals': config,
                               'date': datetime.date.today(),
                               'code': "book_returned",
                               'lend_obj': lends[0]
@@ -708,7 +710,7 @@ def return_check_fees(request):
         return render(request,
                       'head/return.html',
                       {
-                          'globals': Globals,
+                          'globals': config,
                           'date': datetime.date.today(),
                           'code': 'None'
                       }
@@ -718,7 +720,7 @@ def return_check_fees(request):
         return render(request,
                       'head/return.html',
                       {
-                          'globals': Globals,
+                          'globals': config,
                           'date': datetime.date.today(),
                           'code':"not_found",
                           'accession_number': bookID
@@ -732,7 +734,7 @@ def return_check_fees(request):
         return render(request,
                       'head/return.html',
                       {
-                          'globals': Globals,
+                          'globals': config,
                           'date': datetime.date.today(),
                           'code':'success',
                           'lend_obj': lend_obj,

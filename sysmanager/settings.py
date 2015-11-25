@@ -44,7 +44,6 @@ INSTALLED_APPS = (
     'configs',
     'ledger',
     'almsGroups',
-    'configurations',
     'restructuredText'
 )
 
