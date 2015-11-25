@@ -46,10 +46,14 @@ function saveBook(){
           $(".input-acc_no").text(max_accession_number);
           $("html, body").animate({ scrollTop: 0 }, "slow");
           $("#dataEntrySuccessful").show().delay(2000).hide("slow");
+          var bg_color = $("body").css("background-color");
+          $("body").css("background-color", "green").delay(2000).css("background-color", bg_color);
           if (clear_fields == 1)
             clearInputFields();
         }
         else {
+          var bg_color = $("body").css("background-color");
+          $("body").css("background-color", "red").delay(2000).css("background-color", bg_color);
           alert("data entry unsuccessful :(");
         }
       });
@@ -60,27 +64,59 @@ function saveBook(){
   });
 }
 
-$("#saveBook").click(function(){
-  saveBook();
-})
 
+$("#saveBook").click(function(){ //when i click the save button, save the book
+  saveBook();
+});
+
+$(window).on('keypress', function(e){ // when i press ctrl+enter save teh book
+  // keycode 10 is for enter with ctrl key on chrome and 13 is for enter on
+  // firefox
+  if (e.ctrlKey == true && (e.keyCode == 10 || e.keyCode == 13)){
+    e.preventDefault();
+    saveBook();
+  }
+});
+
+
+//
+//generate a metrix of rows and columns for all the fields
+//
+var field_matrix = new Array();
+for (row = 0;row < no_of_rows;row +=1){
+  column = new Array();
+  for (col = row; col <= total_cols_entry;col+=no_of_rows){
+    column.push(col);
+  }
+  field_matrix[row] = column
+}
+
+function get_last_column(column_id){
+  // returns the last column number of the row
+  var column_id = parseInt(column_id, 10);
+  for (i=0;i < field_matrix.length;i++){
+    index = field_matrix[i].indexOf(column_id);
+    if (index != -1)
+      return field_matrix[i][field_matrix[i].length -1];
+    else
+      return -1
+  }
+}
 
 $(".input").on("keypress", function(e){
   // keycode 13 - enter
-  // keycode 
-  if (e.keyCode == 13 && e.ctrlKey){
-    console.log("save me1");
-    saveBook();
-  }
-  else if (e.shiftKey && e.keyCode == 13){
+  // when i press enter, take me to the field below me, thats two fields ahead
+  // when i press shift+enter, take me to the field above me, thats two fields
+  // back.
+  if (e.shiftKey && e.keyCode == 13){
     e.preventDefault();
-    var element_id = (parseInt(e.currentTarget.id, 10)-2);
+    var current_element_id = (parseInt(e.currentTarget.id, 10));
+    var element_id = current_element_id - 2;
     var element = document.getElementById(element_id.toString());
     if (element == null){
-      if (element_id % 2 == 0)
-        document.getElementById((total_cols_entry - element_id).toString()).focus();
-      else
-        document.getElementById(total_cols_entry.toString()).focus();
+      var last_element_id = get_last_column(current_element_id);
+      console.log(last_element_id);
+      document.getElementById(last_element_id.toString()).focus();
     }
     else{
       element.focus();
@@ -100,22 +136,27 @@ $(".input").on("keypress", function(e){
       element.focus();
     }
   }
-})
+});
 
 
 $("#"+total_cols_entry.toString()).on('keypress', function(e){
+  // keycode 9 - TAB
+  // when i press TAB - take me to the next field
+  // when i press shift+TAB - take me to the previous field
+  // when i am on the last field and i press tab, take me to the first field
   if (e.shiftKey && e.keyCode == 9){
     e.preventDefault();
     $("#"+(total_cols_entry-1).toString()).focus();
   }
   else if (e.keyCode == 9){
-    console.log("it is a me a mario");
     e.preventDefault();
     document.getElementById("1").focus();
   }
 });
 
 $("#1").on('keypress', function(e){
+  // if i am on the first field, and i press shift+TAB, take me to the last
+  // field
   if (e.shiftKey && e.keyCode == 9)
   {
     e.preventDefault();
