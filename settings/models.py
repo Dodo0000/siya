@@ -21,8 +21,14 @@ class Globals:
         self.yalms = self.config['alms']
         self.misc = self.config['misc']
 
+    def load(self):
+        import configparser
+        self.config.read(os.path.join(settings.BASE_DIR, "config.ini"))
+
     def add(self,key, value):
         self.config[key] = value
+        self.save()
+        self.load()
 
     def save(self):
         with open(os.path.join(settings.BASE_DIR, "config.ini")) as configfile:

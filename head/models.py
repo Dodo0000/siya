@@ -276,6 +276,8 @@ class Gifter(models.Model):
     
 
 
+
+
 class Book(models.Model):
     '''
     accession number increases by +1 for each new entry; kinda like the
@@ -320,7 +322,6 @@ class Book(models.Model):
     book which the call number failed to explain
     '''
     gifted_by = models.ForeignKey(Gifter,null=True,db_index=True)
-
 
 
     def bring_back(self):
@@ -622,3 +623,4 @@ class Book(models.Model):
         else:
             return 1
         return 0
+

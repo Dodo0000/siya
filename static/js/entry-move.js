@@ -22,32 +22,30 @@ $("#dataEntrySuccessful").hide();
 
 function saveBook(){
   acc_no = $(".input-acc_no").val();
-  var book_exists = false;
+  var book_exists = true;
   $.get("/book/validate",{accNo: parseInt(acc_no)}).success(function(data){
     if (data.exists == 0)
-      book_exists = true;
+      book_exists = false;
     console.log("book exists: " + book_exists.toString());
     if (book_exists === true || book_exists == false){
       console.log(data);
       var post_data = Object.create(null);
       for(i=0;i < cols_entry.length;i++){
-        loc = cols_entry[i][1][2];
+        loc = cols_entry[i][1][1];
         post_data[loc] = $(".input-"+loc).val();
       }
       post_data.is_edit = is_edit;
       post_data.csrfmiddlewaretoken = document.getElementsByName("csrfmiddlewaretoken")[0].value;
       console.log(post_data);
 
-
       $.post('/book/add', post_data, function(data){
         if (data.success === true){
           max_accession_number = data.acc_no;
           $(".current_acc_no").text(max_accession_number);
           $(".input-acc_no").text(max_accession_number);
-          $("html, body").animate({ scrollTop: 0 }, "slow");
-          $("#dataEntrySuccessful").show().delay(2000).hide("slow");
-          var bg_color = $("body").css("background-color");
-          $("body").css("background-color", "green").delay(2000).css("background-color", bg_color);
+          $("html, body").animate({ scrollTop: 0 }, "fast"); // scroll to the top of the screen
+          $("#dataEntrySuccessful").show("slow").delay(2000).hide("slow");
+          $("#1").focus(); // focus on the first field
           if (clear_fields == 1)
             clearInputFields();
         }

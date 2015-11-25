@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h3> Misc Fields For Books </h3>
+
+<a class="btn btn-primary">Add New Field</a>
+
+{% if all_fields|length == 0 %}
+<div class="panel panel-warning">
+  <div class="panel-title panel-heading">
+    No Misc Fields yet
+  </div>
+  <div class="panel-body">
+    There aren't any misc. fields for the books yet. Add some?
+  </div>
+</div>
+{% endif %}
+
+{% for field in all_fields %}
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h5>{{ field.get_key }}</h5>
+  </div>
+  <div class="panel-body">
+    {{ field.value.all|length}} books have this field value
+  </div>
+</div>
+{% endfor %}
+
+{% endblock %}

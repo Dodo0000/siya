@@ -41,4 +41,5 @@ urlpatterns = [
     url(r'^booktool/', include('booktool.urls')),
     url(r'^spreadsheet/', include('spreadsheet.urls')),
     url(r'^rst/', include('restructuredText.urls')),
+    url(r'^miscfields/', include('miscFields.urls')),
 ]
