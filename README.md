@@ -11,6 +11,9 @@ ALMS is a Django Based Library Management System
 
 ###__How To Install ALMS__
 
-Currently, ALMS is very rigid so I'd recomend not installing the whole system
-but rather using parts of it in your own system.
-You can also use ALMS as the base for your system.
+  To install on a debian system, run this : 
+     wget https://raw.githubusercontent.com/ayys/alms/master/install.sh|sh
+
+  The above code will start the server and run it in the default browser.
+
+  To start the server again, simply go to the `alms` directory and run start.sh
