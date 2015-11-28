@@ -39,6 +39,7 @@
   <div class="well">
     <h2>{{ lend_obj.book.title }}</h2>
     <h4>borrowed by : {{ lend_obj.user.get_name }}</h4>
+    <h4>Borrowed On : {{ lend_obj.lending_date}} ({{ lend_obj.get_borrowed_time }} days)</h4>
     <h4>Accession Number : {{ lend_obj.book.accession_number }}</h4>
     <h4>Call Number : {{ lend_obj.book.call_number }}</h4>
   </div>
@@ -52,7 +53,7 @@
   <form class="form" method="post">
     {% csrf_token %}
     <input classs="form-control" name="bookID" type="hidden" value="{{ lend_obj.book.accession_number }}">
-    <input class="btn btn-success" type="submit" value="{% if late_fees != 0 %}Pay Late Fees and Return Book{% else %}Return Book{% endif %}">
+    <input class="btn btn-success" type="submit" value="{% if late_fees != 0 %}Accept Late Fees and Return Book{% else %}Return Book{% endif %}">
   </form>
 </div>
 {% elif code == "book_returned" %}

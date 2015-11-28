@@ -33,7 +33,7 @@ class GenericField(models.Model):
     key - name of the field
     value - value that is stored for each book in the db
     '''
-    key = models.CharField(max_length=255)
+    key = models.CharField(max_length=255, default="What is My name?")
     value =  models.ManyToManyField(GenericFieldLink)
 
     def __str__(self):
@@ -53,6 +53,11 @@ class GenericField(models.Model):
         returns the value as unicode string
         '''
         return self.get_value_obj(book_id=book_id).get_value()
+
+    def set_value(self, value, book):
+        x = GenericFieldLink.objects.create(book=book,value=value)
+        self.value.add(x)
+
 
     def get_programatic_key(self):
         '''

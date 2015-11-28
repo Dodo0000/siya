@@ -2725,3 +2725,797 @@ Django version 1.8.6, using settings 'sysmanager.settings'
 Development server is running at http://127.0.0.1:8000/
 Using the Werkzeug debugger (http://werkzeug.pocoo.org/)
 Quit the server with CONTROL-C.
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger pin code: 638-352-723
+ * Debugger is active!
+ * Debugger pin code: 178-068-508
+127.0.0.1 - - [26/Nov/2015 12:13:53] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:13:54] "GET /static/css/home.css HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 12:13:54] "GET /static/bootstrap/js/jquery.js HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 12:13:54] "GET /static/css/dashboard.css HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 12:13:54] "GET /static/bootstrap/js/bootstrap.min.js HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 12:13:54] "GET /static/images/library_brj_kids.jpg HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 12:13:54] "GET /static/bootstrap/css/bootstrap.min.css HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 12:13:54] "GET /static/css/styles.css HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 12:13:54] "GET /static/bootstrap/fonts/glyphicons-halflings-regular.woff2 HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 12:13:54] "GET /favicon.ico HTTP/1.1" 404 -
+/usr/local/lib/python2.7/dist-packages/django/db/models/fields/__init__.py:1414: RuntimeWarning: DateTimeField ModUser.date_joined received a naive datetime (2015-11-26 00:00:00) while time zone support is active.
+  RuntimeWarning)
+
+/usr/local/lib/python2.7/dist-packages/django/db/models/fields/__init__.py:1414: RuntimeWarning: DateTimeField ModUser.date_joined received a naive datetime (2015-08-26 00:00:00) while time zone support is active.
+  RuntimeWarning)
+
+127.0.0.1 - - [26/Nov/2015 12:14:12] "GET /dashboard/ HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:14:13] "GET /rst/create/ HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:14:13] "GET /static/css/restructuredText/styles.css HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 12:14:36] "POST /rst/create/ HTTP/1.1" 302 -
+127.0.0.1 - - [26/Nov/2015 12:14:36] "GET /rst/create/ HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:14:38] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:15:40] "POST /rst/create/ HTTP/1.1" 302 -
+127.0.0.1 - - [26/Nov/2015 12:15:40] "GET /rst/create/ HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:15:41] "GET / HTTP/1.1" 500 -
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/staticfiles/handlers.py", line 63, in __call__
+    return self.application(environ, start_response)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/wsgi.py", line 189, in __call__
+    response = self.get_response(request)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 218, in get_response
+    response = self.handle_uncaught_exception(request, resolver, sys.exc_info())
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 261, in handle_uncaught_exception
+    return debug.technical_500_response(request, *exc_info)
+  File "/usr/local/lib/python2.7/dist-packages/django_extensions/management/technical_response.py", line 5, in null_technical_500_response
+    six.reraise(exc_type, exc_value, tb)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 132, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ays/alms/head/views.py", line 396, in home
+    return render(request, 'head/home.html', {'globals':config, 'date': datetime.date.today(), "body_code": RestructuredText.objects.get(name="homeBody").get_html()})
+  File "/home/ays/alms/restructuredText/models.py", line 16, in get_html
+    rst_dic = markdown.markdown(self.get_rst())
+  File "/home/ays/.local/lib/python2.7/site-packages/markdown/__init__.py", line 494, in markdown
+    return md.convert(text)
+  File "/home/ays/.local/lib/python2.7/site-packages/markdown/__init__.py", line 359, in convert
+    source = util.text_type(source)
+UnicodeDecodeError: 'ascii' codec can't decode byte 0xe0 in position 43: ordinal not in range(128). -- Note: Markdown only accepts unicode input!
+127.0.0.1 - - [26/Nov/2015 12:15:41] "GET /?__debugger__=yes&cmd=resource&f=jquery.js HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:15:41] "GET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:15:41] "GET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:15:41] "GET /?__debugger__=yes&cmd=resource&f=ubuntu.ttf HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:15:41] "GET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:15:41] "GET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:16:05] "GET /dashboard/ HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:16:07] "GET /groups/ HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:16:07] "GET /static/css/almsGroups/styles.css HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 12:16:10] "GET /groups/edit/13 HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:16:32] "POST /groups/edit/13 HTTP/1.1" 302 -
+127.0.0.1 - - [26/Nov/2015 12:16:32] "GET /groups/1/%E0%A4%B8%E0%A4%B9%E0%A4%BE%E0%A4%AF%E0%A4%95/ HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:16:37] "GET /groups/edit/13 HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:16:48] "POST /groups/edit/13 HTTP/1.1" 302 -
+127.0.0.1 - - [26/Nov/2015 12:16:48] "GET /groups/1/%E0%A4%B8%E0%A4%B9%E0%A4%BE%E0%A4%AF%E0%A4%95/ HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:16:56] "GET /groups/edit/13 HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:17:04] "POST /groups/edit/13 HTTP/1.1" 302 -
+127.0.0.1 - - [26/Nov/2015 12:17:04] "GET /groups/1/Volunteer/ HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:17:13] "GET /groups/add/ HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:17:16] "GET /groups/ HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:17:24] "GET /search/book/ HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:17:24] "GET /static/css/search_books.css HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 12:17:25] "GET /search/book/ HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:17:26] "GET /dashboard/ HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:17:31] "GET /dashboard/ HTTP/1.1" 200 -
+Error on request:
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/werkzeug/serving.py", line 192, in run_wsgi
+    execute(self.server.app)
+  File "/usr/local/lib/python2.7/dist-packages/werkzeug/serving.py", line 183, in execute
+    write(data)
+  File "/usr/local/lib/python2.7/dist-packages/werkzeug/serving.py", line 151, in write
+    self.send_header(key, value)
+  File "/usr/lib/python2.7/BaseHTTPServer.py", line 401, in send_header
+    self.wfile.write("%s: %s\r\n" % (keyword, value))
+IOError: [Errno 32] Broken pipe
+127.0.0.1 - - [26/Nov/2015 12:17:31] "GET /dashboard/ HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:17:48] "GET /booktool/ HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:17:52] "GET /spreadsheet/booksWithoutCallNumber/ HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:18:13] "GET /search/book/ HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:18:15] "GET /entry/ HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:18:15] "GET /static/css/entry.css HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 12:18:15] "GET /static/js/entry-move.js HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 12:18:15] "GET /static/js/entry.js HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 12:18:24] "GET /book/validate?accNo=NaN HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:18:24] "POST /book/add HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:18:28] "GET /entry/ HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:18:28] "GET / HTTP/1.1" 500 -
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/staticfiles/handlers.py", line 63, in __call__
+    return self.application(environ, start_response)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/wsgi.py", line 189, in __call__
+    response = self.get_response(request)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 218, in get_response
+    response = self.handle_uncaught_exception(request, resolver, sys.exc_info())
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 261, in handle_uncaught_exception
+    return debug.technical_500_response(request, *exc_info)
+  File "/usr/local/lib/python2.7/dist-packages/django_extensions/management/technical_response.py", line 5, in null_technical_500_response
+    six.reraise(exc_type, exc_value, tb)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 132, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ays/alms/head/views.py", line 396, in home
+    return render(request, 'head/home.html', {'globals':config, 'date': datetime.date.today(), "body_code": RestructuredText.objects.get(name="homeBody").get_html()})
+  File "/home/ays/alms/restructuredText/models.py", line 16, in get_html
+    rst_dic = markdown.markdown(self.get_rst())
+  File "/home/ays/.local/lib/python2.7/site-packages/markdown/__init__.py", line 494, in markdown
+    return md.convert(text)
+  File "/home/ays/.local/lib/python2.7/site-packages/markdown/__init__.py", line 359, in convert
+    source = util.text_type(source)
+UnicodeDecodeError: 'ascii' codec can't decode byte 0xe0 in position 43: ordinal not in range(128). -- Note: Markdown only accepts unicode input!
+127.0.0.1 - - [26/Nov/2015 12:18:28] "GET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:18:28] "GET /?__debugger__=yes&cmd=resource&f=jquery.js HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:18:28] "GET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:18:28] "GET /?__debugger__=yes&cmd=resource&f=ubuntu.ttf HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:18:29] "GET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:18:40] "GET /dashboard/ HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:18:45] "GET /search/book/ HTTP/1.1" 200 -
+Performing system checks...
+
+System check identified no issues (0 silenced).
+
+Django version 1.8.6, using settings 'sysmanager.settings'
+Development server is running at http://127.0.0.1:8000/
+Using the Werkzeug debugger (http://werkzeug.pocoo.org/)
+Quit the server with CONTROL-C.
+<QueryDict: {u'rst': [u"#### **Nepal** - Our Theme Of The Month\r\n\r\nNepal, officially the Federal Democratic Republic of Nepal, is a landlocked country located in South Asia. With an area of 147,181 square kiloliters (56,827 sq mi) and a population of approximately 27 million, Nepal is the world's 93rd largest country by area and the 41st most populous country.\r\n\r\nFolklore is an integral part of Nepali society. Traditional stories are rooted in the reality of day-to-day life, tales of love, affection and battles as well as demons and ghosts and thus reflect local lifestyles, cultures and beliefs. Many Nepali folk tales are enacted through the medium of dance and music.\r\n\r\n---------------------------------------\r\n###Welcome to **Nepal Japan Children Library**\r\n![Arts And Crafts With Kids At Nepal Japan Children Library](/static/images/library_brj_kids.jpg)\r\n\r\n\r\nConnect with us on facebook at [facebook.com/Nepal-Japan-Children-Library](https://www.facebook.com/Nepal-Japan-Children-Library-117390398337579/)\r\n\r\n###Where are we?\r\n\r\nNepal Japan Children Library is in lainchaur, Kathmandu, on the way to British council.\r\n\r\n###Our Volunteers\r\n\r\n* Biraj Khatiwada\r\n* Ayush Jha\r\n* Suresh Sah\r\n* Dharmananda Joshi\r\n\r\n###Things to Do\r\n\r\n* Fix the shelves\r\n\r\n         Our library has just been renovated, and the books are scattered. We need to put them back in the correct order."], u'csrfmiddlewaretoken': [u'buk7BSzGU6ox6eYUSFojT6YiHPaHqfLN']}>
+<QueryDict: {u'rst': [u"#### **Nepal** - Our Theme Of The Month\r\n\r\n\u0928\u0947\u092a\u093e\u0932\u0940\r\n\r\nNepal, officially the Federal Democratic Republic of Nepal, is a landlocked country located in South Asia. With an area of 147,181 square kiloliters (56,827 sq mi) and a population of approximately 27 million, Nepal is the world's 93rd largest country by area and the 41st most populous country.\r\n\r\nFolklore is an integral part of Nepali society. Traditional stories are rooted in the reality of day-to-day life, tales of love, affection and battles as well as demons and ghosts and thus reflect local lifestyles, cultures and beliefs. Many Nepali folk tales are enacted through the medium of dance and music.\r\n\r\n---------------------------------------\r\n###Welcome to **Nepal Japan Children Library**\r\n![Arts And Crafts With Kids At Nepal Japan Children Library](/static/images/library_brj_kids.jpg)\r\n\r\n\r\nConnect with us on facebook at [facebook.com/Nepal-Japan-Children-Library](https://www.facebook.com/Nepal-Japan-Children-Library-117390398337579/)\r\n\r\n###Where are we?\r\n\r\nNepal Japan Children Library is in lainchaur, Kathmandu, on the way to British council.\r\n\r\n###Our Volunteers\r\n\r\n* Biraj Khatiwada\r\n* Ayush Jha\r\n* Suresh Sah\r\n* Dharmananda Joshi\r\n\r\n###Things to Do\r\n\r\n* Fix the shelves\r\n\r\n         Our library has just been renovated, and the books are scattered. We need to put them back in the correct order."], u'csrfmiddlewaretoken': [u'buk7BSzGU6ox6eYUSFojT6YiHPaHqfLN']}>
+[u'add', u'moduser']
+[u'change', u'book']
+[u'add', u'book']
+[u'change', u'moduser']
+[u'change', u'book']
+[u'add', u'book']
+[u'change', u'book']
+[u'add', u'book']
+<QueryDict: {u'pub_place': [u''], u'call_no': [u''], u'isbn': [u''], u'ser': [u''], u'title': [u''], u'vol': [u''], u'no_of_pages': [u''], u'price': [u''], u'is_edit': [u'0'], u'acc_no': [u''], u'auth': [u''], u'gftd_email': [u''], u'pub_name': [u''], u'pub_year': [u''], u'edtn': [u''], u'csrfmiddlewaretoken': [u'buk7BSzGU6ox6eYUSFojT6YiHPaHqfLN'], u'gftd_phn': [u''], u'gftd_name': [u''], u'kwds': [u'']}>
+needle is in the heystack
+[0.286, 0.143, 0.0, 0.308, 0.9782608695652174]
+needle is in the heystack
+[0.286, 0.143, 0.0, 0.308, 0.9782608695652174, 0.308, 0.9782608695652174]
+needle is 127.0.0.1 - - [26/Nov/2015 12:18:53] "GET /search/book/?type=Keyword&search=search HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:19:24] "GET /search/book/?type=Keyword&search=charles+dickens HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:19:43] "GET /book/16414/ HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:19:52] "GET /entry/16414 HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:20:06] "GET /book/validate?accNo=16414 HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:20:09] "POST /book/add HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:20:15] "GET /book/validate?accNo=16414 HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:20:16] "POST /book/add HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:20:27] "GET /user/ays/ HTTP/1.1" 500 -
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/staticfiles/handlers.py", line 63, in __call__
+    return self.application(environ, start_response)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/wsgi.py", line 189, in __call__
+    response = self.get_response(request)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 218, in get_response
+    response = self.handle_uncaught_exception(request, resolver, sys.exc_info())
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 261, in handle_uncaught_exception
+    return debug.technical_500_response(request, *exc_info)
+  File "/usr/local/lib/python2.7/dist-packages/django_extensions/management/technical_response.py", line 5, in null_technical_500_response
+    six.reraise(exc_type, exc_value, tb)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 132, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 22, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/home/ays/alms/account/views.py", line 26, in profile
+    return render(request, 'account/user.html', {'globals': Globals,'date': datetime.date.today(), 'search_user': user, 'books_borrowed': books_borrowed, 'len_books_borrowed': len_books_borrowed })
+  File "/usr/local/lib/python2.7/dist-packages/django/shortcuts.py", line 67, in render
+    template_name, context, request=request, using=using)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/loader.py", line 99, in render_to_string
+    return template.render(context, request)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/backends/django.py", line 74, in render
+    return self.template.render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 210, in render
+    return self._render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 202, in _render
+    return self.nodelist.render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 905, in render
+    bit = self.render_node(node, context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 79, in render_node
+    return node.render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/loader_tags.py", line 135, in render
+    return compiled_parent._render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 202, in _render
+    return self.nodelist.render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 905, in render
+    bit = self.render_node(node, context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 79, in render_node
+    return node.render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/loader_tags.py", line 65, in render
+    result = block.nodelist.render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 905, in render
+    bit = self.render_node(node, context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 79, in render_node
+    return node.render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/defaulttags.py", line 217, in render
+    nodelist.append(node.render(context))
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 92, in render
+    output = force_text(output)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/encoding.py", line 94, in force_text
+    s = six.text_type(bytes(s), encoding, errors)
+  File "/home/ays/alms/head/models.py", line 236, in __str__
+    self.get_returning_date().strftime("%A %eth %B, %Y")
+  File "/home/ays/alms/head/models.py", line 230, in get_returning_date
+    return self.lending_date + datetime.timedelta(days=Globals.books['borrow']['max_days'])
+AttributeError: class Globals has no attribute 'books'
+127.0.0.1 - - [26/Nov/2015 12:20:27] "GET /user/ays/?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:20:27] "GET /user/ays/?__debugger__=yes&cmd=resource&f=jquery.js HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:20:27] "GET /user/ays/?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:20:27] "GET /user/ays/?__debugger__=yes&cmd=resource&f=ubuntu.ttf HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:20:27] "GET /user/ays/?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:20:27] "GET /user/ays/?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:20:37] "GET /entry/ HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:20:40] "GET /dashboard/ HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:37:06] "GET /search/book/ HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:37:15] "GET /search/book/?type=Keyword&search=cahrles HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:37:23] "GET /book/16414/ HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:37:34] "GET /book/16414/ HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:37:40] "GET /entry/16414 HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:37:43] "GET /book/validate?accNo=16414 HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:37:44] "POST /book/add HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:37:51] "GET /dashboard/ HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:37:53] "GET /booktool/ HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:37:56] "GET /spreadsheet/booksWithoutCallNumber/ HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:43:55] "GET /dashboard/ HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:44:07] "GET /groups/ HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:44:59] "GET /dashboard/ HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:45:06] "GET /rst/create/ HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:45:12] "POST /rst/create/ HTTP/1.1" 302 -
+127.0.0.1 - - [26/Nov/2015 12:45:12] "GET /rst/create/ HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:45:23] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:46:00] "GET /book/borrow/ HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:46:00] "GET /static/admin/css/forms.css HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:46:00] "GET /static/admin/css/widgets.css HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:46:11] "GET /book/return/check/ HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:46:20] "GET /search/member/ HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:46:33] "GET /search/member/?username=ays HTTP/1.1" 302 -
+127.0.0.1 - - [26/Nov/2015 12:46:34] "GET /user/ays/ HTTP/1.1" 500 -
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/staticfiles/handlers.py", line 63, in __call__
+    return self.application(environ, start_response)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/wsgi.py", line 189, in __call__
+    response = self.get_response(request)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 218, in get_response
+    response = self.handle_uncaught_exception(request, resolver, sys.exc_info())
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 261, in handle_uncaught_exception
+    return debug.technical_500_response(request, *exc_info)
+  File "/usr/local/lib/python2.7/dist-packages/django_extensions/management/technical_response.py", line 5, in null_technical_500_response
+    six.reraise(exc_type, exc_value, tb)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 132, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 22, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/home/ays/alms/account/views.py", line 26, in profile
+    return render(request, 'account/user.html', {'globals': Globals,'date': datetime.date.today(), 'search_user': user, 'books_borrowed': books_borrowed, 'len_books_borrowed': len_books_borrowed })
+  File "/usr/local/lib/python2.7/dist-packages/django/shortcuts.py", line 67, in render
+    template_name, context, request=request, using=using)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/loader.py", line 99, in render_to_string
+    return template.render(context, request)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/backends/django.py", line 74, in render
+    return self.template.render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 210, in render
+    return self._render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 202, in _render
+    return self.nodelist.render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 905, in render
+    bit = self.render_node(node, context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 79, in render_node
+    return node.render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/loader_tags.py", line 135, in render
+    return compiled_parent._render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 202, in _render
+    return self.nodelist.render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 905, in render
+    bit = self.render_node(node, context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 79, in render_node
+    return node.render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/loader_tags.py", line 65, in render
+    result = block.nodelist.render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 905, in render
+    bit = self.render_node(node, context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 79, in render_node
+    return node.render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/defaulttags.py", line 217, in render
+    nodelist.append(node.render(context))
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 92, in render
+    output = force_text(output)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/encoding.py", line 94, in force_text
+    s = six.text_type(bytes(s), encoding, errors)
+  File "/home/ays/alms/head/models.py", line 236, in __str__
+    self.get_returning_date().strftime("%A %eth %B, %Y")
+  File "/home/ays/alms/head/models.py", line 230, in get_returning_date
+    return self.lending_date + datetime.timedelta(days=Globals.books['borrow']['max_days'])
+AttributeError: class Globals has no attribute 'books'
+127.0.0.1 - - [26/Nov/2015 12:46:34] "GET /user/ays/?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:46:34] "GET /user/ays/?__debugger__=yes&cmd=resource&f=jquery.js HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:46:34] "GET /user/ays/?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:46:34] "GET /user/ays/?__debugger__=yes&cmd=resource&f=ubuntu.ttf HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:46:34] "GET /user/ays/?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:47:32] "GET /entry/ HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:47:48] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:47:50] "GET /dashboard/ HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:48:01] "GET /search/book/ HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:48:28] "GET /search/book/?type=Keyword&search=ened+blytan HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:48:34] "GET /search/book/ HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:48:52] "GET /dashboard/ HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:49:10] "GET /dashboard/ HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 12:49:12] "GET /dashboard/ HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 13:04:36] "GET /rst/create/ HTTP/1.1" 200 -
+in the heystack
+[0.286, 0.143, 0.0, 0.308, 0.0, 0.167, 0.0, 0.9824561403508771]
+needle is in the heystack
+[0.286, 0.143, 0.0, 0.308, 0.0, 0.167, 0.0, 0.9824561403508771, 0.308, 0.0, 0.167, 0.0, 0.9824561403508771]
+needle is in the heystack
+[0.286, 0.143, 0.0, 0.308, 0.0, 0.167, 0.0, 0.9824561403508771]
+needle is in the heystack
+[0.286, 0.143, 0.0, 0.308, 0.0, 0.167, 0.0, 0.9824561403508771, 0.308, 0.0, 0.167, 0.0, 0.9824561403508771]
+needle is in the heystack
+[0.286, 0.143, 0.0, 0.308, 0.0, 0.167, 0.0, 0.9824561403508771]
+needle is in the heystack
+[0.286, 0.143, 0.0, 0.308, 0.0, 0.167, 0.0, 0.9824561403508771, 0.308, 0.0, 0.167, 0.0, 0.9824561403508771]
+needle is in the heystack
+[0.286, 0.143, 0.0, 0.222, 0.0, 0.9811320754716981]
+needle is in the heystack
+[0.286, 0.143, 0.0, 0.222, 0.0, 0.9811320754716981, 0.222, 0.0, 0.9811320754716981]
+one of the needles is in the haystack
+one of the needles is in the haystack
+one of the needles is in the haystack
+<QueryDict: {u'pub_place': [u'London'], u'call_no': [u''], u'isbn': [u'1854712330'], u'ser': [u''], u'title': [u'Nicholas Nickleby'], u'vol': [u'1'], u'no_of_pages': [u'158'], u'price': [u''], u'is_edit': [u'1'], u'acc_no': [u'16414'], u'auth': [u'Charles Dickens'], u'gftd_email': [u''], u'pub_name': [u'Bloomsbury books'], u'pub_year': [u'1994'], u'edtn': [u''], u'csrfmiddlewaretoken': [u'buk7BSzGU6ox6eYUSFojT6YiHPaHqfLN'], u'gftd_phn': [u''], u'gftd_name': [u''], u'kwds': [u'Charles Dickens, Novel, Countryside']}>
+<QueryDict: {u'pub_place': [u'London'], u'call_no': [u''], u'isbn': [u'1854712330'], u'ser': [u''], u'title': [u'Nicholas Nickleby'], u'vol': [u'1'], u'no_of_pages': [u'158'], u'price': [u''], u'is_edit': [u'1'], u'acc_no': [u'16414'], u'auth': [u'Charles Dickens'], u'gftd_email': [u''], u'pub_name': [u'Bloomsbury books'], u'pub_year': [u'1994'], u'edtn': [u''], u'csrfmiddlewaretoken': [u'buk7BSzGU6ox6eYUSFojT6YiHPaHqfLN'], u'gftd_phn': [u''], u'gftd_name': [u''], u'kwds': [u'Charles Dickens, Novel, Countryside']}>
+<QueryDict: {u'pub_place': [u'london'], u'call_no': [u''], u'isbn': [u'1854712330'], u'ser': [u''], u'title': [u'nicholas nickleby'], u'vol': [u'1'], u'no_of_pages': [u'158'], u'price': [u''], u'is_edit': [u'1'], u'acc_no': [u'16414'], u'auth': [u'charles dickens'], u'gftd_email': [u''], u'pub_name': [u'bloomsbury books'], u'pub_year': [u'1994'], u'edtn': [u''], u'csrfmiddlewaretoken': [u'buk7BSzGU6ox6eYUSFojT6YiHPaHqfLN'], u'gftd_phn': [u''], u'gftd_name': [u''], u'kwds': [u'Charles Dickens, Novel, Countryside, Charles Dickens, Novel, Countryside']}>
+<QueryDict: {u'rst': [u"#### **Nepal** - Our Theme Of The Month\r\n\r\nNepal, officially the Federal Democratic Republic of Nepal, is a landlocked country located in South Asia. With an area of 147,181 square kiloliters (56,827 sq mi) and a population of approximately 27 million, Nepal is the world's 93rd largest country by area and the 41st most populous country.\r\n\r\nFolklore is an integral part of Nepali society. Traditional stories are rooted in the reality of day-to-day life, tales of love, affection and battles as well as demons and ghosts and thus reflect local lifestyles, cultures and beliefs. Many Nepali folk tales are enacted through the medium of dance and music.\r\n\r\n---------------------------------------\r\n###Welcome to **Nepal Japan Children Library**\r\n![Arts And Crafts With Kids At Nepal Japan Children Library](/static/images/library_brj_kids.jpg)\r\n\r\n\r\nConnect with us on facebook at [facebook.com/Nepal-Japan-Children-Library](https://www.facebook.com/Nepal-Japan-Children-Library-117390398337579/)\r\n\r\n###Where are we?\r\n\r\nNepal Japan Children Library is in lainchaur, Kathmandu, on the way to British council.\r\n\r\n###Our Volunteers\r\n\r\n* Biraj Khatiwada\r\n* Ayush Jha\r\n* Suresh Sah\r\n* Dharmananda Joshi\r\n\r\n###Things to Do\r\n\r\n* Fix the shelves\r\n\r\n         Our library has just been renovated, and the books are scattered. We need to put them back in the correct order."], u'csrfmiddlewaretoken': [u'buk7BSzGU6ox6eYUSFojT6YiHPaHqfLN']}>
+<QueryDict: {u'rst': [u"127.0.0.1 - - [26/Nov/2015 13:04:58] "POST /rst/create/ HTTP/1.1" 302 -
+127.0.0.1 - - [26/Nov/2015 13:04:58] "GET /rst/create/ HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 13:04:59] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 13:04:59] "GET /static/bootstrap/css/bootstrap.min.css HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 13:04:59] "GET /static/css/styles.css HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 13:04:59] "GET /static/css/dashboard.css HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 13:04:59] "GET /static/css/home.css HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 13:04:59] "GET /static/images/library_brj_kids.jpg HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 13:04:59] "GET /static/bootstrap/js/jquery.js HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 13:04:59] "GET /static/bootstrap/js/bootstrap.min.js HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 13:04:59] "GET /static/bootstrap/fonts/glyphicons-halflings-regular.woff2 HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 13:17:19] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 13:17:19] "GET /static/css/dashboard.css HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 13:17:19] "GET /static/bootstrap/css/bootstrap.min.css HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 13:17:19] "GET /static/css/styles.css HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 13:17:19] "GET /static/css/home.css HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 13:17:19] "GET /static/images/library_brj_kids.jpg HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 13:17:20] "GET /static/bootstrap/js/jquery.js HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 13:17:20] "GET /static/bootstrap/js/bootstrap.min.js HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 13:17:20] "GET /static/bootstrap/fonts/glyphicons-halflings-regular.woff HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 13:17:20] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [26/Nov/2015 13:17:20] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [26/Nov/2015 13:17:21] "GET /dashboard/ HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 13:17:21] "GET /static/bootstrap/js/jquery.js HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 13:17:21] "GET /static/bootstrap/js/bootstrap.min.js HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 13:17:22] "GET /rst/create/ HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 13:17:22] "GET /static/css/restructuredText/styles.css HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 13:17:23] "GET /static/js/autosize.min.js HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 13:17:29] "POST /rst/create/ HTTP/1.1" 302 -
+127.0.0.1 - - [26/Nov/2015 13:17:29] "GET /rst/create/ HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 13:17:29] "GET /static/bootstrap/js/jquery.js HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 13:17:29] "GET /static/bootstrap/js/bootstrap.min.js HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 13:17:30] "GET / HTTP/1.1" 500 -
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/staticfiles/handlers.py", line 63, in __call__
+    return self.application(environ, start_response)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/wsgi.py", line 189, in __call__
+    response = self.get_response(request)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 218, in get_response
+    response = self.handle_uncaught_exception(request, resolver, sys.exc_info())
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 261, in handle_uncaught_exception
+    return debug.technical_500_response(request, *exc_info)
+  File "/usr/local/lib/python2.7/dist-packages/django_extensions/management/technical_response.py", line 5, in null_technical_500_response
+    six.reraise(exc_type, exc_value, tb)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 132, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ays/alms/head/views.py", line 396, in home
+    return render(request, 'head/home.html', {'globals':config, 'date': datetime.date.today(), "body_code": RestructuredText.objects.get(name="homeBody").get_html()})
+  File "/home/ays/alms/restructuredText/models.py", line 16, in get_html
+    rst_dic = markdown.markdown(self.get_rst())
+  File "/home/ays/.local/lib/python2.7/site-packages/markdown/__init__.py", line 494, in markdown
+    return md.convert(text)
+  File "/home/ays/.local/lib/python2.7/site-packages/markdown/__init__.py", line 359, in convert
+    source = util.text_type(source)
+UnicodeDecodeError: 'ascii' codec can't decode byte 0xe0 in position 45: ordinal not in range(128). -- Note: Markdown only accepts unicode input!
+127.0.0.1 - - [26/Nov/2015 13:17:30] "GET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 13:17:30] "GET /?__debugger__=yes&cmd=resource&f=jquery.js HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 13:17:30] "GET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 13:17:30] "GET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 13:17:30] "GET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 13:17:31] "GET /?__debugger__=yes&cmd=resource&f=ubuntu.ttf HTTP/1.1" 200 -
+ * Detected change in '/home/ays/alms/restructuredText/models.py', reloading
+#### **Flowers** - Our Theme Of The Month\r\n\r\n\r\n\r\nNepal, officially the Federal Democratic Republic of Nepal, is a landlocked country located in South Asia. With an area of 147,181 square kiloliters (56,827 sq mi) and a population of approximately 27 million, Nepal is the world's 93rd largest country by area and the 41st most populous country.\r\n\r\nFolklore is an integral part of Nepali society. Traditional stories are rooted in the reality of day-to-day life, tales of love, affection and battles as well as demons and ghosts and thus reflect local lifestyles, cultures and beliefs. Many Nepali folk tales are enacted through the medium of dance and music.\r\n\r\n---------------------------------------\r\n###Welcome to **Nepal Japan Children Library**\r\n![Arts And Crafts With Kids At Nepal Japan Children Library](/static/images/library_brj_kids.jpg)\r\n\r\n\r\nConnect with us on facebook at [facebook.com/Nepal-Japan-Children-Library](https://www.facebook.com/Nepal-Japan-Children-Library-117390398337579/)\r\n\r\n###Where are we?\r\n\r\nNepal Japan Children Library is in lainchaur, Kathmandu, on the way to British council.\r\n\r\n###Our Volunteers\r\n\r\n* Biraj Khatiwada\r\n* Ayush Jha\r\n* Suresh Sah\r\n* Dharmananda Joshi\r\n\r\n###Things to Do\r\n\r\n* Fix the shelves\r\n\r\n         Our library has just been renovated, and the books are scattered. We need to put them back in the correct order."], u'csrfmiddlewaretoken': [u'buk7BSzGU6ox6eYUSFojT6YiHPaHqfLN']}>
+<QueryDict: {u'rst': [u"#### **Flowers** - Our Theme Of The Month\r\n\r\n\u0928\u0947\u092a\u093e\u0932\r\n\r\nNepal, officially the Federal Democratic Republic of Nepal, is a landlocked country located in South Asia. With an area of 147,181 square kiloliters (56,827 sq mi) and a population of approximately 27 million, Nepal is the world's 93rd largest country by area and the 41st most populous country.\r\n\r\nFolklore is an integral part of Nepali society. Traditional stories are rooted in the reality of day-to-day life, tales of love, affection and battles as well as demons and ghosts and thus reflect local lifestyles, cultures and beliefs. Many Nepali folk tales are enacted through the medium of dance and music.\r\n\r\n---------------------------------------\r\n###Welcome to **Nepal Japan Children Library**\r\n![Arts And Crafts With Kids At Nepal Japan Children Library](/static/images/library_brj_kids.jpg)\r\n\r\n\r\nConnect with us on facebook at [facebook.com/Nepal-Japan-Children-Library](https://www.facebook.com/Nepal-Japan-Children-Library-117390398337579/)\r\n\r\n###Where are we?\r\n\r\nNepal Japan Children Library is in lainchaur, Kathmandu, on the way to British council.\r\n\r\n###Our Volunteers\r\n\r\n* Biraj Khatiwada\r\n* Ayush Jha\r\n* Suresh Sah\r\n* Dharmananda Joshi\r\n\r\n###Things to Do\r\n\r\n* Fix the shelves\r\n\r\n         Our library has just been renovated, and the books are scattered. We need to put them back in the correct order."], u'csrfmiddlewaretoken': [u'jvhA4h877a9Z92Ukl1n7rBHDe8Anb7Kh']}>
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger pin code: 638-352-723
+ * Debugger is active!
+ * Debugger pin code: 178-068-508
+ * Detected change in '/home/ays/alms/restructuredText/models.py', reloading
+Performing system checks...
+
+System check identified no issues (0 silenced).
+
+Django version 1.8.6, using settings 'sysmanager.settings'
+Development server is running at http://127.0.0.1:8000/
+Using the Werkzeug debugger (http://werkzeug.pocoo.org/)
+Quit the server with CONTROL-C.
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger pin code: 638-352-723
+ * Debugger is active!
+ * Debugger pin code: 178-068-508
+127.0.0.1 - - [26/Nov/2015 13:18:34] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 13:18:34] "GET /static/bootstrap/css/bootstrap.min.css HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 13:18:34] "GET /static/css/styles.css HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 13:18:34] "GET /static/css/dashboard.css HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 13:18:34] "GET /static/css/home.css HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 13:18:34] "GET /static/bootstrap/js/jquery.js HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 13:18:34] "GET /static/bootstrap/js/bootstrap.min.js HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 13:18:34] "GET /static/images/library_brj_kids.jpg HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 13:22:01] "POST /rst/create/ HTTP/1.1" 302 -
+127.0.0.1 - - [26/Nov/2015 13:22:01] "GET /rst/create/ HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 13:22:24] "POST /rst/create/ HTTP/1.1" 302 -
+127.0.0.1 - - [26/Nov/2015 13:22:24] "GET /rst/create/ HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 13:22:25] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 13:22:25] "GET /static/bootstrap/css/bootstrap.min.css HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 13:22:25] "GET /static/css/styles.css HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 13:22:25] "GET /static/css/dashboard.css HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 13:22:25] "GET /static/css/home.css HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 13:22:25] "GET /static/bootstrap/js/jquery.js HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 13:22:25] "GET /static/bootstrap/js/bootstrap.min.js HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 13:22:25] "GET /static/images/library_brj_kids.jpg HTTP/1.1" 304 -
+Performing system checks...
+
+System check identified no issues (0 silenced).
+
+Django version 1.8.6, using settings 'sysmanager.settings'
+Development server is running at http://127.0.0.1:8000/
+Using the Werkzeug debugger (http://werkzeug.pocoo.org/)
+Quit the server with CONTROL-C.
+<QueryDict: {u'rst': [u"#### **Nepal** - Our Theme Of The Month\r\n\r\n\u0928\u0947\u092a\u093e\u0932\r\n\r\nNepal, officially the Federal Democratic Republic of Nepal, is a landlocked country located in South Asia. With an area of 147,181 square kiloliters (56,827 sq mi) and a population of approximately 27 million, Nepal is the world's 93rd largest country by area and the 41st most populous country.\r\n\r\nFolklore is an integral part of Nepali society. Traditional stories are rooted in the reality of day-to-day life, tales of love, affection and battles as well as demons and ghosts and thus reflect local lifestyles, cultures and beliefs. Many Nepali folk tales are enacted through the medium of dance and music.\r\n\r\n---------------------------------------\r\n###Welcome to **Nepal Japan Children Library**\r\n![Arts And Crafts With Kids At Nepal Japan Children Library](/static/images/library_brj_kids.jpg)\r\n\r\n\r\nConnect with us on facebook at [facebook.com/Nepal-Japan-Children-Library](https://www.facebook.com/Nepal-Japan-Children-Library-117390398337579/)\r\n\r\n###Where are we?\r\n\r\nNepal Japan Children Library is in lainchaur, Kathmandu, on the way to British council.\r\n\r\n###Our Volunteers\r\n\r\n* Biraj Khatiwada\r\n* Ayush Jha\r\n* Suresh Sah\r\n* Dharmananda Joshi\r\n\r\n###Things to Do\r\n\r\n* Fix the shelves\r\n\r\n         Our library has just been renovated, and the books are scattered. We need to put them back in the correct order."], u'csrfmiddlewaretoken': [u'jvhA4h877a9Z92Ukl1n7rBHDe8Anb7Kh']}>
+<QueryDict: {u'rst': [u"#### **Nepal** - Our Theme Of The Month\r\n\r\n\u0928\u0947\u092a\u093e\u0932 \u092e\u0947\u0930\u094b \u0926\u0947\u0936 \u0939\u094b\u0964\r\n\r\nNepal, officially the Federal Democratic Republic of Nepal, is a landlocked country located in South Asia. With an area of 147,181 square kiloliters (56,827 sq mi) and a population of approximately 27 million, Nepal is the world's 93rd largest country by area and the 41st most populous country.\r\n\r\nFolklore is an integral part of Nepali society. Traditional stories are rooted in the reality of day-to-day life, tales of love, affection and battles as well as demons and ghosts and thus reflect local lifestyles, cultures and beliefs. Many Nepali folk tales are enacted through the medium of dance and music.\r\n\r\n---------------------------------------\r\n###Welcome to **Nepal Japan Children Library**\r\n![Arts And Crafts With Kids At Nepal Japan Children Library](/static/images/library_brj_kids.jpg)\r\n\r\n\r\nConnect with us on facebook at [facebook.com/Nepal-Japan-Children-Library](https://www.facebook.com/Nepal-Japan-Children-Library-117390398337579/)\r\n\r\n###Where are we?\r\n\r\nNepal Japan Children Library is in lainchaur, Kathmandu, on the way to British council.\r\n\r\n###Our Volunteers\r\n\r\n* Biraj Khatiwada\r\n* Ayush Jha\r\n* Suresh Sah\r\n* Dharmananda Joshi\r\n\r\n###Things to Do\r\n\r\n* Fix the shelves\r\n\r\n         Our library has just been renovated, and the books are scattered. We need to put them back in the correct order."], u'csrfmiddlewaretoken': [u'jvhA4h877a9Z92Ukl1n7rBHDe8Anb7Kh']}>
+<QueryDict: {u'rst': [u"#### **Nepal** - Our Theme Of The Month\r\n\r\nNepal, officially the Federal Democratic Republic of Nepal, is a landlocked country located in South Asia. With an area of 147,181 square kiloliters (56,827 sq mi) and a population of approximately 27 million, Nepal is the world's 93rd largest country by area and the 41st most populous country.\r\n\r\nFolklore is an integral part of Nepali society. Traditional stories are rooted in the reality of day-to-day life, tales of love, affection and battles as well as demons and ghosts and thus reflect local lifestyles, cultures and beliefs. Many Nepali folk tales are enacted through the m127.0.0.1 - - [26/Nov/2015 13:22:30] "POST /rst/create/ HTTP/1.1" 302 -
+127.0.0.1 - - [26/Nov/2015 13:22:30] "GET /rst/create/ HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 13:22:39] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 13:22:39] "GET /static/bootstrap/css/bootstrap.min.css HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 13:22:39] "GET /static/css/styles.css HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 13:22:39] "GET /static/css/dashboard.css HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 13:22:39] "GET /static/css/home.css HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 13:22:39] "GET /static/bootstrap/js/jquery.js HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 13:22:39] "GET /static/bootstrap/js/bootstrap.min.js HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 13:22:39] "GET /static/images/library_brj_kids.jpg HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 13:33:18] "GET /search/book/ HTTP/1.1" 200 -
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger pin code: 638-352-723
+ * Debugger is active!
+ * Debugger pin code: 178-068-508
+127.0.0.1 - - [26/Nov/2015 16:55:49] "GET / HTTP/1.1" 200 -
+Error on request:
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/werkzeug/serving.py", line 192, in run_wsgi
+    execute(self.server.app)
+  File "/usr/local/lib/python2.7/dist-packages/werkzeug/serving.py", line 183, in execute
+    write(data)
+  File "/usr/local/lib/python2.7/dist-packages/werkzeug/serving.py", line 151, in write
+    self.send_header(key, value)
+  File "/usr/lib/python2.7/BaseHTTPServer.py", line 401, in send_header
+    self.wfile.write("%s: %s\r\n" % (keyword, value))
+IOError: [Errno 32] Broken pipe
+127.0.0.1 - - [26/Nov/2015 16:55:49] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 16:55:49] "GET /static/bootstrap/css/bootstrap.min.css HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 16:55:49] "GET /static/css/styles.css HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 16:55:49] "GET /static/css/dashboard.css HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 16:55:49] "GET /static/css/home.css HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 16:55:49] "GET /static/bootstrap/js/jquery.js HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 16:55:49] "GET /static/bootstrap/js/bootstrap.min.js HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 16:55:50] "GET /static/images/library_brj_kids.jpg HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 16:55:50] "GET /static/bootstrap/fonts/glyphicons-halflings-regular.woff2 HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 16:55:50] "GET /favicon.ico HTTP/1.1" 404 -
+Performing system checks...
+
+System check identified no issues (0 silenced).
+
+Django version 1.8.6, using settings 'sysmanager.settings'
+Development server is running at http://127.0.0.1:8000/
+Using the Werkzeug debugger (http://werkzeug.pocoo.org/)
+Quit the server with CONTROL-C.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+
+Django version 1.8.6, using settings 'sysmanager.settings'
+Development server is running at http://127.0.0.1:8000/
+Using the Werkzeug debugger (http://werkzeug.pocoo.org/)
+Quit the server with CONTROL-C.
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger pin code: 638-352-723
+ * Debugger is active!
+ * Debugger pin code: 178-068-508
+127.0.0.1 - - [26/Nov/2015 16:57:32] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 16:57:34] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 16:57:40] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 16:57:40] "GET /static/bootstrap/css/bootstrap.min.css HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 16:57:40] "GET /static/css/styles.css HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 16:57:40] "GET /static/css/dashboard.css HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 16:57:40] "GET /static/css/home.css HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 16:57:40] "GET /static/images/library_brj_kids.jpg HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 16:57:40] "GET /static/bootstrap/js/jquery.js HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 16:57:40] "GET /static/bootstrap/js/bootstrap.min.js HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 16:57:40] "GET /static/bootstrap/fonts/glyphicons-halflings-regular.woff2 HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 17:00:50] "GET / HTTP/1.1" 200 -
+Performing system checks...
+
+System check identified no issues (0 silenced).
+
+Django version 1.8.6, using settings 'sysmanager.settings'
+Development server is running at http://127.0.0.1:8000/
+Using the Werkzeug debugger (http://werkzeug.pocoo.org/)
+Quit the server with CONTROL-C.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+
+Django version 1.8.6, using settings 'sysmanager.settings'
+Development server is running at http://127.0.0.1:8000/
+Using the Werkzeug debugger (http://werkzeug.pocoo.org/)
+Quit the server with CONTROL-C.
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger pin code: 638-352-723
+ * Debugger is active!
+ * Debugger pin code: 178-068-508
+127.0.0.1 - - [26/Nov/2015 17:03:05] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 17:03:05] "GET /static/bootstrap/css/bootstrap.min.css HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 17:03:05] "GET /static/css/styles.css HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 17:03:05] "GET /static/css/dashboard.css HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 17:03:05] "GET /static/css/home.css HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 17:03:05] "GET /static/images/library_brj_kids.jpg HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 17:03:05] "GET /static/bootstrap/js/jquery.js HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 17:03:05] "GET /static/bootstrap/js/bootstrap.min.js HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 17:03:05] "GET /static/bootstrap/fonts/glyphicons-halflings-regular.woff2 HTTP/1.1" 304 -
+Performing system checks...
+
+System check identified no issues (0 silenced).
+
+Django version 1.8.6, using settings 'sysmanager.settings'
+Development server is running at http://127.0.0.1:8000/
+Using the Werkzeug debugger (http://werkzeug.pocoo.org/)
+Quit the server with CONTROL-C.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+
+Django version 1.8.6, using settings 'sysmanager.settings'
+Development server is running at http://127.0.0.1:8000/
+Using the Werkzeug debugger (http://werkzeug.pocoo.org/)
+Quit the server with CONTROL-C.
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger pin code: 638-352-723
+ * Debugger is active!
+ * Debugger pin code: 178-068-508
+Performing system checks...
+
+System check identified no issues (0 silenced).
+
+Django version 1.8.6, using settings 'sysmanager.settings'
+Development server is running at http://127.0.0.1:8000/
+Using the Werkzeug debugger (http://werkzeug.pocoo.org/)
+Quit the server with CONTROL-C.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+
+Django version 1.8.6, using settings 'sysmanager.settings'
+Development server is running at http://127.0.0.1:8000/
+Using the Werkzeug debugger (http://werkzeug.pocoo.org/)
+Quit the server with CONTROL-C.
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger pin code: 638-352-723
+ * Debugger is active!
+ * Debugger pin code: 178-068-508
+127.0.0.1 - - [26/Nov/2015 17:14:06] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 17:14:06] "GET /static/bootstrap/css/bootstrap.min.css HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 17:14:06] "GET /static/css/styles.css HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 17:14:06] "GET /static/css/dashboard.css HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 17:14:06] "GET /static/css/home.css HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 17:14:06] "GET /static/images/library_brj_kids.jpg HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 17:14:06] "GET /static/bootstrap/js/jquery.js HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 17:14:06] "GET /static/bootstrap/js/bootstrap.min.js HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 17:14:06] "GET /static/bootstrap/fonts/glyphicons-halflings-regular.woff2 HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 17:14:06] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [26/Nov/2015 17:20:20] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 17:20:38] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 17:20:39] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 17:20:39] "GET /static/bootstrap/css/bootstrap.min.css HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 17:20:39] "GET /static/css/styles.css HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 17:20:39] "GET /static/css/dashboard.css HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 17:20:39] "GET /static/css/home.css HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 17:20:39] "GET /static/images/library_brj_kids.jpg HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 17:20:39] "GET /static/bootstrap/js/jquery.js HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 17:20:39] "GET /static/bootstrap/js/bootstrap.min.js HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 17:20:39] "GET /static/bootstrap/fonts/glyphicons-halflings-regular.woff2 HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 17:20:40] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 17:20:40] "GET /static/bootstrap/css/bootstrap.min.css HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 17:20:40] "GET /static/css/styles.css HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 17:20:40] "GET /static/css/dashboard.css HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 17:20:40] "GET /static/css/home.css HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 17:20:40] "GET /static/images/library_brj_kids.jpg HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 17:20:40] "GET /static/bootstrap/js/jquery.js HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 17:20:40] "GET /static/bootstrap/js/bootstrap.min.js HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 17:20:40] "GET /static/bootstrap/fonts/glyphicons-halflings-regular.woff2 HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 17:20:40] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2015 17:20:40] "GET /static/bootstrap/css/bootstrap.min.css HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 17:20:40] "GET /static/css/styles.css HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 17:20:40] "GET /static/css/dashboard.css HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 17:20:40] "GET /static/css/home.css HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 17:20:40] "GET /static/images/library_brj_kids.jpg HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 17:20:40] "GET /static/bootstrap/js/jquery.js HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 17:20:40] "GET /static/bootstrap/js/bootstrap.min.js HTTP/1.1" 304 -
+127.0.0.1 - - [26/Nov/2015 17:20:40] "GET /static/bootstrap/fonts/glyphicons-halflings-regular.woff2 HTTP/1.1" 304 -
+Performing system checks...
+
+System check identified no issues (0 silenced).
+
+Django version 1.8.6, using settings 'sysmanager.settings'
+Development server is running at http://127.0.0.1:8000/
+Using the Werkzeug debugger (http://werkzeug.pocoo.org/)
+Quit the server with CONTROL-C.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+
+Django version 1.8.6, using settings 'sysmanager.settings'
+Development server is running at http://127.0.0.1:8000/
+Using the Werkzeug debugger (http://werkzeug.pocoo.org/)
+Quit the server with CONTROL-C.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+Traceback (most recent call last):
+  File "./manage.py", line 10, in <module>
+    execute_from_command_line(sys.argv)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/__init__.py", line 354, in execute_from_command_line
+    utility.execute()
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/__init__.py", line 346, in execute
+    self.fetch_command(subcommand).run_from_argv(self.argv)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/base.py", line 394, in run_from_argv
+    self.execute(*args, **cmd_options)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/base.py", line 445, in execute
+    output = self.handle(*args, **options)
+  File "/usr/local/lib/python2.7/dist-packages/django_extensions/management/utils.py", line 57, in inner
+    ret = func(self, *args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django_extensions/management/commands/runserver_plus.py", line 332, in handle
+    inner_run()
+  File "/usr/local/lib/python2.7/dist-packages/django_extensions/management/commands/runserver_plus.py", line 250, in inner_run
+    self.check_migrations()
+  File "/usr/local/lib/python2.7/dist-packages/django_extensions/management/commands/runserver_plus.py", line 339, in check_migrations
+    executor = MigrationExecutor(connections[DEFAULT_DB_ALIAS])
+  File "/usr/local/lib/python2.7/dist-packages/django/db/migrations/executor.py", line 19, in __init__
+    self.loader = MigrationLoader(self.connection)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/migrations/loader.py", line 47, in __init__
+    self.build_graph()
+  File "/usr/local/lib/python2.7/dist-packages/django/db/migrations/loader.py", line 182, in build_graph
+    self.load_disk()
+  File "/usr/local/lib/python2.7/dist-packages/django/db/migrations/loader.py", line 102, in load_disk
+    migration_module = import_module("%s.%s" % (module_name, migration_name))
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/ays/alms/restructuredText/migrations/0004_auto_20151124_2229.py", line 5, in <module>
+    import django_markdown.models
+ImportError: No module named django_markdown.models
+Performing system checks...
+
+System check identified no issues (0 silenced).
+Traceback (most recent call last):
+  File "./manage.py", line 10, in <module>
+    execute_from_command_line(sys.argv)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/__init__.py", line 354, in execute_from_command_line
+    utility.execute()
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/__init__.py", line 346, in execute
+    self.fetch_command(subcommand).run_from_argv(self.argv)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/base.py", line 394, in run_from_argv
+    self.execute(*args, **cmd_options)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/base.py", line 445, in execute
+    output = self.handle(*args, **options)
+  File "/usr/local/lib/python2.7/dist-packages/django_extensions/management/utils.py", line 57, in inner
+    ret = func(self, *args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django_extensions/management/commands/runserver_plus.py", line 332, in handle
+    inner_run()
+  File "/usr/local/lib/python2.7/dist-packages/django_extensions/management/commands/runserver_plus.py", line 250, in inner_run
+    self.check_migrations()
+  File "/usr/local/lib/python2.7/dist-packages/django_extensions/management/commands/runserver_plus.py", line 339, in check_migrations
+    executor = MigrationExecutor(connections[DEFAULT_DB_ALIAS])
+  File "/usr/local/lib/python2.7/dist-packages/django/db/migrations/executor.py", line 19, in __init__
+    self.loader = MigrationLoader(self.connection)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/migrations/loader.py", line 47, in __init__
+    self.build_graph()
+  File "/usr/local/lib/python2.7/dist-packages/django/db/migrations/loader.py", line 182, in build_graph
+    self.load_disk()
+  File "/usr/local/lib/python2.7/dist-packages/django/db/migrations/loader.py", line 102, in load_disk
+    migration_module = import_module("%s.%s" % (module_name, migration_name))
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/ays/alms/restructuredText/migrations/0004_auto_20151124_2229.py", line 5, in <module>
+    import django_markdown.models
+ImportError: No module named django_markdown.models
+Performing system checks...
+
+System check identified no issues (0 silenced).
+Traceback (most recent call last):
+  File "./manage.py", line 10, in <module>
+    execute_from_command_line(sys.argv)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/__init__.py", line 354, in execute_from_command_line
+    utility.execute()
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/__init__.py", line 346, in execute
+    self.fetch_command(subcommand).run_from_argv(self.argv)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/base.py", line 394, in run_from_argv
+    self.execute(*args, **cmd_options)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/base.py", line 445, in execute
+    output = self.handle(*args, **options)
+  File "/usr/local/lib/python2.7/dist-packages/django_extensions/management/utils.py", line 57, in inner
+    ret = func(self, *args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django_extensions/management/commands/runserver_plus.py", line 332, in handle
+    inner_run()
+  File "/usr/local/lib/python2.7/dist-packages/django_extensions/management/commands/runserver_plus.py", line 250, in inner_run
+    self.check_migrations()
+  File "/usr/local/lib/python2.7/dist-packages/django_extensions/management/commands/runserver_plus.py", line 339, in check_migrations
+    executor = MigrationExecutor(connections[DEFAULT_DB_ALIAS])
+  File "/usr/local/lib/python2.7/dist-packages/django/db/migrations/executor.py", line 19, in __init__
+    self.loader = MigrationLoader(self.connection)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/migrations/loader.py", line 47, in __init__
+    self.build_graph()
+  File "/usr/local/lib/python2.7/dist-packages/django/db/migrations/loader.py", line 182, in build_graph
+    self.load_disk()
+  File "/usr/local/lib/python2.7/dist-packages/django/db/migrations/loader.py", line 102, in load_disk
+    migration_module = import_module("%s.%s" % (module_name, migration_name))
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/ays/alms/restructuredText/migrations/0004_auto_20151124_2229.py", line 5, in <module>
+    import django_markdown.models
+ImportError: No module named django_markdown.models
+Performing system checks...
+
+System check identified no issues (0 silenced).
+Traceback (most recent call last):
+  File "./manage.py", line 10, in <module>
+    execute_from_command_line(sys.argv)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/__init__.py", line 354, in execute_from_command_line
+    utility.execute()
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/__init__.py", line 346, in execute
+    self.fetch_command(subcommand).run_from_argv(self.argv)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/base.py", line 394, in run_from_argv
+    self.execute(*args, **cmd_options)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/base.py", line 445, in execute
+    output = self.handle(*args, **options)
+  File "/usr/local/lib/python2.7/dist-packages/django_extensions/management/utils.py", line 57, in inner
+    ret = func(self, *args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django_extensions/management/commands/runserver_plus.py", line 332, in handle
+    inner_run()
+  File "/usr/local/lib/python2.7/dist-packages/django_extensions/management/commands/runserver_plus.py", line 250, in inner_run
+    self.check_migrations()
+  File "/usr/local/lib/python2.7/dist-packages/django_extensions/management/commands/runserver_plus.py", line 339, in check_migrations
+    executor = MigrationExecutor(connections[DEFAULT_DB_ALIAS])
+  File "/usr/local/lib/python2.7/dist-packages/django/db/migrations/executor.py", line 19, in __init__
+    self.loader = MigrationLoader(self.connection)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/migrations/loader.py", line 47, in __init__
+    self.build_graph()
+  File "/usr/local/lib/python2.7/dist-packages/django/db/migrations/loader.py", line 182, in build_graph
+    self.load_disk()
+  File "/usr/local/lib/python2.7/dist-packages/django/db/migrations/loader.py", line 102, in load_disk
+    migration_module = import_module("%s.%s" % (module_name, migration_name))
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/ays/alms/restructuredText/migrations/0004_auto_20151124_2229.py", line 5, in <module>
+    import django_markdown.models
+ImportError: No module named django_markdown.models

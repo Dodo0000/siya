@@ -4,7 +4,7 @@
 <div class="container-fluid">
   {% if book.is_borrowed == True %}
   <div class="alert alert-danger">
-    <strong>Oh, No!</strong> This book with accession number <span class="label label-primary">{{ book.accession_number }}</span> has been borrowed by <a href="{% url 'profile' username=user.username %}">{{ book.get_borrower.get_name }}</a> {{ days_ago }} ({{ lends.lending_date }}).
+    <strong>Oh, No!</strong> This book with accession number <span class="label label-primary">{{ book.accession_number }}</span> was borrowed by <a href="{% url 'profile' username=user.username %}">{{ book.get_borrower.get_name }}</a> {{ days_ago }} ({{ lends.lending_date }}).
   </div>
   {% elif book.is_discarded %}
   <div class="alert alert-danger">

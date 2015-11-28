@@ -18,7 +18,6 @@ from django.contrib import admin
 
 urlpatterns = [
     url(r'^$', 'head.views.home', name='home'),
-    url('^markdown/', include( 'django_markdown.urls')),
     url(r'^dashboard/$', 'head.views.dashboard', name='dashboard'),
     url(r'^entry/$', 'head.views.entry', name="entry"),
     url(r'^entry/(?P<acc_no>[0-9]+)$', 'head.views.editEntry', name="editEntry"),
@@ -33,8 +32,10 @@ urlpatterns = [
     url(r'^search/book/$', 'head.views.searchBook', name='search-book'),
     url(r'^search/member/$', 'account.views.search_member', name="search-member"),
     url(r'^login/$', 'account.views.login_user', name="login"),
+    url(r'^register/member/$', 'account.views.addMember', name="addMember"),
+    url(r'^register/member/new/(?P<created>.*)$', 'account.views.addMemberWithArgs', name="addMemberWithArgs"),
     url(r'^logout/', 'account.views.logout_user', name="logout"),
-    url(r'^user/(?P<username>[a-z]+)/$', 'account.views.profile', name='profile'),
+    url(r'^user/(?P<username>[a-z0-9]+)/$', 'account.views.profile', name='profile'),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^accounts/', include('ledger.urls')),
     url(r'^groups/', include('almsGroups.urls')),

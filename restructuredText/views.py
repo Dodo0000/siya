@@ -6,8 +6,6 @@ from django.core.urlresolvers import reverse
 from settings.models import addGlobalContext
 # Create your views here.
 
-from docutils.core import publish_parts
-
 from .models import RestructuredText
 
 

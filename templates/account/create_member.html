@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'admin/css/forms.css' %}" />
+{% endblock %}
+{{ form.media }}
+
+{% block content %}
+
+{% if member_created %}
+<div class="panel panel-success">
+  <div class="panel-body">
+    The Member Was Added
+  </div>
+</div>
+{% endif %}
+
+
+<h3>Signup for members</h3>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-6">
+
+      <form method="POST" role="form" class="form-horizontal">{% csrf_token %}
+        <br>
+        {{ form.non_field_error }}
+        <div class="form-group">
+          <div class="col-sm-3">
+            {{ form.first_name.errors.as_p }}
+          </div>
+          <div class="col-sm-9">
+            <label for="form.first_name.id_for_label">{{ form.first_name.label }}</label>
+          {% render_field form.first_name placeholder=form.first_name.label class="form-control" autofocus=true %}
+          </div>
+
+          <div class="col-sm-3">
+            {{ form.last_name.errors }}
+          </div>
+          <div class="col-sm-9">
+            <label for="form.last_name.id_for_label">{{ form.last_name.label }}</label>
+          {% render_field form.last_name placeholder=form.last_name.label class="form-control" %}
+          </div>	
+          
+          <div class="col-sm-3">
+            {{ form.gender.errors }}
+          </div>
+          <div class="col-sm-9">
+            <label for="form.gender.id_for_label">{{ form.gender.label }}</label>
+          {% render_field form.gender placeholder=form.gender.label class="form-control" %}
+          </div>	
+          
+          <div class="col-sm-3">
+            {{ form.ward_no.errors }}
+          </div>
+          <div class="col-sm-9">
+            <label for="form.username.id_for_label">{{ form.ward_no.label }}</label>
+          {% render_field form.ward_no placeholder=form.ward_no.label class="form-control" %}
+          </div>	
+          
+          <div class="col-sm-3">
+            {{ form.tole.errors }}
+          </div>
+          <div class="col-sm-9">
+            <label for="form.tole.id_for_label">{{ form.tole.label }}</label>
+          {% render_field form.tole placeholder=form.tole.label class="form-control" %}
+          </div>	
+          
+          <div class="col-sm-3">
+            {{ form.city.errors }}
+          </div>
+          <div class="col-sm-9">
+            <label for="form.city.id_for_label">{{ form.city.label }}</label>
+          {% render_field form.city placeholder=form.city.label class="form-control" %}
+          </div>	
+          
+          <div class="col-sm-3">
+            {{ form.home_phone.errors }}
+          </div>
+          <div class="col-sm-9">
+            <label for="form.home_phone.id_for_label">{{ form.home_phone.label }}</label>
+          {% render_field form.home_phone placeholder=form.home_phone.label class="form-control" %}
+          </div>	
+          
+          <div class="col-sm-3">
+            {{ form.parent_name.errors }}
+          </div>
+          <div class="col-sm-9">
+            <label for="form.parent_name.id_for_label">{{ form.parent_name.label }}</label>
+          {% render_field form.parent_name placeholder=form.parent_name.label class="form-control" %}
+          </div>	
+          
+          <div class="col-sm-3">
+            {{ form.school_name.errors }}
+          </div>
+          <div class="col-sm-9">
+            <label for="form.school_name.id_for_label">{{ form.school_name.label }}</label>
+          {% render_field form.school_name placeholder=form.school_name.label class="form-control" %}
+          </div>	
+          
+          <div class="col-sm-3">
+            {{ form.school_class.errors }}
+          </div>
+          <div class="col-sm-9">
+            <label for="form.school_class.id_for_label">{{ form.school_class.label }}</label>
+          {% render_field form.school_class placeholder=form.school_class.label class="form-control" %}
+          </div>	
+          
+          <div class="col-sm-3">
+            {{ form.roll_no.errors }}
+          </div>
+          <div class="col-sm-9">
+            <label for="form.roll_no.id_for_label">{{form.roll_no.label}}</label>
+          {% render_field form.roll_no placeholder=form.roll_no.label class="form-control" %}
+          </div>	
+          
+          <div class="col-sm-3">
+            {{ form.date_of_birth.errors }}
+          </div>
+          <div class="col-sm-9">
+            <label for="form.date_of_birth.id_for_label">{{form.date_of_birth.label}}</label>
+          {% render_field form.date_of_birth placeholder=form.date_of_birth.label class="form-control vDateField" %}
+          </div>	
+
+        <div class="form-group">
+          <div class="col-md-4 col-md-offset-4">
+            <button class="btn btn btn-primary btn-block" type="submit" id="id_submit">Create Member</button>
+          </div>
+        </div>
+
+
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+
+{%block post-js-external %}
+<script type="text/javascript">window.__admin_media_prefix__ = "{% static 'admin' %}/";</script>
+<script type="text/javascript">window.__admin_utc_offset__ = "20700";</script>
+<script type="text/javascript" src="/admin/jsi18n/"></script>
+<script type="text/javascript" src="{% static 'admin/js/core.js' %}"></script>
+<script type="text/javascript" src="{% static 'admin/js/admin/RelatedObjectLookups.js' %}"></script>
+<script type="text/javascript" src="{% static 'admin/js/jquery.js' %}"></script>
+<script type="text/javascript" src="{% static 'admin/js/jquery.init.js' %}"></script>
+<script type="text/javascript" src="{% static 'admin/js/actions.js' %}"></script>
+<script type="text/javascript" src="{% static 'admin/js/calendar.js' %}"></script>
+<script type="text/javascript" src="{% static 'admin/js/admin/DateTimeShortcuts.js' %}"></script>
+<script type="text/javascript" src="{% static 'admin/js/related-widget-wrapper.js' %}"></script>
+{% endblock %}

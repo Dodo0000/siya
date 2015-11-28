@@ -9,6 +9,7 @@
     <h1>{{ search_user.get_name|title }}</h1>
     <h4>{{ search_user.user_type.type|title }} since {{ search_user.date_joined|date:"l d N Y" }}</h4>
     <p>{% if search_user.is_male %}He{% else %}She{% endif %} has borrowed <span class="label label-info">{{ len_books_borrowed }}</span> {% if len_books_borrowed == 1 %}book{% else %}books{% endif %}</p>
+    <p> Groups - {% for group in search_user.groups.all %} {{ group.name }} {% endfor %}</p>
   </div> <!-- jumbotron -->
   </div>
   

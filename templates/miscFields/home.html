@@ -16,16 +16,16 @@
   </div>
 </div>
 {% endif %}
-
+<hr>
 {% for field in all_fields %}
-<div class="panel panel-default">
-  <div class="panel-heading">
-    <h5>{{ field.get_key }}</h5>
-  </div>
-  <div class="panel-body">
-    {{ field.value.all|length}} books have this field value
-  </div>
-</div>
+
+<h3>
+  <a href="">
+    <span class="label label-primary">
+      {{field}}
+    </span>
+  </a>
+</h3>
 {% endfor %}
 
 {% endblock %}

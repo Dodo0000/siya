@@ -27,5 +27,11 @@
     <strong>Oops!</strong> Member with username <span class="label label-warning">{{ username }}</span> could not be found! Try searching for some other username
   </div>
 {% endif %}
+<div align=center>
+  <div class="btn-group" role="group">
+    {% for alphabet in alphabets %}
+    <button class="btn btn-primary">{{alphabet}}</button>
+    {% endfor %}
+  </div>
 {% endblock %}
       

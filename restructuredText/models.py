@@ -1,5 +1,5 @@
 from django.db import models
-from django.utils.encoding import smart_str
+from django.utils.encoding import smart_str, smart_text
 
 # Create your models here.
 
@@ -17,7 +17,7 @@ class RestructuredText(models.Model):
         return rst_dic
 
     def get_rst(self):
-        return smart_str(self.restructuredText)
+        return smart_text(self.restructuredText)
 
     def get_name(self):
         return smart_str(self.name)

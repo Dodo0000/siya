@@ -70,34 +70,31 @@ class UserManager(BaseUserManager):
     '''
     def create(self,
             username,
-            user_type,
             super_user=False,
             first_name=None,
             last_name=None,
             password=None, 
             **extra_fields):
+        print username
         if not username:
-            raise ValueError("Email is required to create User")
+            raise ValueError("Username is required to create User")
 
         user = self.model(username=username,
                 first_name=first_name,
                 last_name=last_name,
-                user_type=user_type,
                 **extra_fields
                 )
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, username, password, user_type=None):
+    def create_superuser(self, username, password):
         if not username:
-            raise ValueError("Email is required")
+            raise ValueError("username is required")
         if not password:
             raise ValueError("Password is required")
-        if not user_type:
-            user_type= UserType.objects.get_or_create(_type="member",slug="member")[0]
 
-        user = self.create(username=username, password=password,super_user=True, user_type=user_type)
+        user = self.create(username=username, password=password,super_user=True)
         user.is_staff = True
         user.is_superuser = True
         user.save(using=self._db)
@@ -106,9 +103,9 @@ class UserManager(BaseUserManager):
         self.viewers.add(user.viewer)
 
 class ModUser(AbstractBaseUser, PermissionsMixin):
-    first_name = models.CharField(max_length=90,null=True)
-    last_name = models.CharField(max_length=90,null=True)
-    username = models.CharField(max_length=25, unique=True)
+    first_name = models.CharField(max_length=90,null=True,blank=True)
+    last_name = models.CharField(max_length=90,null=True,blank=True)
+    username = models.CharField(max_length=25, unique=True,blank=True)
 
     date_joined = models.DateTimeField('Date Joined',default=timezone.now)
 
@@ -119,23 +116,23 @@ class ModUser(AbstractBaseUser, PermissionsMixin):
                 ('female','female'),
                 ))
 
-    addr_ward_no = models.CharField(max_length=20, null=True)
-    addr_tole = models.CharField(max_length=100, null=True)
-    addr_municipality = models.CharField(max_length=100, null=True)
+    addr_ward_no = models.CharField(max_length=20, null=True,blank=True)
+    addr_tole = models.CharField(max_length=100, null=True,blank=True)
+    addr_municipality = models.CharField(max_length=100, null=True,blank=True)
 
-    telephone_home = models.IntegerField(null=True)
-    telephone_mobile = models.IntegerField(null=True)
+    telephone_home = models.IntegerField(null=True,blank=True)
+    telephone_mobile = models.IntegerField(null=True,blank=True)
 
-    parent_name = models.CharField(max_length=255,null=True)
-    parent_telephone_number = models.IntegerField(null=True)
+    parent_name = models.CharField(max_length=255,null=True,blank=True)
+    parent_telephone_number = models.IntegerField(null=True,blank=True)
 
-    school_name = models.CharField(max_length=255,null=True)
-    school_telephone = models.IntegerField(null=True)
-    school_class = models.CharField(max_length=5,null=True)
-    school_roll_no = models.CharField(max_length=3,null=True)
+    school_name = models.CharField(max_length=255,null=True,blank=True)
+    school_telephone = models.IntegerField(null=True,blank=True)
+    school_class = models.CharField(max_length=5,null=True,blank=True)
+    school_roll_no = models.CharField(max_length=3,null=True,blank=True)
     school_varified = models.NullBooleanField(default=False)
     
-    date_of_birth = models.DateField(null=True)
+    date_of_birth = models.DateField(null=True,blank=True)
 
     is_staff = models.BooleanField(default=False)
 
@@ -150,6 +147,8 @@ class ModUser(AbstractBaseUser, PermissionsMixin):
         return "home: {0}, mobile: {1}, parent's: {2}".format(self.telephone_home, self.telephone_mobile, self.parent_telephone_number)
     
     def get_age(self):
+        if self.date_of_birth in [None,"None"]:
+            return ""
         return datetime.date.today().year - self.date_of_birth.year
 
     
@@ -157,6 +156,7 @@ class ModUser(AbstractBaseUser, PermissionsMixin):
         if not self.is_active:
             self.send_email_activation_confirmation()
         if commit:
+            super(ModUser,self).set_password(self.password)
             super(ModUser, self).save(*args,**kwargs)
 
     def is_male(self):

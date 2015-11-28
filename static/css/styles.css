@@ -1,6 +1,6 @@
 body{
     font-family: 'Droid Sans';
-    background-color: #eee;
+    background-color: #fff;
     height:100%;
 }
 
@@ -48,7 +48,7 @@ body{
 
 .navbar-default{
     opacity:1;
-    background-color:#1c6585;
+    background-color: #1c6585;
 
 }
 
@@ -58,7 +58,7 @@ body{
 }
 
 .navbar-default .navbar-brand:hover{
-    color:black;
+    color: #F3EFE0;
 }
 
 .navbar-default .navbar-nav > li > a{
@@ -66,7 +66,8 @@ body{
 }
 
 .navbar-default .navbar-nav > li > a:hover{
-    color: black;
+    color: #F3EFE0;
+    background-color: #0B3D52;
 }
 
 .jumbotron-cus{

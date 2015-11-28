@@ -24,6 +24,8 @@ from settings.models import Globals
 import datetime
 
 
+config = Globals()
+
 def make_title(title):
     title = title.strip(" ")
     return title[0].upper() + title[1:]
@@ -212,8 +214,8 @@ class Lend(models.Model):
     
     def get_late_fees(self):
         borrowed_time = self.get_borrowed_time()
-        max_days = Globals.books['borrow']['max_days']
-        money_per_day = Globals.late_fees_rate
+        max_days = config.config.getint("books","borrow_max_days")
+        money_per_day = config.config.getint("misc", "late_fees_rate")
         if borrowed_time > max_days:
             return money_per_day *  (borrowed_time - max_days)
         else:
@@ -227,7 +229,7 @@ class Lend(models.Model):
          self.book.save()
 
     def get_returning_date(self):
-        return self.lending_date + datetime.timedelta(days=Globals.books['borrow']['max_days'])
+        return self.lending_date + datetime.timedelta(days=config.config.getint("books",'borrow_max_days'))
 
     def __str__(self):
         return "{0},borrowed on {1}, till {2}".format(

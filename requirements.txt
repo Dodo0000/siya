@@ -1,3 +1,4 @@
+uuWSGI==2.0.11.2
 Django==1.8.6
 django-memcached-hashring==0.1.2
 django-extensions==1.5.9
@@ -5,3 +6,4 @@ Werkzeug==0.11
 openpyxl==2.3.1
 markdown
 simpleyaml
+configparser

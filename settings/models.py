@@ -7,6 +7,20 @@ from configs.models import Organization as configsOrganization
 from django.conf import settings
 import os
 
+
+import hashlib
+
+def md5Checksum(filePath):
+    with open(filePath, 'rb') as fh:
+        m = hashlib.md5()
+        while True:
+            data = fh.read(8192)
+            if not data:
+                break
+            m.update(data)
+        return m.hexdigest()
+
+
 class Globals:
     '''
     this is a wrapper arpund the configs.models.Organization class
@@ -16,6 +30,11 @@ class Globals:
         import configparser
         self.config = configparser.ConfigParser()
         self.config.read(os.path.join(settings.BASE_DIR, "config.ini"))
+        self.set_vals()
+        self.checksum = ""
+        self.load()
+
+    def set_vals(self):
         self.books = self.config['books']
         self.books_columns = self.config['columns']
         self.yalms = self.config['alms']
@@ -24,6 +43,20 @@ class Globals:
     def load(self):
         import configparser
         self.config.read(os.path.join(settings.BASE_DIR, "config.ini"))
+        self.set_vals()
+
+       
+    def reload(self):
+        if self.file_is_same() is False:
+            self.load()
+
+    def file_is_same(self):
+        checksum = md5Checksum("config.ini")
+        if checksum != self.checksum:
+             self.checksum = checksum
+             return False
+        return True
+
 
     def add(self,key, value):
         self.config[key] = value
@@ -33,8 +66,6 @@ class Globals:
     def save(self):
         with open(os.path.join(settings.BASE_DIR, "config.ini")) as configfile:
             self.config.write(configfile)
-
-
 
 
 '''
@@ -100,7 +131,7 @@ class AccessionNumberCount(models.Model):
 
 def addGlobalContext(context=None):
     global_dict = {
-                "globals": Globals,
+                "globals": Globals(),
                 "date": datetime.date.today()
             }
     if context != None and context.__class__ == dict:

@@ -7,8 +7,6 @@ from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.debug import sensitive_post_parameters
 from django.views.decorators.cache import never_cache
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.models import Group
-from django.utils.encoding import smart_str
 
 from .models import ModUser
 from .forms import CreateMemberForm
@@ -34,7 +32,6 @@ def profile(request, username):
 
 @login_required(login_url="/login")
 def search_member(request):
-    import string
     username = request.GET.get("username", None)
     if username is not None:
         user = ModUser.objects.filter(username=username)
@@ -42,10 +39,9 @@ def search_member(request):
             user = user[0]
             return HttpResponseRedirect(reverse('profile', kwargs={"username":user.username}))
         else:
-            return render(request, 'account/search_user.html', {'not_found': True, 'username': username,"alphabets": string.ascii_lowercase, 'globals': config, 'date': datetime.date.today()})
+            return render(request, 'account/search_user.html', {'not_found': True, 'username': username, 'globals': config, 'date': datetime.date.today()})
     else:
-        return render(request, 'account/search_user.html', {"alphabets": string.ascii_lowercase,"globals": config, 'date': datetime.date.today()})
-
+        return render(request, 'account/search_user.html', {"globals": config, 'date': datetime.date.today()})
 
 
 
@@ -120,14 +116,13 @@ def logout_user(request):
     
 
 def create_username(*args):
-    import random
     vals = []
     for each in args:
-        vals.append(smart_str(each))
+        vals.append(each)
     return "".join(vals)
 
 @login_required(login_url="/login")
-def addMemberWithArgs(request,created):
+def addMember(request):
     form = CreateMemberForm()
     if request.method == "POST":
         form = CreateMemberForm(request.POST)
@@ -135,27 +130,26 @@ def addMemberWithArgs(request,created):
             # the form is valid, so lets create the member
             data = form.cleaned_data
             if data['first_name'] == '' and data['last_name'] == '':
-                member_created = False
+                pass # error!!
             else:
-                first_name =smart_str( data['first_name'].strip(" ").lower())
-                last_name = smart_str(data['last_name'].strip(" ").lower())
-                gender = smart_str(data['gender'].strip(' ').lower())
-                ward_no = smart_str(data['ward_no'].strip(' ').lower())
-                tole = smart_str(data['tole'].strip(' ').lower())
-                city = smart_str(data['city'].strip(' ').lower())
-                home_phone = smart_str(data['home_phone'].strip(' ').lower())
-                parent_name = smart_str(data['parent_name'].strip(' ').lower())
-                school_name = smart_str(data['school_name'].strip(' ').lower())
-                school_class = smart_str(data['school_class'].strip(' ').lower())
-                roll_no = smart_str(data['roll_no'].strip(' ').lower())
-                date_of_birth = data['date_of_birth']
+                first_name = data['first_name'].strip(" ")
+                last_name = data['last_name'].strip(" ")
+                gender = data['gender'].strip(' ')
+                ward_no = data['ward_no'].strip(' ')
+                tole = data['tole'].strip(' ')
+                city = data['city'].strip(' ')
+                home_phone = data['home_phone'].strip(' ')
+                parent_name = data['parent_name'].strip(' ')
+                school_name = data['school_name'].strip(' ')
+                school_class = data['school_class'].strip(' ')
+                roll_no = data['roll_no'].strip(' ')
+                date_of_birth = data['roll_no'].strip(' ')
 
                 ## creating the username
-                username = create_username(first_name, last_name,ModUser.objects.all().count())
+                username = create_username(first_name, last_name)
                 member = ModUser.objects.create(
                         username=username
                         )
-                print first_name
                 if first_name not in ['']:
                     member.first_name = first_name
                 if last_name not in ['']:
@@ -180,22 +174,12 @@ def addMemberWithArgs(request,created):
                     member.school_roll_no = roll_no
                 if date_of_birth not in ['']:
                     member.date_of_birth = date_of_birth
-                ## school_number and telephone_mobile are not added
-                member.groups.add(Group.objects.get(name="Member"))
-                member.save()
 
-                return HttpResponseRedirect(reverse("addMemberWithArgs", kwargs={"created": True}))
             
     return  render(request,
             "account/create_member.html",
             context=addGlobalContext(
                 {
-                    "form": form,
-                    "member_created": created
+                    "form": form
                 })
                 )
-
-@login_required(login_url="/login/")
-def addMember(request):
-    return addMemberWithArgs(request,created=False)
-

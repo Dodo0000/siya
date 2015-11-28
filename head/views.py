@@ -31,7 +31,7 @@ from django.core.urlresolvers import reverse
 from django.http import Http404
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.utils.text import slugify
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
@@ -43,6 +43,7 @@ import json
 from fuzz.search import searchBookTitle, searchBookAuthor,searchBookKeywords
 
 # Create your views here.
+
 
 TYPES = [
     "Keyword",
@@ -122,6 +123,8 @@ def toint(val,lang="EN"):
 ##############################################################################
 ############################### AJAX CALL VIEWS ##############################
 
+@login_required(login_url="/login/")
+@permission_required("add_book", login_url="/login/")
 def validate_book(request):
     '''
     checks if book with the given accession number exists
@@ -145,6 +148,8 @@ def validate_book(request):
 
 
 
+@login_required(login_url="/login/")
+@permission_required("add_book")
 def add_book(request):
     all_attrs = [_[1] for _ in config.config['columns'].items()] + ["language"]
     each = dict()   ## store post data
@@ -292,7 +297,9 @@ def add_book(request):
 
 
 @login_required(login_url="/login")
+@permission_required(("change_book", "add_book"))
 def editEntry(request,acc_no):
+    config.reload()
     book_exists = True
     if acc_no != None:
         books = Book.objects.filter(accession_number=acc_no)
@@ -345,12 +352,14 @@ def editEntry(request,acc_no):
 
 
 @login_required(login_url="/login/")
+@permission_required(("change_book", "add_book"))
 def entry(request):
     return editEntry(request,None)
 
 
 @login_required(login_url="/login")
 def report(request):
+    config.reload()
     no_of_months = TIME_PERIOD
     this_date = datetime.date.today()
     start_month =  this_date.month - no_of_months
@@ -393,12 +402,14 @@ def report(request):
 
 
 def home(request):
+    config.reload()
     return render(request, 'head/home.html', {'globals':config, 'date': datetime.date.today(), "body_code": RestructuredText.objects.get(name="homeBody").get_html()})
 
 
 
 @login_required(login_url="/login")
 def dashboard(request):
+    config.reload()
     logged_in = request.META.get('logged_in', None)
     today = datetime.date.today()
     if today.month - TIME_PERIOD < 0:
@@ -437,7 +448,9 @@ def dashboard(request):
 
 
 @login_required(login_url="/login")
+@permission_required("delete_book")
 def deleteBookConfirm(request,accNo):
+    config.reload()
     if accNo.isdigit():
         book = Book.objects.filter(accession_number=accNo,state=0)
         if len(book) == 0 or len(book) > 1:
@@ -460,8 +473,11 @@ def deleteBookConfirm(request,accNo):
     context_dict.update(GLOBAL_CONTEXT)
     return render(request, "head/delete_book.html", context_dict)
 
+
 @login_required(login_url="/login")
+@permission_required("delete_book")
 def deleteBook(request,accNo):
+    config.reload()
     book = Book.objects.get(accession_number=accNo)
     book.discard()
     context_dict = {"book":book}
@@ -470,7 +486,7 @@ def deleteBook(request,accNo):
 
 
 def searchBook(request):
-
+    config.load()
     value = request.GET.get("search", None)
     type_ = request.GET.get("type", None)
     booklist = []
@@ -544,6 +560,7 @@ def searchBook(request):
 
 
 def bookInfo(request, accNo):
+    config.reload()
     books = Book.objects.filter(accession_number=accNo)
     if len(books) == 0:
         return HttpResponse("Book Not Found")
@@ -553,8 +570,8 @@ def bookInfo(request, accNo):
     lends =  Lend.objects.filter(book=book)
     if_borrowed = False
     
-    if len(lends) == 1:
-        lends = lends[0]
+    if len(lends) > 0:
+        lends = lends[len(lends)-1]
         days_ago = datetime.date.today() - lends.lending_date
         is_borrowed = True
         if days_ago.days == 0:
@@ -586,7 +603,9 @@ def bookInfo(request, accNo):
 
 
 @login_required(login_url="/login")
+@permission_required(("change_lend", "add_lend"))
 def borrow(request):
+    config.reload()
     username = request.POST.get("username", None)
     bookID = request.POST.get("bookID", None)
     date = request.POST.get("date", None)
@@ -647,6 +666,7 @@ def borrow(request):
 
 
 @login_required(login_url="/login")
+@permission_required("delete_lend")
 def return_check_fees(request):
     bookID = request.GET.get("bookID", None)
     if request.method == "POST":
@@ -677,7 +697,7 @@ def return_check_fees(request):
                           'code': 'None'
                       }
         )
-    books = Book.objects.filter(accession_number=bookID,state=0)
+    books = Book.objects.filter(accession_number=bookID)
     if len(books) != 1:
         return render(request,
                       'head/return.html',
