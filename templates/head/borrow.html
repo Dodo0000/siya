@@ -22,19 +22,19 @@
     {% csrf_token %}
     <div class="col col-sm-offset-3 col-sm-6">
       <div class="form-row field-last_login">
-        <label for="date">Date Lended</label>
+        <label for="date">{{ globals.text.date_lended }}</label>
         <input class="form-control vDateField" name="date" type="text" value="{{ date_add }}" aria-label="">
       </div>
       <div class="form-row field-last_login">
-        <label for="username">Username</label>
+        <label for="username">{{ globals.text.username }}</label>
         <input class="form-control" name="username" type="text" aria-label="" required autofocus>
       </div>
       <div class="form-row field-last_login">
-        <label for="bookID">Accession Number</label>
+        <label for="bookID">{{ globals.text.accession_number }}</label>
         <input class="form-control" name="bookID" type="text" aria-label="" required>
       </div>
       <div class="form-row field-last_login">
-        <input type="submit" class="btn btn-success" value="Lend">
+        <input type="submit" class="btn btn-success" value="{{ globals.text.lend_book }}">
       </div>
     </div>
   </form>

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
@@ -23,33 +24,47 @@ import datetime
 
 config = Globals()
 
+
 @login_required(login_url="/login")
 def profile(request, username):
-    user = get_object_or_404(ModUser,username=username)
-    books_borrowed = Lend.objects.filter(user=user,returned=False)
+    config.refresh()
+    user = get_object_or_404(ModUser, username=username)
+    books_borrowed = Lend.objects.filter(user=user, returned=False)
     len_books_borrowed = len(books_borrowed)
-    return render(request, 'account/user.html', {'globals': config,'date': datetime.date.today(), 'search_user': user, 'books_borrowed': books_borrowed, 'len_books_borrowed': len_books_borrowed })
-
+    return render(
+        request,
+        'account/user.html',
+        addGlobalContext(
+            {
+                'globals': config,
+                'date': datetime.date.today(),
+                'search_user': user,
+                'books_borrowed': books_borrowed,
+                'len_books_borrowed': len_books_borrowed
+                }
+            ))
 
 
 @login_required(login_url="/login")
 def search_member(request):
+    config.refresh()
     import string
     username = request.GET.get("username", None)
     if username is not None:
         user = ModUser.objects.filter(username=username)
         if len(user) == 1:
             user = user[0]
-            return HttpResponseRedirect(reverse('profile', kwargs={"username":user.username}))
+            return HttpResponseRedirect(reverse('profile', kwargs={"username": user.username}))
         else:
-            return render(request, 'account/search_user.html', {'not_found': True, 'username': username,"alphabets": string.ascii_lowercase, 'globals': config, 'date': datetime.date.today()})
+            return render(request, 'account/search_user.html', addGlobalContext({'not_found': True, 'username': username, "alphabets": string.ascii_lowercase, 'globals': config, 'date': datetime.date.today()}))
     else:
-        return render(request, 'account/search_user.html', {"alphabets": string.ascii_lowercase,"globals": config, 'date': datetime.date.today()})
+        return render(request, 'account/search_user.html', addGlobalContext({"alphabets": string.ascii_lowercase,"globals": config, 'date': datetime.date.today()}))
 
 
 
 
 def login_get_code_msg(code):
+    config.refresh()
     if code == 0:
         return "Login Successful"
     elif code == 1:
@@ -66,6 +81,7 @@ def login_get_code_msg(code):
 
 
 def login_user(request):
+    config.refresh()
 
     '''
     code values and their meaning : 
@@ -83,8 +99,8 @@ def login_user(request):
     NO_DATA_GIVEN = 4
 
     if request.method.upper() == "POST":
-        username = request.POST.get("username", None)
-        password = request.POST.get("password", None)
+        username = unicode(request.POST.get("username", None))
+        password = unicode(request.POST.get("password", None))
 
 
         user = authenticate(username=username, password=password)
@@ -97,7 +113,7 @@ def login_user(request):
         else:
             code = INVALID_LOGIN_CREDS ## invalid login creds
     else:
-        if request.POST.get('username', None) is not None and request.POST.get("password", None) is not None:
+        if unicode(request.POST.get('username', None)) is not None and unicode(request.POST.get("password", None)) is not None:
             code = METHOD_NOT_POST ## request method was not POST
         else:
             code = NO_DATA_GIVEN
@@ -106,20 +122,22 @@ def login_user(request):
         ## error occured during login proc.
         return render(request,
                       "account/login.html",
-                      {'code': code,
+                      addGlobalContext({'code': code,
                        "code_msg": login_get_code_msg(code),
                        'globals': config
-                      })
+                      }))
     else:
         return HttpResponseRedirect(request.GET.get("next",reverse("home")))
 
 
 def logout_user(request):
+    config.refresh()
     logout(request)
     return HttpResponseRedirect(reverse("home"))
     
 
 def create_username(*args):
+    config.refresh()
     import random
     vals = []
     for each in args:
@@ -128,14 +146,16 @@ def create_username(*args):
 
 @login_required(login_url="/login")
 def addMemberWithArgs(request,created):
+    config.refresh()
     form = CreateMemberForm()
+    member = None
     if request.method == "POST":
         form = CreateMemberForm(request.POST)
         if form.is_valid():
             # the form is valid, so lets create the member
             data = form.cleaned_data
             if data['first_name'] == '' and data['last_name'] == '':
-                member_created = False
+                created = False
             else:
                 first_name =smart_str( data['first_name'].strip(" ").lower())
                 last_name = smart_str(data['last_name'].strip(" ").lower())
@@ -155,7 +175,6 @@ def addMemberWithArgs(request,created):
                 member = ModUser.objects.create(
                         username=username
                         )
-                print first_name
                 if first_name not in ['']:
                     member.first_name = first_name
                 if last_name not in ['']:
@@ -171,7 +190,7 @@ def addMemberWithArgs(request,created):
                 if home_phone not in ['']:
                     member.telephone_home = home_phone
                 if parent_name not in ['']:
-                    member.telephone_home = parent_name
+                    member.parent_name = parent_name
                 if school_name not in ['']:
                     member.school_name = school_name
                 if school_class not in ['']:
@@ -183,19 +202,23 @@ def addMemberWithArgs(request,created):
                 ## school_number and telephone_mobile are not added
                 member.groups.add(Group.objects.get(name="Member"))
                 member.save()
+                created = True
+                print "member created with username %s" % member
 
-                return HttpResponseRedirect(reverse("addMemberWithArgs", kwargs={"created": True}))
+                return HttpResponseRedirect(reverse("addMemberWithArgs", kwargs=addGlobalContext({"member_created": created,"member": member})))
             
     return  render(request,
             "account/create_member.html",
             context=addGlobalContext(
                 {
                     "form": form,
-                    "member_created": created
+                    "member_created": created,
+                    "member": ModUser.objects.order_by("-date_joined")[0]
                 })
                 )
 
 @login_required(login_url="/login/")
 def addMember(request):
+    config.refresh()
     return addMemberWithArgs(request,created=False)
 

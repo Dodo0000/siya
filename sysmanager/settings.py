@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Django settings for sysmanager project.
 
@@ -24,7 +25,7 @@ ROOT_URLCONF = []
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["ays.pythonanywhere.com"]
+ALLOWED_HOSTS = ["192.168.*", "localhost"]
 
 SECRET_KEY = "ksahfsadfda8sfdsayfd8a7sfdhaishfdasusf879sfduaosdf*&^*&YHIUH*&HIH*&(IKBVGSHDI327r398fhd"
 
@@ -38,7 +39,6 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_extensions',
-    'widget_tweaks',
     'account',
     'head',
     'settings',
@@ -46,7 +46,8 @@ INSTALLED_APPS = (
     'ledger',
     'almsGroups',
     'miscFields',
-    'restructuredText'
+    'restructuredText',
+    'widget_tweaks'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -113,6 +114,7 @@ AUTH_USER_MODEL = "account.ModUser"
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_URL = '/static/'
+
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
     )

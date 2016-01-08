@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load bookFilters %}
+{% load nepali %}
 
 {% block extras %}
 {% endblock %}
@@ -39,6 +40,8 @@ var max_accession_number = parseInt("{{ largest_accession_number }}", 10);
 
 
 {% block content %}
+<hr>
+
 <div class="container-fluid">
   <div class="container-fluid">
     <div class="col col-sm-8">
@@ -51,7 +54,7 @@ var max_accession_number = parseInt("{{ largest_accession_number }}", 10);
             Current accession number count
             <font size=4>
               <span class="current_acc_no text-success label label-warning">
-                {{ largest_accession_number }}
+                {{ largest_accession_number|no_to_np }}
               </span>
             </font>
           </i>
@@ -63,38 +66,30 @@ var max_accession_number = parseInt("{{ largest_accession_number }}", 10);
   <div class="container-fluid">
     <div class="col col-sm-12">
       <div class="btn-group">
-        <div class="dropdown">
-          <a href="#" class="btn btn-info btn-menu dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Select Language<span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li><a id="EN" href="#" onclick="changeLang('EN')">English</a></li>
-            <li><a id="NP" href="#" onclick="changeLang('NP')">Nepali</a></li>
-          </ul>
-          <button class="btn btn-info btn-menu" onclick="clearInputFields()">Clear Fields</button>
-          {% if book != None %}
-          <a class="btn btn-info btn-menu" href="{% url 'book' accNo=book.accession_number%}">Read Book Data</a>
-          {% endif %}
-          <button class="btn btn-success btn-menu" id="saveBook">Save Book</button>
-        </div> <!-- button group -->
-      </div>
+        <button class="btn btn-info btn-menu" onclick="clearInputFields()">{{ globals.text.clear_fields }}</button>
+        {% if book != None %}
+        <a class="btn btn-info btn-menu" href="{% url 'book' accNo=book.accession_number%}">{{ globals.text.about_book }}</a>
+        {% endif %}
+        <button class="btn btn-success btn-menu" id="saveBook">{{ globals.text.add_new_record }}</button>
+      </div> <!-- button group -->
     </div>
-    <hr/>
   </div>
-  
+</div>
+
+<font size=3>
   <div id="dataEntrySuccessful" class="well label-success">
-    <b><span class="text-success">Book Was Saved :D</span></b>
+    <b><span class="text-success"> {{globals.text.book_was_saved}} :D</span></b>
   </div>
-
-
-  <br> 
+  <br>
   {% csrf_token %}
   <div class="container">
     {% for each in columns_for_entry_div %}
     <div class="col col-sm-6">
       {% if each.0 != None %}
       <div class="form-group">
-        <label>{{ each.0.1.0|title }}</label>
+        <label>{{ each.0.1.0|nepali }}</label>
         <font id="input-font" face=''>
-          <input type="text" id="{{ each.0.0 }}" mid="{{ each.0.1.1  }}" style="width:100%;" name="{{ each.0.1.0 }}" value="{{ book|getBookValue:each.0.1.1 }}"  placeholder="{{ each.0.1.0|title }}" class="form-control input input-{{ each.0.1.1 }}" required {% if each.0.0 == 1 %} autofocus {% endif %} spellcheck="true">
+          <input type="text" id="{{ each.0.0 }}" mid="{{ each.0.1.1  }}" style="width:100%;" name="{{ each.0.1.0 }}" value="{{ book|getBookValue:each.0.1.1 }}"  placeholder="{{ each.0.1.0|nepali }}" class="form-control input input-{{ each.0.1.1 }}" required {% if each.0.0 == 1 %} autofocus {% endif %} spellcheck="true">
         </font>
       </div>
       {% endif %}
@@ -102,13 +97,14 @@ var max_accession_number = parseInt("{{ largest_accession_number }}", 10);
     {% if each.1 != None %}
     <div class="col col-sm-6">
       <div class="form-group">
-        <label>{{ each.1.1.0|title }}</label>
+        <label>{{ each.1.1.0|nepali }}</label>
         <font id="input-font" face=''>
-          <input type="text" id="{{ each.1.0 }}" mid="{{each.1.1.1  }}" style="width:100%"  name="{{ each.1.1.0 }}" value="{{ book|getBookValue:each.1.1.1 }}" placeholder="{{ each.1.1.0|title }}" class="form-control input input-{{ each.1.1.1 }}" required {% if each.1.0 == 1 %} autofocus {% endif %} spellcheck="true">
+          <input type="text" id="{{ each.1.0 }}" mid="{{each.1.1.1  }}" style="width:100%"  name="{{ each.1.1.0 }}" value="{{ book|getBookValue:each.1.1.1 }}" placeholder="{{ each.1.1.0|nepali }}" class="form-control input input-{{ each.1.1.1 }}" required {% if each.1.0 == 1 %} autofocus {% endif %} spellcheck="true">
         </font>
       </div>
     </div>
     {% endif %}
     {% endfor %}
   </div>
-  {% endblock %}
+</font>
+{% endblock %}

@@ -1,0 +1,20 @@
+### High Priority - Very Importaint Things To Do (URGENT!!)
+
+* Add Settings Page
+* Improve the Find Person Interface - 
+    * fix dates when converted to nepali
+    * Change Nepali -Preeti/Kantipur to unicode
+
+### Medium Priority - Things to do this month
+
+    * optimize book searching
+    * Add "show all members" options in dashboard members
+    * Show **similar** members when searched
+    * make front end nepali
+
+### Low Priority - Things to consider
+
+  * Improve the home page editor
+
+### Errors
+  * fix configuration refresh

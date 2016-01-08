@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.shortcuts import render
 
 # Create your views here.
@@ -21,4 +22,4 @@ def editField(request, id):
     context = {
                 "generic_field": generic_field
             }
-    return render(request, "miscfield/editField.html")
+    return render(request, "miscfield/editField.html",addGlobalCOntext(context))

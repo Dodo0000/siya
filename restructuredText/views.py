@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.utils.encoding import smart_str
@@ -12,13 +13,14 @@ from .models import RestructuredText
 def writeHomeBody(request):
     homeBody = RestructuredText.objects.get(name="homeBody")
     context = {
-                "body": homeBody.get_rst()
-            }
+        "body": homeBody.get_rst()
+        }
     if request.method == "POST":
         rst = request.POST.get("rst", None)
-        print request.POST
         if rst is not None:
             homeBody.set_rst(smart_str(rst))
             homeBody.save()
             return HttpResponseRedirect(reverse("writeHomeBody"))
-    return render(request, "restructuredText/editHomePage.html", context=addGlobalContext(context))
+    return render(request,
+                  "restructuredText/editHomePage.html",
+                  context=addGlobalContext(context))

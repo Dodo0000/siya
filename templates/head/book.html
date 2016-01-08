@@ -1,4 +1,6 @@
 {% extends 'base.html' %}
+{% load nepali %}
+{% load datefilters %}
 
 {% block content %}
 <div class="container-fluid">
@@ -28,34 +30,34 @@
   {% endif %}
   <h3>
     <div>
+      <span class="text-info">
+        {% if book.get_authors != "" %}{{ book.get_authors|title }} को {% endif %}
+      </span>
       <i>
         <span class="text-primary">
           {{ book.title|title }}
         </span>
       </i>
-      <span class="text-info">
-        {% if book.get_authors != "" %}written by {{ book.get_authors|title }}{% endif %}
-      </span>
     </div>
   </h3>
   <table class="table table-hover table-responsive">
     {% for each in book.get_all_attr %}
     <tr> 
-      <td>{{ each.0|title }}</td>
+      <td>{{ each.0|title|nepali }}</td>
       {% if each.0 == "Author" %}
-      <td><a href="/search/book/?type=Author&search={{each.1}}">{{ each.1|title }}</a></td>
+      <td><a href="/search/book/?type={{ globals.text.author }}&search={{each.1}}">{{ each.1|title }}</a></td>
       {% else %}
-      <td style="{% if book.get_language.upper == "NP" %}font-family:preeti;font-size:20px{%endif %}">{{each.1|title}}</td>
+      <td >{{each.1|title|no_to_np}}</td>
       {% endif %}
     </tr>
     {% endfor %}
     <tr>
-      <td>Is the book available ?</td>
+      <td>{{globals.text.is_book_available }}</td>
       <td>
 	{% if book.is_borrowed == False %}
-	<span class="text-success"><b>Yes</b></span>
+  <span class="text-success"><b>{{globals.text.yes}}</b></span>
 	{% else %}
-	<span class="text-danger"><b>No</b></span>
+  <span class="text-danger"><b>{{globals.text.no}}</b></span>
 	{% endif %}
       </td>
     </tr>
@@ -65,11 +67,11 @@
       </td>
       <td>
 	{% if book.is_borrowed == False %}
-	<span class="text-success"> <b>No</b>, the book isn't borrowed</span>
+  <span class="text-success"> <b>{{globals.text.no}}</b>, the book isn't borrowed</span>
 	{% elif late_fees != 0 %}
-	<span class="text-warning"><b>Yes</b>, late fees :<i> Rs.{{ late_fees }}</i></span>
+  <span class="text-warning"><b>{{globals.text.yes}}</b>, late fees :<i> Rs.{{ late_fees|no_to_np }}</i></span>
 	{% elif late_fees == 0 %}
-	<span class="text-success"><b>No</b></span>
+  <span class="text-success"><b>{{globals.text.no}}</b></span>
 	{% endif %}
       </td>
     </tr>

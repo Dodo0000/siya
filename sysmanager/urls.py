@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """sysmanager URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
@@ -27,6 +28,7 @@ urlpatterns = [
     url(r'^book/discard/confirm/(?P<accNo>[0-9]+)/$', 'head.views.deleteBookConfirm', name="delete_book_confirm"),
     url(r'^book/discard/(?P<accNo>[0-9]+)/$', 'head.views.deleteBook', name="delete_book"),
     url(r'^book/borrow/$', 'head.views.borrow', name='lend-book'),
+    url(r'^book/copy/(?P<old_acc>[0-9]+)/(?P<new_acc>[0-9]+)$', 'head.views.copyBook', name='copy-book'),
     url(r'^book/return/check/$', 'head.views.return_check_fees', name='return-book'),
     url(r'^report/$', 'head.views.report', name='report'),
     url(r'^search/book/$', 'head.views.searchBook', name='search-book'),
@@ -35,7 +37,7 @@ urlpatterns = [
     url(r'^register/member/$', 'account.views.addMember', name="addMember"),
     url(r'^register/member/new/(?P<created>.*)$', 'account.views.addMemberWithArgs', name="addMemberWithArgs"),
     url(r'^logout/', 'account.views.logout_user', name="logout"),
-    url(r'^user/(?P<username>[a-z0-9]+)/$', 'account.views.profile', name='profile'),
+    url(r'^user/(?P<username>.+)/$', 'account.views.profile', name='profile'),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^accounts/', include('ledger.urls')),
     url(r'^groups/', include('almsGroups.urls')),
@@ -43,4 +45,5 @@ urlpatterns = [
     url(r'^spreadsheet/', include('spreadsheet.urls')),
     url(r'^rst/', include('restructuredText.urls')),
     url(r'^miscfields/', include('miscFields.urls')),
+    url(r'^settings/', include('settings.urls')),
 ]

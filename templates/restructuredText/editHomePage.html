@@ -8,7 +8,7 @@
 {% block content %}
 <form class="form-horizontal" method="POST">{% csrf_token %}
   <input class="btn btn-success" type="submit" value="Save">
-  <textarea id="restructuredText" style="width:100%;" onkeydown="autosize($('#restructuredText'))" onfocus="autosize($('#restructuredText'))" rows=10 name="rst">{{ body }}</textarea>
+  <textarea id="restructuredText" style="width:100%;font-family: monospace" onkeydown="autosize($('#restructuredText'))" onfocus="autosize($('#restructuredText'))" rows=10 name="rst">{{ body }}</textarea>
 </form>
 {% endblock %}
 

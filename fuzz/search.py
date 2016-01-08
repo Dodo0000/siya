@@ -1,11 +1,12 @@
+# -*- coding: utf-8 -*-
 from difflib import SequenceMatcher
 
 from django.utils.encoding import smart_str
 
 
 def search(needle, heystack):
-    needle = smart_str(needle.lower())
-    heystack = smart_str(heystack.lower())
+    needle = smart_str(needle.lower().strip(" "))
+    heystack = smart_str(heystack.lower().strip(" "))
     if len(needle) == 0:
         return heystack
     needlel = needle.split(" ") ## get a list of all the words in the needle
@@ -15,8 +16,6 @@ def search(needle, heystack):
         for each in heystackl:
             if needle in each:
                 ranks.append(1 - 1./(len(heystack) - heystack.index(each)))
-                print "needle is in the heystack"
-                print ranks
             else:
                 seq = SequenceMatcher(None, needle, each)
                 ranks.append(round(seq.ratio(), 3))
@@ -29,7 +28,6 @@ def search(needle, heystack):
                 if needeach in heyeach:
                     ranks[needlel.index(needeach)].append(
                             1 - 1./(len(heystack) - heystack.index(heyeach)))
-                    print 'one of the needles is in the haystack'
                 else:
                     seq = SequenceMatcher(None,needeach,heyeach)
                     ranks[needlel.index(needeach)].append(seq.ratio())

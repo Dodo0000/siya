@@ -1,12 +1,20 @@
+# -*- coding: utf-8 -*-
 from django import template
 from django.db import models
 
 from head.models import Book
 from settings.models import Globals
 
+
+from pyBSDate.BSDate import convert_to_bs
+
 register = template.Library()
 
 NONE_LS = [None,"None"]
+
+@register.filter(name="tobs")
+def to_bs(value):
+    return convert_to_bs(value)
 
 @register.filter(name="getBookValue")
 def getBookValue(value,arg):

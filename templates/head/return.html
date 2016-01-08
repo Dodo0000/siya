@@ -13,12 +13,12 @@
 </div>
 
 {% elif code == "None" %}
-<div class="col col-sm-offset-3 col-sm-6">
+<div class="col col-sm-offset-3 col-sm-6" align=center>
   <form method="GET" class="form">
-    <label for="bookID">Book Accession Number</label>
+    <label for="bookID">{{ globals.text.accession_number }}</label>
     <input type="text" class="form-control" name="bookID" aria-label="" required autofocus>
     <hr>
-    <input type="submit" class="btn btn-success">
+    <input type="submit" class="btn btn-success" value="{{ globals.text.return_book }}">
   </form>
 </div>
 {% elif code == "not_found" %}

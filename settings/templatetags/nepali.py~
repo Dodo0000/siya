@@ -1,0 +1,30 @@
+# -*- coding: utf-8 -*-
+from django import template
+from django.db import models
+
+import string
+
+from head.models import Book
+from settings.models import Globals
+
+register = template.Library()
+
+@register.filter(name="nepali")
+def nepali(value):
+    '''
+    try to convert text to nepali
+    '''
+    config = Globals()
+    value = value.lower().replace(" ", "_")
+    out_val = ""
+    for _ in value:
+        if _ in string.ascii_lowercase + string.ascii_uppercase or  _ == "_":
+            out_val += _
+    value = out_val
+    del out_val
+
+    text = config.text.get(value, None)
+    if text != None:
+        return text
+    else:
+        return value

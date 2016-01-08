@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 '''
  ___  __                                      
 |_ _|/ _|  _   _  ___  _   _    __ _ _ __ ___ 
@@ -19,16 +20,18 @@
                                                     
 '''
 
+
 from head.models import Book, Lend, Author, KeyWord, Publisher, Gifter
 from account.models import ModUser
-from settings.models import Globals, AccessionNumberCount
+from settings.models import Globals, AccessionNumberCount, addGlobalContext
+from settings.models import no_to_en
+from settings.models import TYPES
 from restructuredText.models import RestructuredText
 
 from django.http import JsonResponse
 from django.http import HttpResponseRedirect, HttpResponse
 from django.http import HttpResponseNotFound
 from django.core.urlresolvers import reverse
-from django.http import Http404
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required, permission_required
@@ -40,27 +43,20 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import datetime
 import json
 
-from fuzz.search import searchBookTitle, searchBookAuthor,searchBookKeywords
+from fuzz.search import searchBookTitle, searchBookAuthor, searchBookKeywords
 
 # Create your views here.
 
 
-TYPES = [
-    "Keyword",
-    "Title",
-    "Author",
-    "Acc No",
-    "Call No",
-    "Publisher"
-]
-
 config = Globals()
 
-TIME_PERIOD = config.config.getint('misc', 'report_time_period')  #months
 
-LATE_FEES_PRICE = config.misc['late_fees_price'] #rupees per day
-NO_DAYS_TO_BORROW_BOOK = config.books['borrow_max_days'] # number of days for which a book is to be borrowed
-MAX_NUM_OF_BOOKS_TO_BORROW = int(config.books['borrow_max_books']) # max number of books member can borrow at once
+TIME_PERIOD = config.config.getint('misc', 'report_time_period')  # months
+
+LATE_FEES_PRICE = config.misc['late_fees_price']  # rupees per day
+# number of days for which a book is to be borrowed
+NO_DAYS_TO_BORROW_BOOK = config.books['borrow_max_days'] # max number of books member can borrow at once
+MAX_NUM_OF_BOOKS_TO_BORROW = int(config.books['borrow_max_books'])
 
 NO_OF_BOOKS_PER_PAGE = 10
 
@@ -68,30 +64,28 @@ NO_OF_BOOKS_PER_PAGE = 10
 NO_OF_ROWS_IN_ENTRY = 2
 
 GLOBAL_CONTEXT = {
-        "globals": config,
-        "date": datetime.date.today()
-        }
+    "globals": config,
+    "date": datetime.date.today()
+    }
 
 NP_NUM = {
-        [
-            ')',
-            '!',
-            '@',
-            '#',
-            '$',
-            '%',
-            '^',
-            '&',
-            '*',
-            '('][x]: str(x)  for x in range(0,10)
-        }
-
-
+    [
+        ')',
+        '!',
+        '@',
+        '#',
+        '$',
+        '%',
+        '^',
+        '&',
+        '*',
+        '('][x]: str(x) for x in range(0, 10)
+    }
 
 LANG_LIST = [
-            'EN',
-            'NP'
-        ]
+    'EN',
+    'NP'
+    ]
 
 CURRENT_LANGUAGE = LANG_LIST[0]
 
@@ -104,8 +98,7 @@ def validateEmail(email):
         return False
 
 
-
-def toint(val,lang="EN"):
+def toint(val, lang="EN"):
     if val is None or val == "None" or val == "":
         return 0
     else:
@@ -133,33 +126,31 @@ def validate_book(request):
     '''
     acc_no = request.GET.get('accNo', None)
     if acc_no is None:
-        return JsonResponse({"data_correct": False, "valid":False})
+        return JsonResponse({"data_correct": False, "valid": False})
     is_valid = -1
     if acc_no is not None:
-        is_valid = int(len(Book.objects.filter(accession_number=acc_no,state=0)) > 0)
+        is_valid = int(len(Book.objects.filter(accession_number=acc_no, state=0)) > 0)
 
     json_dict = {
-                'data_correct': True,
-                "exists":is_valid,
-                "accNo": acc_no
-            }
+        'data_correct': True,
+        "exists": is_valid,
+        "accNo": acc_no
+        }
 
     return JsonResponse(json_dict)
-
 
 
 @login_required(login_url="/login/")
 @permission_required("add_book")
 def add_book(request):
+    config.reload()
     all_attrs = [_[1] for _ in config.config['columns'].items()] + ["language"]
-    each = dict()   ## store post data
+    each = dict()   # store post data
     STATE = 0
-    
+
     print request.POST
     for _ in all_attrs:
-        each[_] =  request.POST.get(_)
-    CURRENT_LANGUAGE = request.POST.get("language", "EN")
-
+        each[_] = request.POST.get(_)
 
     if "," in str(each['acc_no']):
         acc_list = [_.strip(" ") for _ in each['acc_no'].split(",")]
@@ -170,15 +161,14 @@ def add_book(request):
         acc_list = list(range(acc_strip[0], acc_strip[1]+1))
     else:
         acc_list = [each['acc_no']]
-    
 
     for val in acc_list:
         if val.__class__ == str:
             accession_number = val.strip(" ")
         else:
             accession_number = val
-                    
-        if accession_number in [None,"None", 0,"0",""] or "-" in accession_number:
+
+        if accession_number in [None, "None", 0, "0", ""] or "-" in accession_number:
             STATE = -1
             continue
         if each['no_of_pages'] in [None, "", 0, "0"] or '-' in each['no_of_pages']:
@@ -195,9 +185,9 @@ def add_book(request):
             book_was_created = False
         except ObjectDoesNotExist:
             book = Book.objects.create(accession_number=toint(accession_number),
-                    title=each['title'].lower(),
-                    no_of_pages=toint(
-                        each['no_of_pages']))
+                                       title=each['title'].lower(),
+                                       no_of_pages=toint(
+                                       each['no_of_pages']))
 
         # if the book was found, the title, page No. and accession number
         # can also to change
@@ -205,13 +195,12 @@ def add_book(request):
             book.title = each['title'].lower()
             book.no_of_pages = toint(each['no_of_pages'])
 
-        
         book.author.all().delete()
         for author_name in each['auth'].lower().split("%"):
             author_name = author_name.strip(" ")
             author = Author.objects.get_or_create(
                 name=author_name,
-                slug = slugify(author_name))
+                slug=slugify(author_name))
             if author[1]:
                 author = author[0]
                 author.save()
@@ -243,20 +232,17 @@ def add_book(request):
         if (each['edtn'] is None) is False:
             book.edition = each['edtn'].lower()
 
-
         if (each['isbn'] is None) is False:
             book.isbn = each['isbn']
 
         if (each['price'] is None) is False:
             book.price = each['price']
-        
+
         if (each['gftd_name'] is None) is False:
             gifter_name = each['gftd_name'].lower()
             gifter_phn = each['gftd_phn']
             gifter_email = each['gftd_email']
-            gifter = Gifter.objects.get_or_create(
-                        gifter_name=gifter_name,
-                    )
+            gifter = Gifter.objects.get_or_create(gifter_name=gifter_name)
             gifter = gifter[0]
             if gifter_phn.isdigit():
                 gifter.phone = gifter_phn
@@ -265,8 +251,8 @@ def add_book(request):
             gifter.save()
             book.gifted_by = gifter
 
-        if each['vol'] != None and each['vol'] != "None":
-            if each['vol'].isdigit() == True:
+        if each['vol'] is not None and each['vol'] != "None":
+            if each['vol'].isdigit() is True:
                 book.volume = int(each['vol'])
             else:
                 book.volume = acc_list.index(val) + 1
@@ -275,7 +261,7 @@ def add_book(request):
 
         for keyword in each['kwds'].lower().split(","):
             keyword = keyword.strip(' ')
-            kw = KeyWord.objects.get_or_create(name=keyword,slug=slugify(keyword))
+            kw = KeyWord.objects.get_or_create(name=keyword, slug=slugify(keyword))
             if kw[1]:
                 kw = kw[0]
                 kw.save()
@@ -287,9 +273,9 @@ def add_book(request):
             AccessionNumberCount.add1()
         STATE = 0
     if STATE == 0:
-        return JsonResponse({"success": True,'acc_no': AccessionNumberCount.get_no()})
+        return JsonResponse({"success": True, 'acc_no': AccessionNumberCount.get_no()})
     else:
-        return JsonResponse({"success": False,'acc_no': AccessionNumberCount.get_no()})
+        return JsonResponse({"success": False, 'acc_no': AccessionNumberCount.get_no()})
 
 
 
@@ -301,7 +287,7 @@ def add_book(request):
 def editEntry(request,acc_no):
     config.reload()
     book_exists = True
-    if acc_no != None:
+    if acc_no is not None:
         books = Book.objects.filter(accession_number=acc_no)
         if len(books) < 1:
             return HttpResponseRedirect(reverse("entry"))
@@ -312,12 +298,11 @@ def editEntry(request,acc_no):
         book_exists = False
         book = None
         clear_fields = True
-    total_entry_space = 12
-    
-    columns_for_table =  list(enumerate(config.books_columns.items(), 1))
-    columns_for_entry = list(enumerate(( _[1] for _ in columns_for_table),1 ))
-    
-    columns_for_entry_div = [ columns_for_entry[c:c+NO_OF_ROWS_IN_ENTRY] for c in range(0,len(columns_for_entry)+1,NO_OF_ROWS_IN_ENTRY)]
+
+    columns_for_table = list(enumerate(config.books_columns.items(), 1))
+    columns_for_entry = list(enumerate(( _[1] for _ in columns_for_table), 1))
+
+    columns_for_entry_div = [columns_for_entry[c:c+NO_OF_ROWS_IN_ENTRY] for c in range(0, len(columns_for_entry)+1, NO_OF_ROWS_IN_ENTRY)]
 
     total_no_of_cols_table = len(columns_for_table)
     total_no_of_cols_entry = len(columns_for_entry)
@@ -329,9 +314,8 @@ def editEntry(request,acc_no):
         div_len = total_no_of_cols_entry / 12
         div_offset = ((div_len * total_no_of_cols_entry) - 12) / 2
 
-    
     return render(request,
-                  "head/entry.html", {
+                  "head/entry.html", addGlobalContext({
                       'globals': config,
                       'date': datetime.date.today(),
                       "columns_for_table": columns_for_table,
@@ -348,13 +332,13 @@ def editEntry(request,acc_no):
                       'columns_table_json': json.dumps(columns_for_table, indent=4),
                       'largest_accession_number': AccessionNumberCount.get_no(),
                       'clear_fields': int(clear_fields)
-                  })
+                  }))
 
 
 @login_required(login_url="/login/")
 @permission_required(("change_book", "add_book"))
 def entry(request):
-    return editEntry(request,None)
+    return editEntry(request, None)
 
 
 @login_required(login_url="/login")
@@ -362,15 +346,15 @@ def report(request):
     config.reload()
     no_of_months = TIME_PERIOD
     this_date = datetime.date.today()
-    start_month =  this_date.month - no_of_months
+    start_month = this_date.month - no_of_months
     if start_month < 0:
-        start_date = datetime.date(this_date.year - 1, 12 - start_month, this.day)
+        start_date = datetime.date(this_date.year - 1, 12 - start_month, this_date.day)
     else:
         start_date = datetime.date(this_date.year, start_month, this_date.day)
     time_period = this_date - start_date
 
     books_cataloged_in_tp = Book.objects.exclude(
-        accessioned_date__gte=this_date,state=0).filter(
+        accessioned_date__gte=this_date, state=0).filter(
             accessioned_date__gte=start_date)
 
     books_cataloged_until_tp = Book.objects.exclude(
@@ -389,7 +373,7 @@ def report(request):
 
     return render(request,
                   "head/report.html",
-                  {'globals':config,
+                  {'globals': config,
                    'date': datetime.date.today(),
                    'this_date': this_date,
                    'start_date': start_date,
@@ -398,24 +382,27 @@ def report(request):
                    'books_cataloged_until_tp': books_cataloged_until_tp,
                    'members_added_in_tp': members_added_in_tp,
                    'members_added_until_tp': members_added_until_tp
-                  })
+                   })
 
 
 def home(request):
     config.reload()
-    return render(request, 'head/home.html', {'globals':config, 'date': datetime.date.today(), "body_code": RestructuredText.objects.get(name="homeBody").get_html()})
-
+    return render(request, 'head/home.html', addGlobalContext({"body_code": RestructuredText.objects.get(name="homeBody").get_html()}))
 
 
 @login_required(login_url="/login")
 def dashboard(request):
+    import calendar
     config.reload()
+
     logged_in = request.META.get('logged_in', None)
     today = datetime.date.today()
     if today.month - TIME_PERIOD < 0:
-        start_date = datetime.date(today.year - 1, 12 - today.month + TIME_PERIOD, today.day)
+        month = 12 - today.month - TIME_PERIOD
+        start_date = datetime.date(today.year - 1, month, min(today.day, calendar.monthrange(today.year-1, month)[1]))
     else:
-        start_date = datetime.date(today.year, today.month - TIME_PERIOD, today.day)
+        month = today.month - TIME_PERIOD
+        start_date = datetime.date(today.year, month, min(today.day, calendar.monthrange(today.year, month)[1]))
 
     ## problem, the _gte filter with `today' excludes the data entered on today...fix this
     time_period = today - start_date
@@ -428,22 +415,19 @@ def dashboard(request):
     recently_added_books.reverse()
     total_books = Book.objects.all()
         
-    return render(request, "head/dashboard.html", {
-        'globals':config,
+    return render(request, "head/dashboard.html", addGlobalContext({
         "members_added_during_tp": members_added_during_tp,
         "members_added_before_tp": total_members.exclude(date_joined__gte=start_date),
         'total_members': total_members,
         'books_cataloged_during_tp': books_cataloged_during_tp,
         'books_cataloged_before_tp': total_books.exclude(accessioned_date__gte=start_date),
         'total_books': total_books,
-        'types': TYPES,
         'time_period': time_period.days / 30,
         'start_date': start_date,
         'recently_added_books': recently_added_books,
         'recently_added_members': ModUser.objects.order_by("-date_joined"),
-        'date': today,
         'logged_in': logged_in
-    })
+    }))
 
 
 
@@ -471,7 +455,7 @@ def deleteBookConfirm(request,accNo):
                 }
 
     context_dict.update(GLOBAL_CONTEXT)
-    return render(request, "head/delete_book.html", context_dict)
+    return render(request, "head/delete_book.html", addGlobalContext(context_dict))
 
 
 @login_required(login_url="/login")
@@ -482,7 +466,7 @@ def deleteBook(request,accNo):
     book.discard()
     context_dict = {"book":book}
     context_dict.update(GLOBAL_CONTEXT)
-    return render(request, "head/deleted_book.html", context_dict)
+    return render(request, "head/deleted_book.html", addGlobalContext(context_dict))
 
 
 def searchBook(request):
@@ -506,16 +490,18 @@ def searchBook(request):
     if value is not None:
         value = value.split(" ")
         if type_ in TYPES:
-            if type_ == "Title":
+            print type_
+            if type_ == config.text['title']:
                 books = searchBookTitle(" ".join(value), all_books)
-            elif type_ == "Call No":
+            elif type_ == config.text['call_number']:
                 books = Book.objects.filter(call_number__contains=value[0]).order_by("call_number")
-            elif type_ == "Acc No":
-                books = Book.objects.filter(accession_number__contains=value[0]).order_by("-accession_number")
+            elif type_ == config.text['accession_number']:
+                books = Book.objects.filter(
+                        accession_number__contains=no_to_en(value[0])).order_by("-accession_number")
 
-            elif type_ == "Keyword":
+            elif type_ == config.text['keyword']:
                 books = searchBookKeywords(" ".join(value), all_books)
-            elif type_ == "Publisher":
+            elif type_ == config.text['publisher']:
                 books = Book.objects.filter(publisher__name__contains=value[0]).order_by("publisher__name")
                 for each in value[1:]:
                     bookf = books.filter(publisher__name__contains=each).order_by("publisher__name")
@@ -523,7 +509,7 @@ def searchBook(request):
                         books = bookf
                     else:
                         break
-            elif type_ == "Author":
+            elif type_ == config.text['author']:
                 books = searchBookAuthor(" ".join(value), all_books)
         booklist = books
         if len(booklist) == 0:
@@ -544,17 +530,14 @@ def searchBook(request):
         booklist = paginator.page(paginator.num_pages)
     return render(request,
                   "head/search_books.html",
-                  {
-                      'globals': config,
+                  addGlobalContext({
                       'total_books_len': len(all_books),
-                      'date': datetime.date.today(),
                       "books": booklist,
                       "book_pages": list(range(1, paginator.num_pages+1)),
                       "value": " ".join(value),
                       "type": type_,
-                      "types": TYPES,
                       "not_found": not_found
-                  })
+                  }))
 
 
 
@@ -590,16 +573,14 @@ def bookInfo(request, accNo):
 
     return render(request,
                   "head/book.html",
-                  {
-                      'globals':config,
-                      'date': datetime.date.today(),
+                  addGlobalContext({
                       "book": book,
                       'lends': lends,
                       'late_fees': late_fees,
                       'is_borrowed': is_borrowed,
                       'days_ago': days_ago,
                       "types":TYPES,
-                  })
+                  }))
 
 
 @login_required(login_url="/login")
@@ -616,12 +597,10 @@ def borrow(request):
         
     if username is None or bookID is None:
         return render(request,
-                      "head/borrow.html", {
-                          'globals': config,
+                      "head/borrow.html", addGlobalContext({
                           "borrowed": 4,
                           "date_add": date.isoformat(),
-                          'date': datetime.date.today()
-                      })
+                      }))
     
     book = get_object_or_404(Book, accession_number=bookID)
     user = get_object_or_404(ModUser, username=username)
@@ -652,15 +631,13 @@ def borrow(request):
     ## 3 - User has borrowed MAX_NUM_OF_BOOKS_TO_BORROW books already
     ## 4 - username and bookID were not given
     
-    return render(request, 'head/borrow.html', {
-        'globals': config,
-        'date': datetime.date.today(),
+    return render(request, 'head/borrow.html', addGlobalContext({
         'date_val': date,
         'borrowed': borrowed,
         'book': book,
         'got_user': user,
         'book_acc': borrowed
-    })
+    }))
 
 
 
@@ -668,6 +645,7 @@ def borrow(request):
 @login_required(login_url="/login")
 @permission_required("delete_lend")
 def return_check_fees(request):
+    config.reload()
     bookID = request.GET.get("bookID", None)
     if request.method == "POST":
         bookID = request.POST.get("bookID", None)
@@ -681,32 +659,26 @@ def return_check_fees(request):
                 _.save()
             return render(request,
                           'head/return.html',
-                          {
-                              'globals': config,
-                              'date': datetime.date.today(),
+                          addGlobalContext({
                               'code': "book_returned",
                               'lend_obj': lends[0]
-                          }
+                          })
             )
     if bookID is None:
         return render(request,
                       'head/return.html',
-                      {
-                          'globals': config,
-                          'date': datetime.date.today(),
+                      addGlobalContext({
                           'code': 'None'
-                      }
+                      })
         )
     books = Book.objects.filter(accession_number=bookID)
     if len(books) != 1:
         return render(request,
                       'head/return.html',
-                      {
-                          'globals': config,
-                          'date': datetime.date.today(),
+                      addGlobalContext({
                           'code':"not_found",
                           'accession_number': bookID
-                      }
+                      })
         )
     else:
         lend_obj = Lend.objects.filter(book__accession_number=bookID, returned=False)
@@ -715,18 +687,19 @@ def return_check_fees(request):
         late_fees = lend_obj.get_late_fees()
         return render(request,
                       'head/return.html',
-                      {
-                          'globals': config,
-                          'date': datetime.date.today(),
-                          'code':'success',
+                      addGlobalContext({
+                          'code': 'success',
                           'lend_obj': lend_obj,
                           'late_fees': late_fees,
                           'has_late_fees': late_fees == 0
-                      }
-        )
-
+                      })
+                      )
 
 
 @login_required(login_url="/login")
 def return_book(request):
     pass
+
+
+def copyBook(request):
+    return render(request, "head/copyBook.html", addGlobalContext())

@@ -1,12 +1,16 @@
+# -*- coding: utf-8 -*-
 from django import forms
-from django.forms import ModelForm
-from account.models import ModUser
 from django.contrib.admin import widgets
+
+from settings.models import Globals
+
+config = Globals()
+
 
 class CreateMemberForm(forms.Form):
     first_name = forms.CharField(label="First Name")
     last_name = forms.CharField(label="Last Name")
-    gender = forms.ChoiceField(label="Gender",choices=(("male","male"),("female","female")))
+    gender = forms.ChoiceField(label="Gender", choices=(("female", config.text['female']), ('male', config.text['male'])))
     ward_no = forms.CharField(label="Ward No.")
     tole = forms.CharField(label="Tole")
     city = forms.CharField(label="City")
@@ -15,5 +19,4 @@ class CreateMemberForm(forms.Form):
     school_name = forms.CharField(label="School Name")
     school_class = forms.CharField(label="Class")
     roll_no = forms.CharField(label="Roll No.")
-    date_of_birth = forms.DateTimeField(widget=widgets.AdminDateWidget(),label="Date Of Birth")
-
+    date_of_birth = forms.DateTimeField(widget=widgets.AdminDateWidget(), label="Date Of Birth")

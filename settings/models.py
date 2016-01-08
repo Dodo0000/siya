@@ -1,14 +1,16 @@
+# -*- coding: utf-8 -*-
 from django.db import models
 
 import datetime
 
-from configs.models import Organization as configsOrganization
 
 from django.conf import settings
 import os
+import codecs
 
 
 import hashlib
+
 
 def md5Checksum(filePath):
     with open(filePath, 'rb') as fh:
@@ -21,6 +23,10 @@ def md5Checksum(filePath):
         return m.hexdigest()
 
 
+GET_MAIN_COLOR = "SELECT main_color FROM org_configs"
+GET_ACCENT_COLOR = "SELECT accent_color FROM org_configs"
+
+
 class Globals:
     '''
     this is a wrapper arpund the configs.models.Organization class
@@ -29,84 +35,62 @@ class Globals:
     def __init__(self):
         import configparser
         self.config = configparser.ConfigParser()
+        self.text_config = configparser.ConfigParser()
         self.config.read(os.path.join(settings.BASE_DIR, "config.ini"))
+        self.text_config.read(os.path.join(settings.BASE_DIR, "text.ini.np"))
         self.set_vals()
         self.checksum = ""
         self.load()
+        self.db_load()
 
     def set_vals(self):
         self.books = self.config['books']
         self.books_columns = self.config['columns']
         self.yalms = self.config['alms']
         self.misc = self.config['misc']
+        self.text = self.text_config['text']
+        self.db_load()
+
+    def db_load(self):
+        import sqlite3
+        config_db = sqlite3.connect(
+            os.path.join(settings.BASE_DIR, "config.sqlite"))
+        self.main_color = config_db.cursor().execute(GET_MAIN_COLOR).fetchone()[0]
+        self.accent_color = config_db.cursor().execute(GET_ACCENT_COLOR).fetchone()[0]
 
     def load(self):
         import configparser
+        self.config = configparser.ConfigParser()
+        self.text_config = configparser.ConfigParser()
         self.config.read(os.path.join(settings.BASE_DIR, "config.ini"))
-        self.set_vals()
+        self.text_config.read(os.path.join(settings.BASE_DIR, "text.ini.np"))
 
-       
     def reload(self):
         if self.file_is_same() is False:
             self.load()
+        self.db_load()
+
+    def refresh(self):
+        self.load();
+        self.reload();
 
     def file_is_same(self):
-        checksum = md5Checksum("config.ini")
+        checksum = md5Checksum(os.path.join(settings.BASE_DIR, "config.ini"))
         if checksum != self.checksum:
-             self.checksum = checksum
-             return False
+            self.checksum = checksum
+            return False
         return True
 
-
-    def add(self,key, value):
-        self.config[key] = value
+    def add(self, section, key, value):
+        self.config.set(section, key, value)
         self.save()
         self.load()
 
     def save(self):
-        with open(os.path.join(settings.BASE_DIR, "config.ini")) as configfile:
+        with codecs.open(os.path.join(settings.BASE_DIR, "config.ini"), "w", encoding="utf-8") as configfile:
             self.config.write(configfile)
 
 
-'''
-class Globals:
-
-    books={
-        "borrow_max_days":10,
-        "borrow_max_books":2
-    }
-    columns = {
-            'Call Number' : "call_no",
-            'Authors' : "auth",
-            'Call Number' : "call_no",
-            'Published Place' : 'pub_place',
-            'Publisher Name' : "pub_name",
-            "Price" : 'price',
-            'Series' : 'ser',
-            "ISBN" : "isbn",
-            'Edition' : 'edtn',
-            "volume" : 'vol',
-            'Accession Number' : "acc_no",
-            'Subject & Keywords' : "kwds",
-            "Gifted By" : "gftd_name",
-            "Doner's Phone Number" : "gftd_phn",
-            "Donor's Email" : "gftd_email",
-            }
-    late_fees_price = 2 #rs per day
-    late_fees_rate = late_fees_price
-
-    report = {
-        "time_period": 3 ## months
-    }
-
-    yalms = {
-        "sft_short_name": "yalms",
-        "sft_long_name": "Yet Another Library Management Software",
-        "org_long_name": "Nepal Japan Children Library",
-        "org_short_name": "NJCL",
-        "org_motto": "Reading Is Fun!",
-    }
-'''
 
 class AccessionNumberCount(models.Model):
     accession_number = models.IntegerField(default=0)
@@ -115,7 +99,7 @@ class AccessionNumberCount(models.Model):
     def add1():
         acc_nos = AccessionNumberCount.objects.all()
         if len(acc_nos) == 1:
-            acc_nos[0].accession_number += 1 
+            acc_nos[0].accession_number += 1
             acc_nos[0].save()
             return 0
         else:
@@ -129,15 +113,72 @@ class AccessionNumberCount(models.Model):
         else:
             return 0
 
+
+config = Globals()
+TYPES = [
+    config.text['title'],
+    config.text['author'],
+    config.text['accession_number'],
+    config.text['call_number'],
+    config.text['publisher'],
+    config.text['keyword']
+    ]
+
+
 def addGlobalContext(context=None):
     global_dict = {
-                "globals": Globals(),
-                "date": datetime.date.today()
-            }
-    if context != None and context.__class__ == dict:
+        "globals": config,
+        "date": datetime.date.today(),
+        'main_color': "#"+str(config.main_color),
+        'accent_color': "#"+str(config.accent_color),
+        'types': TYPES
+        }
+    if context is not None and context.__class__ == dict:
         context.update(global_dict)
         return context
-    elif context == None:
+    elif context is None:
         return global_dict
     else:
         raise TypeError("context is not a dictionary")
+
+
+def no_to_en(value):
+    '''
+    convert number to nepali
+    '''
+    nepali_numbers = [
+        u'\u0966',
+        u'\u0967',
+        u'\u0968',
+        u'\u0969',
+        u'\u096a',
+        u'\u096b',
+        u'\u096c',
+        u'\u096d',
+        u'\u096e',
+        u'\u097f',
+        ]
+    out = ""
+    for _ in value:
+        if _ in nepali_numbers:
+            out += unicode(nepali_numbers.index(_) - 1)
+        else:
+            out += _
+    return out
+
+
+def no_to_np(value):
+    '''
+    convert number to nepali
+    '''
+    config = Globals()
+    out = ""
+    value = unicode(value)
+    if unicode(value).isdigit() is True:
+        for _ in value:
+            np_txt = config.text.get(_, None)
+            if np_txt is None:
+                out += _
+            else:
+                out += np_txt
+    return out

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 '''
 
 
@@ -141,10 +142,10 @@ class ModUser(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = "username"
 
     def get_address(self):
-        return "{0} ward, {1}, {2}".format(self.addr_ward_no, self.addr_tole, self.addr_municipality)
+        return u"{0} ward, {1}, {2}".format(self.addr_ward_no, self.addr_tole, self.addr_municipality)
 
     def get_telephone(self):
-        return "home: {0}, mobile: {1}, parent's: {2}".format(self.telephone_home, self.telephone_mobile, self.parent_telephone_number)
+        return u"home: {0}, mobile: {1}, parent's: {2}".format(self.telephone_home, self.telephone_mobile, self.parent_telephone_number)
     
     def get_age(self):
         if self.date_of_birth in [None,"None"]:
@@ -174,7 +175,7 @@ class ModUser(AbstractBaseUser, PermissionsMixin):
     def get_name(self):
         if self.first_name is None or self.last_name is None:
             return self.username
-        return "{0} {1}".format(self.first_name, self.last_name).title()
+        return u"{0} {1}".format(self.first_name, self.last_name).title()
 
 
 

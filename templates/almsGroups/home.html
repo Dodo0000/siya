@@ -35,7 +35,7 @@
 
 <div class="container-fluid buttons">
   <a href="{% url 'addNewGroup' %}" class="btn btn-primary">
-    <span class="glyphicon glyphicon-plus"></span> Create Group</span>
+    <span class="glyphicon glyphicon-plus"></span> {{ globals.text.create_group }}</span>
 </a>
 </div>
 
@@ -50,16 +50,16 @@
     </div>
     <div class="col col-sm-11">
       <div class="col col-sm-11">
-        <h4>Name - <i>{{ group.name|title }}</i></h4>
+        <h4>{{globals.text.name}} - <i>{{ group.name|title }}</i></h4>
       </div>
       <div class="col col-sm-1" align=right>
-        <font size="5"><a title="Delete Group"  href="{% url 'deleteGroup' group_id=group.id %}" class="group_delete_link"><span class="glyphicon glyphicon-trash"></span></a></font>
+        <font size="5"><a title="{{ globals.text.delete_group }}"  href="{% url 'deleteGroup' group_id=group.id %}" class="group_delete_link"><span class="glyphicon glyphicon-trash"></span></a></font>
       </div>
       <div class="col col-sm-11">
-        <h4> Permissions - <i>{{ group|getReasonablePermissions|getFormattedPermissions|safe }}</i> </h4>
+        <h4> {{globals.text.permissions}} - <i>{{ group|getReasonablePermissions|getFormattedPermissions|safe }}</i> </h4>
       </div>
       <div class="col col-sm-1" align=right>
-        <font size="5"><a href="{% url 'editGroup' group_id=group.id %}" class="group_edit_link" title="Edit Group"><span class="glyphicon glyphicon-edit"></span></a></font>
+        <font size="5"><a href="{% url 'editGroup' group_id=group.id %}" class="group_edit_link" title="{{ globals.text.edit_group }}"><span class="glyphicon glyphicon-edit"></span></a></font>
       </div>
     </div>
   </div>

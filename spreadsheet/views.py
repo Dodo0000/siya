@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.shortcuts import render
 from django.utils.encoding import smart_str,smart_text
 from StringIO import StringIO

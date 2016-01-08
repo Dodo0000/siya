@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 '''
   ____             _   _       ___       ____            _ 
  |  _ \  ___  __ _| |_| |__   |_ _|___  |  _ \ ___  __ _| |
@@ -15,6 +16,7 @@ Or being hated, don't give way to hating,
     And yet don't look too good, nor talk too wise: 
 
 '''
+
 from django.db import models
 from django.utils.encoding import smart_str, smart_unicode
 # Create your models here
@@ -26,10 +28,11 @@ import datetime
 
 config = Globals()
 
+
 def make_title(title):
     title = title.strip(" ")
     return title[0].upper() + title[1:]
-        
+
 
 NP_NUM = {
         [
@@ -54,7 +57,7 @@ LANG_LIST = [
 
 CURRENT_LANGUAGE = LANG_LIST[0]
 
-def toint(val,lang="EN"):
+def toint(val, lang="EN"):
     if val is None or val == "None" or val == "":
         return 0
     else:
@@ -292,9 +295,9 @@ class Book(models.Model):
     Is it a nepali book? english book? Hindi book? Is it fiction? reference?
     etc
     '''
-    call_number = models.CharField(max_length=20, null=True,blank=True, db_index=True)
-    author = models.ManyToManyField(Author,db_index=True)  # author of the book
-    title = models.CharField(max_length=255,db_index=True)    # name of the book
+    call_number = models.CharField(max_length=20, null=True, blank=True, db_index=True)
+    author = models.ManyToManyField(Author, db_index=True)  # author of the book
+    title = models.CharField(max_length=255, db_index=True)    # name of the book
     no_of_pages = models.IntegerField(db_index=True)
     '''
     If the book is part of a series,
@@ -463,12 +466,12 @@ class Book(models.Model):
 
     def get_pretty_series(self):
         if self.series in [None,"None"]:
-            return "No series"
+            return config.text["no_series"]
         else:
             return smart_str(self.series)
 
-
     def get_edition(self):
+        print self.edition
         if self.edition in [None, "None"]:
             return ""
         else:
@@ -477,7 +480,7 @@ class Book(models.Model):
 
     def get_pretty_edition(self):
         if self.edition in [None, "None"]:
-            return "No edition"
+            return config.text['no_edition']
         else:
             return smart_str(self.edition)
 
@@ -490,7 +493,7 @@ class Book(models.Model):
 
     def get_pretty_price(self):
         if self.price in [None,"None"]:
-            return "No price"
+            return config.text['no_price']
         else:
             return smart_str(self.price)
 

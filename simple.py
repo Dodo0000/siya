@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from xlrd import open_workbook
 
 wb = open_workbook("excel/data/Reference Data entry/data entry.xlsx")

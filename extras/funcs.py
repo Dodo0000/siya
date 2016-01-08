@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import Image, ImageDraw, ImageFont
 
 from head.models import Book

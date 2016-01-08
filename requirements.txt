@@ -1,4 +1,4 @@
-uuWSGI==2.0.11.2
+uWSGI==2.0.11
 Django==1.8.6
 django-memcached-hashring==0.1.2
 django-extensions==1.5.9
