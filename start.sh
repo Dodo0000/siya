@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 if [[ $EUID -ne 0 ]]; then
-  pip install -r /home/ays/alms-env/alms/requirements.txt
+  pip install -r $HOME/alms-env/alms/requirements.txt
   ./manage.py makemigrations
   ./manage.py migrate
   ip=ifconfig|grep "inet addr"|awk -F':' '{print $2}'|awk -F" " '{ print $1 }'

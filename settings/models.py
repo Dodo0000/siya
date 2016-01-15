@@ -26,6 +26,10 @@ def md5Checksum(filePath):
 GET_MAIN_COLOR = "SELECT main_color FROM org_configs"
 GET_ACCENT_COLOR = "SELECT accent_color FROM org_configs"
 
+CONFIG_INI = os.path.join(settings.BASE_DIR, "config.ini")
+CONFIG_SQLITE = os.path.join(settings.BASE_DIR, "config.sqlite")
+TEXT_INI = os.path.join(settings.BASE_DIR, "text.ini.np")
+
 
 class Globals:
     '''
@@ -36,8 +40,8 @@ class Globals:
         import configparser
         self.config = configparser.ConfigParser()
         self.text_config = configparser.ConfigParser()
-        self.config.read(os.path.join(settings.BASE_DIR, "config.ini"))
-        self.text_config.read(os.path.join(settings.BASE_DIR, "text.ini.np"))
+        self.config.read(CONFIG_INI)
+        self.text_config.read(TEXT_INI)
         self.set_vals()
         self.checksum = ""
         self.load()
@@ -53,8 +57,7 @@ class Globals:
 
     def db_load(self):
         import sqlite3
-        config_db = sqlite3.connect(
-            os.path.join(settings.BASE_DIR, "config.sqlite"))
+        config_db = sqlite3.connect(CONFIG_SQLITE)
         self.main_color = config_db.cursor().execute(GET_MAIN_COLOR).fetchone()[0]
         self.accent_color = config_db.cursor().execute(GET_ACCENT_COLOR).fetchone()[0]
 
@@ -62,8 +65,8 @@ class Globals:
         import configparser
         self.config = configparser.ConfigParser()
         self.text_config = configparser.ConfigParser()
-        self.config.read(os.path.join(settings.BASE_DIR, "config.ini"))
-        self.text_config.read(os.path.join(settings.BASE_DIR, "text.ini.np"))
+        self.config.read(CONFIG_INI)
+        self.text_config.read(TEXT_INI)
 
     def reload(self):
         if self.file_is_same() is False:
@@ -75,7 +78,7 @@ class Globals:
         self.reload();
 
     def file_is_same(self):
-        checksum = md5Checksum(os.path.join(settings.BASE_DIR, "config.ini"))
+        checksum = md5Checksum(CONFIG_INI)
         if checksum != self.checksum:
             self.checksum = checksum
             return False
@@ -87,7 +90,7 @@ class Globals:
         self.load()
 
     def save(self):
-        with codecs.open(os.path.join(settings.BASE_DIR, "config.ini"), "w", encoding="utf-8") as configfile:
+        with codecs.open(CONFIG_INI, "w", encoding="utf-8") as configfile:
             self.config.write(configfile)
 
 
@@ -127,7 +130,9 @@ TYPES = [
 
 def addGlobalContext(context=None):
     global_dict = {
-        "globals": config,
+        "globals": Globals(),  # user Globals() not config because the updates
+        # to config files need to be seen immediately
+        # * config is a cached object fo Globals class *
         "date": datetime.date.today(),
         'main_color': "#"+str(config.main_color),
         'accent_color': "#"+str(config.accent_color),
@@ -156,12 +161,13 @@ def no_to_en(value):
         u'\u096c',
         u'\u096d',
         u'\u096e',
-        u'\u097f',
+        u'\u096f',
         ]
     out = ""
+    print value+"||"+",".join(nepali_numbers)
     for _ in value:
         if _ in nepali_numbers:
-            out += unicode(nepali_numbers.index(_) - 1)
+            out += unicode(nepali_numbers.index(_))
         else:
             out += _
     return out

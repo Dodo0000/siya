@@ -19,8 +19,15 @@ var NP_EN_STRUCT = {
 };
 
 $("#dataEntrySuccessful").hide();
+$("#dataEntryUnSuccessful").hide();
 
 function saveBook(){
+  /*
+   * This function saves the book
+   * To do so, it makes 2 ajax calls to the sever.
+   * The first call validates the book
+   * if the book should be accessioned,it is accessioned by the second call
+   * */
   acc_no = $(".input-acc_no").val();
   var book_exists = true;
   $.get("/book/validate",{accNo: parseInt(acc_no)}).success(function(data){
@@ -51,8 +58,7 @@ function saveBook(){
         }
         else {
           var bg_color = $("body").css("background-color");
-          $("body").css("background-color", "red").delay(2000).css("background-color", bg_color);
-          alert("data entry unsuccessful :(");
+          $("#dataEntryUnSuccessful").show("slow").delay(2000).hide("slow");
         }
       });
     }

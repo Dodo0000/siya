@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load group_filters %}
+{% load nepali %}
 {% load static %}
 
 {% block css %}
@@ -33,11 +34,13 @@
 </span>
 {% endif %}
 
+{% if request.user.is_superuser == True %}
 <div class="container-fluid buttons">
   <a href="{% url 'addNewGroup' %}" class="btn btn-primary">
     <span class="glyphicon glyphicon-plus"></span> {{ globals.text.create_group }}</span>
 </a>
 </div>
+{% endif %}
 
 <hr>
 
@@ -52,15 +55,19 @@
       <div class="col col-sm-11">
         <h4>{{globals.text.name}} - <i>{{ group.name|title }}</i></h4>
       </div>
+      {% if request.user.is_superuser == True %}
       <div class="col col-sm-1" align=right>
         <font size="5"><a title="{{ globals.text.delete_group }}"  href="{% url 'deleteGroup' group_id=group.id %}" class="group_delete_link"><span class="glyphicon glyphicon-trash"></span></a></font>
       </div>
+      {% endif %}
       <div class="col col-sm-11">
         <h4> {{globals.text.permissions}} - <i>{{ group|getReasonablePermissions|getFormattedPermissions|safe }}</i> </h4>
       </div>
+      {% if request.user.is_superuser == True %}
       <div class="col col-sm-1" align=right>
         <font size="5"><a href="{% url 'editGroup' group_id=group.id %}" class="group_edit_link" title="{{ globals.text.edit_group }}"><span class="glyphicon glyphicon-edit"></span></a></font>
       </div>
+      {% endif %}
     </div>
   </div>
 </div>

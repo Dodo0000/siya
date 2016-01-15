@@ -22,6 +22,7 @@
 
 
 from head.models import Book, Lend, Author, KeyWord, Publisher, Gifter
+from head.models import BookSaver
 from account.models import ModUser
 from settings.models import Globals, AccessionNumberCount, addGlobalContext
 from settings.models import no_to_en
@@ -117,7 +118,7 @@ def toint(val, lang="EN"):
 ############################### AJAX CALL VIEWS ##############################
 
 @login_required(login_url="/login/")
-@permission_required("add_book", login_url="/login/")
+@permission_required(("head.add_book", "head.change_book"), login_url="/login/")
 def validate_book(request):
     '''
     checks if book with the given accession number exists
@@ -141,7 +142,7 @@ def validate_book(request):
 
 
 @login_required(login_url="/login/")
-@permission_required("add_book")
+@permission_required(("head.add_book", "head.change_book"), login_url="/login/")
 def add_book(request):
     config.reload()
     all_attrs = [_[1] for _ in config.config['columns'].items()] + ["language"]
@@ -268,6 +269,9 @@ def add_book(request):
             else:
                 kw = kw[0]
             book.keywords.add(kw)
+        bookSaver = BookSaver.objects.create(user=request.user)
+        bookSaver.save()
+        book.saved_by.add(bookSaver)
         book.save()
         if request.POST.get('is_edit', 0) is 0:
             AccessionNumberCount.add1()
@@ -283,8 +287,8 @@ def add_book(request):
 
 
 @login_required(login_url="/login")
-@permission_required(("change_book", "add_book"))
-def editEntry(request,acc_no):
+@permission_required(("head.add_book", "head.change_book"), login_url="/login/")
+def editEntry(request, acc_no):
     config.reload()
     book_exists = True
     if acc_no is not None:
@@ -336,7 +340,7 @@ def editEntry(request,acc_no):
 
 
 @login_required(login_url="/login/")
-@permission_required(("change_book", "add_book"))
+@permission_required(("head.change_book", "head.add_book"), login_url="/login/")
 def entry(request):
     return editEntry(request, None)
 
@@ -485,7 +489,7 @@ def searchBook(request):
     < Note : In Step 2c, meaning the word "most" is very flexible. >
     '''
     page = request.GET.get("page", 1)
-    all_books = Book.objects.all()
+    all_books = Book.objects.filter(state=0)    # state - 0 is books which are available
 
     if value is not None:
         value = value.split(" ")
@@ -494,17 +498,19 @@ def searchBook(request):
             if type_ == config.text['title']:
                 books = searchBookTitle(" ".join(value), all_books)
             elif type_ == config.text['call_number']:
-                books = Book.objects.filter(call_number__contains=value[0]).order_by("call_number")
+                books = Book.objects.filter(call_number__contains=value[0], state=0).order_by("call_number")
             elif type_ == config.text['accession_number']:
                 books = Book.objects.filter(
-                        accession_number__contains=no_to_en(value[0])).order_by("-accession_number")
+                    state=0,
+                    accession_number__contains=no_to_en(value[0])).order_by("-accession_number")
+                print value[0]+"||"+no_to_en(value[0])
 
             elif type_ == config.text['keyword']:
                 books = searchBookKeywords(" ".join(value), all_books)
             elif type_ == config.text['publisher']:
-                books = Book.objects.filter(publisher__name__contains=value[0]).order_by("publisher__name")
+                books = Book.objects.filter(publisher__name__contains=value[0], state=0).order_by("publisher__name")
                 for each in value[1:]:
-                    bookf = books.filter(publisher__name__contains=each).order_by("publisher__name")
+                    bookf = books.filter(publisher__name__contains=each, state=0).order_by("publisher__name")
                     if len(bookf) > 0:
                         books = bookf
                     else:
@@ -540,8 +546,6 @@ def searchBook(request):
                   }))
 
 
-
-
 def bookInfo(request, accNo):
     config.reload()
     books = Book.objects.filter(accession_number=accNo)
@@ -550,9 +554,8 @@ def bookInfo(request, accNo):
     else:
         book = books[0]
 
-    lends =  Lend.objects.filter(book=book)
-    if_borrowed = False
-    
+    lends = Lend.objects.filter(book=book)
+
     if len(lends) > 0:
         lends = lends[len(lends)-1]
         days_ago = datetime.date.today() - lends.lending_date
@@ -566,7 +569,7 @@ def bookInfo(request, accNo):
         lends = None
         days_ago = None
 
-    if lends != None:
+    if lends is not None:
         late_fees = lends.get_late_fees()
     else:
         late_fees = 0
@@ -579,7 +582,7 @@ def bookInfo(request, accNo):
                       'late_fees': late_fees,
                       'is_borrowed': is_borrowed,
                       'days_ago': days_ago,
-                      "types":TYPES,
+                      "types": TYPES,
                   }))
 
 
@@ -703,3 +706,12 @@ def return_book(request):
 
 def copyBook(request):
     return render(request, "head/copyBook.html", addGlobalContext())
+
+
+@login_required(login_url="/login")
+def reviveBook(request, accNo):
+    books = Book.objects.filter(accession_number=accNo)
+    if len(books) == 1:
+        books[0].state = 0
+        books[0].save()
+    return bookInfo(request, accNo=accNo)

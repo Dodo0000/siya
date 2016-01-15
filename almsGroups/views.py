@@ -60,7 +60,7 @@ def deleteGroup(request,group_id):
 
 @login_required(login_url="/login")
 def editGroup(request, group_id):
-    all_perms = Permission.objects.filter(Q(codename__contains="Book")|Q(codename__contains="ModUser")|Q(codename__contains="lend"))
+    all_perms = Permission.objects.filter(Q(codename__contains="Book")|Q(codename__contains="ModUser")|Q(codename="add_lend"))
     if request.method == "POST":
         name = request.POST.get("name", None)
         if name != None:

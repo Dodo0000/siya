@@ -5,7 +5,7 @@
   <h3><span class="label label-primary">Search for a member of {{ globals.yalms.org_short_name }}</span></h3>
 </div>
 <hr>
-<div class="container">
+<div class="container-fluid">
 <div class="col col-sm-6 col-sm-offset-3">
   <form class="form" method="get">
     <label for="username"><div class="text-info">Enter person's username</div></h4></label>
@@ -27,11 +27,5 @@
     <strong>Oops!</strong> Member with username <span class="label label-warning">{{ username }}</span> could not be found! Try searching for some other username
   </div>
 {% endif %}
-<div align=center>
-  <div class="btn-group" role="group">
-    {% for alphabet in alphabets %}
-    <button class="btn btn-primary">{{alphabet}}</button>
-    {% endfor %}
-  </div>
 {% endblock %}
       

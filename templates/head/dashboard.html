@@ -76,6 +76,8 @@
     </tbody>
   </table>
 
+  {% if recently_added_books|length != 0 %}
+
   <h4><i>{{ globals.text.recently_added_books }}</i></h4>
   <div class="table-responsive">
     <table class="table table-hover">
@@ -105,7 +107,7 @@
       </tbody>
     </table>
   </div>
-
+  {% endif %}
   <h4><i>{{ globals.text.recently_added_members }}</i></h4>
   <table class="table table-hover table-responsive">
     <thead>

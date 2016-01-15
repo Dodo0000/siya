@@ -1,27 +1,28 @@
 # -*- coding: utf-8 -*-
-'''
-  ____             _   _       ___       ____            _ 
- |  _ \  ___  __ _| |_| |__   |_ _|___  |  _ \ ___  __ _| |
- | | | |/ _ \/ _` | __| '_ \   | |/ __| | |_) / _ \/ _` | |
- | |_| |  __/ (_| | |_| | | |  | |\__ \ |  _ <  __/ (_| | |
- |____/ \___|\__,_|\__|_| |_| |___|___/ |_| \_\___|\__,_|_|
-                                                           
-If you can keep your head when all about you   
-    Are losing theirs and blaming it on you,   
-If you can trust yourself when all men doubt you,
-    But make allowance for their doubting too;   
-If you can wait and not be tired by waiting,
-    Or being lied about, don't deal in lies,
-Or being hated, don't give way to hating,
-    And yet don't look too good, nor talk too wise: 
+#
+#  ____             _   _       ___       ____            _
+# |  _ \  ___  __ _| |_| |__   |_ _|___  |  _ \ ___  __ _| |
+# | | | |/ _ \/ _` | __| '_ \   | |/ __| | |_) / _ \/ _` | |
+# | |_| |  __/ (_| | |_| | | |  | |\__ \ |  _ <  __/ (_| | |
+# |____/ \___|\__,_|\__|_| |_| |___|___/ |_| \_\___|\__,_|_|
+#
+# If you can keep your head when all about you
+#    Are losing theirs and blaming it on you,
+# If you can trust yourself when all men doubt you,
+#    But make allowance for their doubting too;
+# If you can wait and not be tired by waiting,
+#    Or being lied about, don't deal in lies,
+# Or being hated, don't give way to hating,
+#    And yet don't look too good, nor talk too wise:
+#
 
-'''
 
 from django.db import models
-from django.utils.encoding import smart_str, smart_unicode
+from django.utils.encoding import smart_str
 # Create your models here
 from account.models import ModUser
 from settings.models import Globals
+from django.utils import timezone
 
 import datetime
 
@@ -35,29 +36,34 @@ def make_title(title):
 
 
 NP_NUM = {
-        [
-            ')',
-            '!',
-            '@',
-            '#',
-            '$',
-            '%',
-            '^',
-            '&',
-            '*',
-            '('][x]: str(x)  for x in range(0,10)
-        }
-
+    [
+        ')',
+        '!',
+        '@',
+        '#',
+        '$',
+        '%',
+        '^',
+        '&',
+        '*',
+        '('][x]: str(x) for x in range(0, 10)
+    }
 
 
 LANG_LIST = [
-            'EN',
-            'NP'
-        ]
+    'EN',
+    'NP'
+    ]
 
 CURRENT_LANGUAGE = LANG_LIST[0]
 
+
 def toint(val, lang="EN"):
+    '''
+    converts a nepali or english numerical character to integer
+    usage : toint(val, [lang])
+    '''
+
     if val is None or val == "None" or val == "":
         return 0
     else:
@@ -74,10 +80,14 @@ def toint(val, lang="EN"):
 
 def cint(v, b, lang="EN"):
     '''
+    like toint, except you can manually specify whether to convert number or
+    not.
+    usage : cint(v, b, [lang])
     b = To Convert or not
     v = value to convert
     '''
-    if b == 0 or b == False:
+
+    if b == 0 or b is False:
         return v
     else:
         return toint(v, lang)
@@ -86,13 +96,32 @@ def cint(v, b, lang="EN"):
 class Publisher(models.Model):
     '''
     Model that holds the attributes of a publisher
+    Proterties :
+        * name
+        * place
+        * year
+
+    Methods :
+        * get_all_attr_for_spreadsheet
+        * get_name
+        * get_place
+        * get_year
+        * __str__
+        * __catalog__
     '''
+
     name = models.CharField(max_length=255, db_index=True)
     place = models.CharField(max_length=255, db_index=True)
     year = models.CharField(max_length=10, db_index=True)
 
 
     def get_all_attr_for_spreadsheet(self):
+        '''
+        returns a tuple of tuples containing the following :
+            * ("Name", <name of publisher of the object>)
+            * ("Place Of Publication", <Place of publication of the object>)
+            * ("Year Of Publication", <year of publication of the object>)
+        '''
         return (
                     ("Name", self.get_name()),
                     ("Place Of Publication", self.get_place()),
@@ -100,41 +129,68 @@ class Publisher(models.Model):
                 )
 
     def get_name(self):
+        '''
+        returns the name of the publisher
+        '''
         if self.name in [None,"None"]:
             return ""
         return smart_str(self.name)
 
     def get_place(self):
+        '''
+        returns the placeof publication
+        '''
         if self.place in [None,"None"]:
             return ""
         return smart_str(self.place)
 
     def get_year(self):
+        '''
+        returns the year of publication
+        '''
         if self.year in [None,"None"]:
             return ""
         return smart_str(self.year)
-    
+
     def __str__(self):
-        if self.year == u"0" and self.place not in [None,'None'] and self.name not in [None,'None']:
-            return smart_str(u"{0}, {1}".format(
+        '''
+        returns a str object for the publisher object.
+        If the year is not given, the format is -
+          <publisher's name>, <place of publication>
+        If the place is not given, the format is -
+          <publisher's name> in <year of publication>
+        If all the properties are given, the format is -
+          <name of publisher>, <place of publication> in <year of publication>
+
+        The name is compulsory for a publisher. If the name is not given,
+        nothing is displayed
+        '''
+        out = u''  # return value
+        if self.name == [u"", "", None]:
+            out = smart_str("")
+        elif (self.year == 0 or self.year == u'0') and self.place not in [None, 'None'] and self.name not in [None, 'None']:
+            out = smart_str(u"{0}, {1}".format(
                 self.name,
                 self.place))
-        elif self.place in [None,'None'] and self.year not in [None,'None'] and self.name not in [None,'None']:
-            return smart_str(u"{0} in {1}".format(
+        elif self.place in [None, 'None'] and self.year not in [None, 'None', '0'] and self.name not in [None, 'None']:
+            out = smart_str(u"{0} in {1}".format(
                 self.name,
                 self.year))
         else:
-            return smart_str(u"{0}, {1} in {2}".format(
+            out = smart_str(u"{0}, {1} in {2}".format(
                 self.name,
                 self.place,
                 self.year))
+        if out.strip(" ") == ",":  # if the output is only a "," return nothing
+            return ""
+        return out
 
     def __catalog__(self):
-        if self.year == u"0" and self.place != None and self.name != None:
+        if self.year == u"0" and self.place is not None and self.name is not None:
             return smart_str(u"{1}: {0}".format(
                 self.name,
                 self.place))
-        elif self.place == None and self.year != None and self.name != None:
+        elif self.place is None and self.year is not None and self.name is not None:
             return smart_str(u"{0}: {1}".format(
                 self.name,
                 self.year))
@@ -145,57 +201,95 @@ class Publisher(models.Model):
                 self.year))
 
 
-
-
-
 class Author(models.Model):
     '''
     Model for Author Class
-    Describes the properties of an author
+    Properties :
+        * name
+        * slug
+    Methods :
+        * get_all_attr_for_spreadsheet
+        * get_name
+        * get_catalog_name
+        * __str__
     '''
     name = models.CharField(max_length=100)
     slug = models.SlugField(db_index=True)
 
     def get_all_attr_for_spreadsheet(self):
         return (
-                    ("Name", self.get_name()),
-                )
+            ("Name", self.get_name()),
+            )
 
     def get_name(self):
         '''
-        the data entered for an anuthor is in the format:
-        last_name, first_name
+        the data entered for an author is in the format:
+        <first name> <last name>
         '''
-        if self.name in [None,"None"]:
+        if self.name in [None, "None"]:
             return ""
         name_list = self.name.split(",")
         name_list.reverse()
         return " ".join(name_list)
 
     def get_catalog_name(self):
+        '''
+        returns the traditional style author name. It's format is:
+            <last name>, <first_name>
+        '''
         name_list = self.name.split(",")
         if name_list.__len__() >= 2:
             return self.name
         elif len(name_list) == 1:
             return ",".join(name_list[0].split(" "))
-            
+
     def __str__(self):
+        '''
+        returns the name of the author
+        '''
         return smart_str(self.name)
-    
+
+
 class KeyWord(models.Model):
     '''
     The Keyword Model for Book class.
     It has a ManyToMany relationship with Book.
     synonymn to tags.
+
+    properties :
+        * name
+        * slug
+    methods :
+        * __str__
     '''
     name = models.CharField(max_length=255)
     slug = models.SlugField(db_index=True)
 
     def __str__(self):
+        '''
+        returns the name of the keyword as a title
+        '''
         return smart_str(self.name.title())
 
 
 class Lend(models.Model):
+    '''
+    Abstract object that works with the lending and borrowing of books.
+    Properties :
+        * user
+        * book
+        * lending_date
+        * returned_date
+        * returned
+        * borrowed
+    Methods :
+        * get_all_attr_for_spreadsheet
+        * get_borrowed_time
+        * get_late_fees
+        * set_returned
+        * get_returning_date
+        * __str__
+    '''
     user = models.ForeignKey(ModUser, db_index=True)
     book = models.ForeignKey('Book', db_index=True)
     lending_date = models.DateField(db_index=True)
@@ -203,43 +297,41 @@ class Lend(models.Model):
     returned = models.BooleanField(default=False, db_index=True)
     borrowed = models.BooleanField(default=False, db_index=True)
 
-
     def get_all_attr_for_spreadsheet(self):
         return self.book.get_all_attr_for_spreadsheet() + (
-                    ("Borrowed By", self.user.username),
-                    ("Lended Date", self.lending_date)
-                )
-
+            ("Borrowed By", self.user.username),
+            ("Lended Date", self.lending_date)
+            )
 
     def get_borrowed_time(self):
         dt = datetime.date.today() - self.lending_date
         return int(dt.days)
-    
+
     def get_late_fees(self):
         borrowed_time = self.get_borrowed_time()
-        max_days = config.config.getint("books","borrow_max_days")
+        max_days = config.config.getint("books", "borrow_max_days")
         money_per_day = config.config.getint("misc", "late_fees_rate")
         if borrowed_time > max_days:
-            return money_per_day *  (borrowed_time - max_days)
+            return money_per_day * (borrowed_time - max_days)
         else:
             return 0
 
-    def set_returned(self,date=datetime.datetime.today()):
-         self.returned_date = date
-         self.returned= True
-         self.save()
-         self.book.state = 0
-         self.book.save()
+    def set_returned(self, date=datetime.datetime.today()):
+        self.returned_date = date
+        self.returned = True
+        self.save()
+        self.book.state = 0
+        self.book.save()
 
     def get_returning_date(self):
         return self.lending_date + datetime.timedelta(days=config.config.getint("books",'borrow_max_days'))
 
     def __str__(self):
         return "{0},borrowed on {1}, till {2}".format(
-                str(self.book),
-                self.lending_date.strftime("%A %eth %B, %Y"),
-                self.get_returning_date().strftime("%A %eth %B, %Y")
-                )
+            str(self.book),
+            self.lending_date.strftime("%A %eth %B, %Y"),
+            self.get_returning_date().strftime("%A %eth %B, %Y")
+            )
 
 
 class Gifter(models.Model):
@@ -278,10 +370,18 @@ class Gifter(models.Model):
                 return "{0}, email: {1} on {2}".format(self.gifter_name,self.email,self.date_given)
         else:
             return "{0}, phone: {1}, email: {2} on {3}".format(self.gifter_name,self.phone,self.email,self.date_given)
+
+
+class BookSaver(models.Model):
+    '''
+    This class represents the Person who modifies/adds a book.
+    It stores the user information and datetime of the book added
+    '''
+    user = models.ForeignKey(ModUser)
+    date = models.DateTimeField(auto_now_add=True)
     
-
-
-
+    def __str__(self):
+        return "{0} on {1}".format(self.user.get_name(), self.date.isoformat())
 
 class Book(models.Model):
     '''
@@ -312,21 +412,22 @@ class Book(models.Model):
     volume = models.CharField(max_length=10,null=True,blank=True,db_index=True)
     keywords = models.ManyToManyField(KeyWord,db_index=True)
 
-    
+
     isbn = models.CharField(max_length=13,null=True,db_index=True)
     '''
-    State has three values: 
+    State has three values:
     0 - Is available
     1 - Is Discarded
     2 - Is borrowed
     defaults to {0}
     '''
-    state = models.IntegerField(default=0,db_index=True)
+    state = models.IntegerField(default=0, db_index=True)
     '''
     The keywords describe in a more specific manner, the "personality" of the
     book which the call number failed to explain
     '''
-    gifted_by = models.ForeignKey(Gifter,null=True,db_index=True)
+    gifted_by = models.ForeignKey(Gifter, null=True, db_index=True)
+    saved_by = models.ManyToManyField(BookSaver, default=timezone.now,  db_index=True)
 
 
     def bring_back(self):
@@ -353,11 +454,11 @@ class Book(models.Model):
             'keywords',
             'date_added'
         )
-    
+
     def get_all_attr(self):
         return (
             ('Accession Number', self.accession_number),
-            ('Call Number', smart_str(self.call_number)),            
+            ('Call Number', smart_str(self.call_number)),
             ('Title', smart_str(self.title)),
             ('Author', self.get_authors()),
             ('Publisher', self.get_publishers()),
@@ -374,7 +475,7 @@ class Book(models.Model):
     def get_all_attr_for_spreadsheet(self):
         value = (
             ('Accession Number', self.get_accession_number()),
-            ('Call Number', self.get_call_number()),            
+            ('Call Number', self.get_call_number()),
             ('Title', self.get_title()),
             ('Author', self.get_authors()),
             ('Publisher Name', self.get_publisher_name()),
@@ -383,9 +484,9 @@ class Book(models.Model):
             ('No. of Pages', self.no_of_pages),
             ('keywords', smart_str(self.get_keywords())),
             ('Date Added', self.accessioned_date),
-            ("Series", self.get_series()),
+            ("Series", self.get_pretty_series()),
             ("Edition", self.get_edition()),
-            ("Price", self.get_price()),
+            ("Price", self.get_pretty_price()),
             ("Volume", self.get_volume()),
             ("Gifted By", self.get_gifted_by_name()),
             ("Email Of Gifter", self.get_gifted_by_email()),
@@ -429,7 +530,7 @@ class Book(models.Model):
         else:
             return self.gifted_by.get_phone_no()
 
-    
+
     def get_accession_number(self):
         return smart_str(self.accession_number)
 
@@ -488,14 +589,18 @@ class Book(models.Model):
         if self.price in [None, 'None']:
             return ""
         else:
-            return smart_str(self.price)
+            print self.price
+            if self.price.isdigit():
+                return u"Rs. " + smart_str(self.price)
+            else:
+                return smart_str(self.price)
 
 
     def get_pretty_price(self):
         if self.price in [None,"None"]:
             return config.text['no_price']
         else:
-            return smart_str(self.price)
+            return self.get_price()
 
 
     def get_volume(self):
@@ -533,11 +638,11 @@ class Book(models.Model):
 
     '''
     What's up with all the get_* functions you ask?
-    These functions help the template system display data in a meaningful way 
+    These functions help the template system display data in a meaningful way
     is all.
     I don't see any other use for these.
     '''
-    
+
     @staticmethod
     def get_largest_accession_number():
         return Book.objects.all().order_by("-accession_number")[0].accession_number
@@ -557,7 +662,7 @@ class Book(models.Model):
             return None
 
     def is_borrowed(self):
-        return self.state == 2 
+        return self.state == 2
 
     def get_authors(self):
         author_list =  self.author.all()
@@ -579,7 +684,7 @@ class Book(models.Model):
             return self.publisher.__str__()
         else:
             return ""
-    
+
     def get_pretty_publishers(self):
         if self.publisher is not None:
             return self.publisher.__str__()
@@ -621,11 +726,10 @@ class Book(models.Model):
                         raise TypeError(
                             "value of date `{}`: does not convert into year-month-day format".format(date))
                 lend_obj.save()
-                self.state = 2   #is borrowed 
+                self.state = 2   #is borrowed
                 self.save()  #save book
             else:
                 return 1
         else:
             return 1
         return 0
-

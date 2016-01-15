@@ -5,7 +5,7 @@ from __future__ import unicode_literals
 from django import template
 
 
-from settings.models import no_to_np, Globals
+from settings.models import Globals
 
 from pyBSDate.BSDate import convert_to_bs
 

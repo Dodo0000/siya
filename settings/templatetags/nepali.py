@@ -20,15 +20,16 @@ def no_to_np(value):
     '''
     convert number to nepali
     '''
-    config = Globals()
-    out = ""
-    value = unicode(value)
-    for _ in value:
-        if _ in ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0']:
-            out += config.text[_]
-        else:
-            out += _
-    return out
+#   config = Globals()
+#   out = ""
+#   value = unicode(value)
+#   for _ in value:
+#       if _ in ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0']:
+#           out += config.text[_]
+#       else:
+#           out += _
+#   return out
+    return value
 
 
 @register.filter(name="nepali")
@@ -65,6 +66,6 @@ def nepali(value):
                     out_val.append(config_val)
             else:
                 out_val.append(config_val)
-        return no_to_np(" ".join(out_val))
+        return " ".join(out_val)
 
 

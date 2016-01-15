@@ -12,7 +12,7 @@ from django.contrib.auth.models import Group
 from django.utils.encoding import smart_str
 
 from .models import ModUser
-from .forms import CreateMemberForm
+from .forms import CreateMemberForm, CreateWorkerForm
 from head.models import Book, Lend
 from head.views import home
 from settings.models  import addGlobalContext
@@ -79,12 +79,11 @@ def login_get_code_msg(code):
         return None
 
 
-
 def login_user(request):
     config.refresh()
 
     '''
-    code values and their meaning : 
+    code values and their meaning :
     0 : Login Successful
     1 : User is Not Active! Accoutn disabled
     2 : Invalid Login creds!
@@ -98,36 +97,37 @@ def login_user(request):
     METHOD_NOT_POST = 3
     NO_DATA_GIVEN = 4
 
+    if request.user.is_authenticated():
+        # user is already logged in
+        return HttpResponseRedirect(reverse("home"))
+
     if request.method.upper() == "POST":
         username = unicode(request.POST.get("username", None))
         password = unicode(request.POST.get("password", None))
-
-
         user = authenticate(username=username, password=password)
         if user is not None:
             if user.is_active:
-                login(request,user)
+                login(request, user)
                 code = LOGIN_SUCCESS
             else:
-                code = USER_NOT_ACTIVE ## user is not active
+                code = USER_NOT_ACTIVE  # user is not active
         else:
-            code = INVALID_LOGIN_CREDS ## invalid login creds
+            code = INVALID_LOGIN_CREDS  # invalid login creds
     else:
         if unicode(request.POST.get('username', None)) is not None and unicode(request.POST.get("password", None)) is not None:
-            code = METHOD_NOT_POST ## request method was not POST
+            code = METHOD_NOT_POST  # request method was not POST
         else:
             code = NO_DATA_GIVEN
 
     if code is not LOGIN_SUCCESS:
-        ## error occured during login proc.
+        # error occured during login proc.
         return render(request,
                       "account/login.html",
                       addGlobalContext({'code': code,
-                       "code_msg": login_get_code_msg(code),
-                       'globals': config
-                      }))
+                                        "code_msg": login_get_code_msg(code),
+                                        }))
     else:
-        return HttpResponseRedirect(request.GET.get("next",reverse("home")))
+        return HttpResponseRedirect(request.GET.get("next", reverse("home")))
 
 
 def logout_user(request):
@@ -138,14 +138,77 @@ def logout_user(request):
 
 def create_username(*args):
     config.refresh()
-    import random
     vals = []
     for each in args:
         vals.append(smart_str(each))
     return "".join(vals)
 
+
 @login_required(login_url="/login")
-def addMemberWithArgs(request,created):
+def addWorkerWithArgs(request, created):
+    config.refresh()
+    form = CreateWorkerForm()
+    member = None
+    if request.method == "POST":
+        form = CreateWorkerForm(request.POST)
+        if form.is_valid():
+            # the form is valid, so lets create the member
+            data = form.cleaned_data
+            if (data['first_name'] == '' and data['last_name'] == '') or data['password'] == '':
+                created = False
+            else:
+                first_name =smart_str( data['first_name'].strip(" ").lower())
+                last_name = smart_str(data['last_name'].strip(" ").lower())
+                gender = smart_str(data['gender'].strip(' ').lower())
+                date_of_birth = data['date_of_birth']
+                group = data['group']
+                password = data['password']
+
+                # creating the username
+                username = create_username(first_name,  ModUser.objects.all().count())
+                worker = ModUser.objects.create(
+                    username=username
+                    )
+                if first_name not in ['']:
+                    worker.first_name = first_name
+                if last_name not in ['']:
+                    worker.last_name = last_name
+                if gender not in ['']:
+                    worker.sex = gender
+                if date_of_birth not in ['']:
+                    worker.date_of_birth = date_of_birth
+                if group not in ['']:
+                    group_grp = Group.objects.filter(name=group)
+                    if len(group_grp) == 1:
+                        worker.groups.add(group_grp[0])
+                # school_number and telephone_mobile are not added
+                worker.is_staff = True
+                worker.save()
+                worker.set_password(password)
+                created = True
+                print "member created with username %s" % member
+
+                return HttpResponseRedirect(reverse("addWorkerWithArgs", kwargs={"created": created}))
+
+    return render(request,
+                  "account/create_worker.html",
+                  context=addGlobalContext({
+                      "form": form,
+                      "worker_created": created,
+                      "worker": ModUser.objects.order_by("-date_joined")[0]
+                      })
+                  )
+
+
+@login_required(login_url="/login/")
+def addWorker(request):
+    config.refresh()
+    return addWorkerWithArgs(request, created=False)
+
+
+
+@login_required(login_url="/login")
+def addMemberWithArgs(request, created):
     config.refresh()
     form = CreateMemberForm()
     member = None
@@ -188,7 +251,7 @@ def addMemberWithArgs(request,created):
                 if city not in ['']:
                     member.addr_municipality = city
                 if home_phone not in ['']:
-                    member.telephone_home = home_phone
+                    member.telephone_home = int(home_phone)
                 if parent_name not in ['']:
                     member.parent_name = parent_name
                 if school_name not in ['']:
@@ -199,13 +262,13 @@ def addMemberWithArgs(request,created):
                     member.school_roll_no = roll_no
                 if date_of_birth not in ['']:
                     member.date_of_birth = date_of_birth
-                ## school_number and telephone_mobile are not added
+                # school_number and telephone_mobile are not added
                 member.groups.add(Group.objects.get(name="Member"))
                 member.save()
                 created = True
                 print "member created with username %s" % member
 
-                return HttpResponseRedirect(reverse("addMemberWithArgs", kwargs=addGlobalContext({"member_created": created,"member": member})))
+                return HttpResponseRedirect(reverse("addMemberWithArgs", kwargs={"created": created}))
             
     return  render(request,
             "account/create_member.html",
@@ -222,3 +285,12 @@ def addMember(request):
     config.refresh()
     return addMemberWithArgs(request,created=False)
 
+
+@login_required(login_url="/login/")
+def verifySchool(request, userName):
+    print "hello"
+    users = ModUser.objects.filter(username=userName)
+    if len(users) == 1:
+        users[0].school_varified = True
+        users[0].save()
+    return profile(request, username=userName)

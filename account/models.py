@@ -157,7 +157,6 @@ class ModUser(AbstractBaseUser, PermissionsMixin):
         if not self.is_active:
             self.send_email_activation_confirmation()
         if commit:
-            super(ModUser,self).set_password(self.password)
             super(ModUser, self).save(*args,**kwargs)
 
     def is_male(self):

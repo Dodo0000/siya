@@ -7,17 +7,17 @@
   <div align=center class="col col-sm-offset-3 col-sm-6">
   <div class="well">
     <h1>{{ book.title|title }}</h1>
-    <h4>written by {{ book.get_authors|title }}</h4>
-    <h4> with Accession Number {{ book.accession_number }} </h4>
-    <a href="{% url 'book' book.accession_number %}">more info</a>
+    <h4>{{ globals.text.author }} :  {{ book.get_authors|title }}</h4> <!--  -->
+    <h4> {{ globals.text.accession_number}} {{ book.accession_number }} </h4> <!--  -->
+    <a href="{% url 'book' book.accession_number %}">{{globals.text.more_info}}</a> <!--  -->
   </div> <!-- jumbotron -->
   </div>
   
 </div><!-- container -->
 
 <div align=center>
-  <h3>Are You Sure You Want To discard this Book?</h3>
-  <a class="btn btn-danger" href="{% url 'delete_book' book.get_accession_number %}">Discard Book</a>
+  <h3>के यो किताबलाई हटाउने हो?</h3>
+  <a class="btn btn-danger" href="{% url 'delete_book' book.get_accession_number %}">{{globals.text.discard_book}}</a>
 </div>
 
 {% elif state == -1 %}

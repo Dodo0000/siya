@@ -47,7 +47,6 @@ INSTALLED_APPS = (
     'almsGroups',
     'miscFields',
     'restructuredText',
-    'widget_tweaks'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -102,6 +101,9 @@ LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'Asia/Kathmandu'
 
+USE_TZ = True
+
+
 USE_I18N = True
 
 USE_L10N = True
@@ -120,3 +122,7 @@ STATICFILES_DIRS = (
     )
 
 ADMIN_MEDIA_PREFIX = "/static/admin/"
+
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_BROWSER_XSS_FILTER = True
+CSRF_TOKEN_SECURE = True
