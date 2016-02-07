@@ -66,9 +66,6 @@ class UserType(models.Model):
 
 class UserManager(BaseUserManager):
 
-    '''
-    Dont grant this user staff access!!
-    '''
     def create(self,
             username,
             super_user=False,
@@ -76,7 +73,11 @@ class UserManager(BaseUserManager):
             last_name=None,
             password=None, 
             **extra_fields):
-        print username
+        '''
+            Dont grant this user staff access!!
+            There is a seperate file to grant user superuser status
+        '''
+
         if not username:
             raise ValueError("Username is required to create User")
 
@@ -90,6 +91,9 @@ class UserManager(BaseUserManager):
         return user
 
     def create_superuser(self, username, password):
+        '''
+        like create, but also makes the user a saff, andn gives them superuser access
+        '''
         if not username:
             raise ValueError("username is required")
         if not password:
@@ -101,7 +105,11 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
 
     def add(self, user):
+	'''
+	  add new user
+	'''
         self.viewers.add(user.viewer)
+
 
 class ModUser(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(max_length=90,null=True,blank=True)

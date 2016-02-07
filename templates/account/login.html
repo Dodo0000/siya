@@ -14,17 +14,17 @@
 
 
 {% block content %}
-
+<br><br><br>
 <div class="alert alert-info">
   <div align=center>
-    <h3>{{ globals.yalms.org_short_name }} Login Page</h3>
+    <h3>{{ globals.yalms.org_short_name }} लग-इन</h3>
     <p>{{ globals.yalms.org_motto }}</p>
   </div>
 </div>
 
-{% if code != 0 and code != 4 %}
+{% if code == 0 %}
 <div class="container">
-  <div class="alert alert-danger" align=center><strong>Oh, no! </strong>{{ code_msg }}</div>
+  <div class="alert alert-danger" align=center><strong>Oh, no! </strong>{{ code_msg }} </div>
 </div>
 {% endif %}
 
@@ -36,7 +36,7 @@
     <label for="password">password</label>
     <input class="form-control" name="password" type="password" aria-label+"" required>
     <hr>
-    <input type="submit" class="btn btn-success" value="login">
+    <input type="submit" class="btn btn-success form-control" value="login">
   </form>
 </div>
 

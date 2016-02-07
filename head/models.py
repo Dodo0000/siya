@@ -24,6 +24,8 @@ from account.models import ModUser
 from settings.models import Globals
 from django.utils import timezone
 
+from miscFields.models import GenericField
+
 import datetime
 
 
@@ -114,7 +116,6 @@ class Publisher(models.Model):
     place = models.CharField(max_length=255, db_index=True)
     year = models.CharField(max_length=10, db_index=True)
 
-
     def get_all_attr_for_spreadsheet(self):
         '''
         returns a tuple of tuples containing the following :
@@ -132,7 +133,7 @@ class Publisher(models.Model):
         '''
         returns the name of the publisher
         '''
-        if self.name in [None,"None"]:
+        if self.name in [None, "None"]:
             return ""
         return smart_str(self.name)
 
@@ -140,7 +141,7 @@ class Publisher(models.Model):
         '''
         returns the placeof publication
         '''
-        if self.place in [None,"None"]:
+        if self.place in [None, "None"]:
             return ""
         return smart_str(self.place)
 
@@ -148,7 +149,7 @@ class Publisher(models.Model):
         '''
         returns the year of publication
         '''
-        if self.year in [None,"None"]:
+        if self.year in [None, "None"]:
             return ""
         return smart_str(self.year)
 
@@ -230,7 +231,11 @@ class Author(models.Model):
             return ""
         name_list = self.name.split(",")
         name_list.reverse()
-        return " ".join(name_list)
+        if len(name_list) == 2:
+            joiner = u" "  # joins 2 author names
+        else:
+            joiner = u", "   # joins more than 2 author names
+        return joiner.join(name_list)
 
     def get_catalog_name(self):
         '''
@@ -300,7 +305,7 @@ class Lend(models.Model):
     def get_all_attr_for_spreadsheet(self):
         return self.book.get_all_attr_for_spreadsheet() + (
             ("Borrowed By", self.user.username),
-            ("Lended Date", self.lending_date)
+            ("Lent Date", self.lending_date)
             )
 
     def get_borrowed_time(self):
@@ -324,7 +329,7 @@ class Lend(models.Model):
         self.book.save()
 
     def get_returning_date(self):
-        return self.lending_date + datetime.timedelta(days=config.config.getint("books",'borrow_max_days'))
+        return self.lending_date + datetime.timedelta(days=config.config.getint("books", 'borrow_max_days'))
 
     def __str__(self):
         return "{0},borrowed on {1}, till {2}".format(
@@ -349,7 +354,7 @@ class Gifter(models.Model):
         return smart_str(self.email)
 
     def get_phone_no(self):
-        if self.phone in [None,"None"]:
+        if self.phone in [None, "None"]:
             return ""
         return smart_str(self.phone)
 
@@ -359,17 +364,17 @@ class Gifter(models.Model):
     def __str__(self):
         if self.email is None:
             if self.phone is None:
-                return "{} on {}".format(self.gifter_name,self.date_given)
+                return "{} on {}".format(self.gifter_name, self.date_given)
             else:
-                return "{0}, phone no.: {1} on {2}".format(self.gifter_name,self.phone,self.date_given)
+                return "{0}, phone no.: {1} on {2}".format(self.gifter_name, self.phone, self.date_given)
         elif self.phone is None:
             if self.email is None:
-                return "{0} on {1}".format(self.gifter_name,self.date_given)
+                return "{0} on {1}".format(self.gifter_name, self.date_given)
 
             else:
-                return "{0}, email: {1} on {2}".format(self.gifter_name,self.email,self.date_given)
+                return "{0}, email: {1} on {2}".format(self.gifter_name, self.email, self.date_given)
         else:
-            return "{0}, phone: {1}, email: {2} on {3}".format(self.gifter_name,self.phone,self.email,self.date_given)
+            return "{0}, phone: {1}, email: {2} on {3}".format(self.gifter_name, self.phone, self.email, self.date_given)
 
 
 class BookSaver(models.Model):
@@ -379,15 +384,12 @@ class BookSaver(models.Model):
     '''
     user = models.ForeignKey(ModUser)
     date = models.DateTimeField(auto_now_add=True)
-    
+
     def __str__(self):
         return "{0} on {1}".format(self.user.get_name(), self.date.isoformat())
 
+
 class Book(models.Model):
-    '''
-    accession number increases by +1 for each new entry; kinda like the
-    primary number. Each book as a unique accession number
-    '''
     accession_number = models.CharField(max_length=9, db_index=True)
     accessioned_date = models.DateField(auto_now=True, db_index=True)
     '''
@@ -404,16 +406,18 @@ class Book(models.Model):
     this tells the number in which the book falls into the series
     '''
 
-    language = models.CharField(max_length=5,default="EN",db_index=True)
-    publisher = models.ForeignKey(Publisher,null=True,blank=True,db_index=True)
-    series = models.CharField(max_length=20,blank=True,null=True,db_index=True)
-    edition = models.CharField(max_length=100,blank=True,null=True,db_index=True)
-    price = models.CharField(max_length=255,null=True,blank=True,db_index=True)
-    volume = models.CharField(max_length=10,null=True,blank=True,db_index=True)
-    keywords = models.ManyToManyField(KeyWord,db_index=True)
+    # !!!!! language is now obsolete!!!!!!!!!
+    language = models.CharField(max_length=5, default="EN", db_index=True)
+    # !!!!! language is now obsolete!!!!!!!!!
 
+    publisher = models.ForeignKey(Publisher, null=True, blank=True, db_index=True)
+    series = models.CharField(max_length=20, blank=True, null=True, db_index=True)
+    edition = models.CharField(max_length=100, blank=True, null=True, db_index=True)
+    price = models.CharField(max_length=255, null=True, blank=True, db_index=True)
+    volume = models.CharField(max_length=10, null=True, blank=True, db_index=True)
+    keywords = models.ManyToManyField(KeyWord, db_index=True)
 
-    isbn = models.CharField(max_length=13,null=True,db_index=True)
+    isbn = models.CharField(max_length=13, null=True, db_index=True)
     '''
     State has three values:
     0 - Is available
@@ -429,21 +433,34 @@ class Book(models.Model):
     gifted_by = models.ForeignKey(Gifter, null=True, db_index=True)
     saved_by = models.ManyToManyField(BookSaver, default=timezone.now,  db_index=True)
 
-
     def bring_back(self):
-        self.state = 0
-        self.save()
+        '''
+        यदि किताब खारेज गरीएको छ भने फिर्ता ल्याउने
+        '''
+        if self.state != 0:
+            self.state = 0
+            self.save()
+        return 0
 
     def discard(self):
+        '''
+        किताब खारेज गर्ने
+        '''
         self.state = 1
         self.save()
 
     def is_discarded(self):
+        '''
+        किताब खारेज गरिएको छ कि छैन
+        '''
         return self.state == 1
-
 
     @staticmethod
     def get_attr_list():
+        '''
+        सबै गुणहरु सूची गर्ने
+        अप्रचलित तरिका!!!!!!
+        '''
         return (
             'accNo',
             'callNo',
@@ -456,6 +473,17 @@ class Book(models.Model):
         )
 
     def get_all_attr(self):
+        '''
+        किताब instanceका सबै गुणहरु सूची गर्ने
+
+        ढाँचा : 
+
+            (
+                (<name of attribute>, <value of attribute for this instance>),
+                ...
+                ...
+            )
+        '''
         return (
             ('Accession Number', self.accession_number),
             ('Call Number', smart_str(self.call_number)),
@@ -473,6 +501,17 @@ class Book(models.Model):
         )
 
     def get_all_attr_for_spreadsheet(self):
+        '''
+        returns all the attributes of the book instance in a pretty format
+
+        format : 
+
+            (
+                (<name of attribute>, <value of attribute for this instance>),
+                ...
+                ...
+            )
+        '''
         value = (
             ('Accession Number', self.get_accession_number()),
             ('Call Number', self.get_call_number()),
@@ -495,50 +534,78 @@ class Book(models.Model):
         return value
 
     def get_publisher_name(self):
-        if self.publisher in [None,'None']:
+        '''
+        returns name of the publisher or empty string
+        '''
+        if self.publisher in [None, 'None']:
             return ""
         else:
             return smart_str(self.publisher.get_name())
 
     def get_published_year(self):
-        if self.publisher in [None,'None']:
+        '''
+        returns the year of publication of empty string
+        '''
+        if self.publisher in [None, 'None']:
             return ""
         else:
             return self.publisher.get_year()
 
     def get_published_place(self):
-        if self.publisher in [None,'None']:
+        '''
+        returns the place of publication or empty string
+        '''
+        if self.publisher in [None, 'None']:
             return ""
         else:
             return smart_str(self.publisher.get_place())
 
     def get_gifted_by_name(self):
-        if self.gifted_by in [None,'None']:
+        '''
+        returns the name of person who gifted the book or empty string
+        '''
+        if self.gifted_by in [None, 'None']:
             return ""
         else:
             return self.gifted_by.get_name()
 
     def get_gifted_by_email(self):
-        if self.gifted_by in [None,'None']:
+        '''
+        returns the email of person who gifted the book or empty string
+        '''
+        if self.gifted_by in [None, 'None']:
             return ""
         else:
             return self.gifted_by.get_email()
 
     def get_gifted_by_phone_no(self):
+        '''
+        returns the phone number of person who gifted the book or empty string
+        '''
         if self.gifted_by in [None, "None"]:
             return ""
         else:
             return self.gifted_by.get_phone_no()
 
-
     def get_accession_number(self):
+        '''
+        returns the accession number of the book. Since the accession number
+        is  a required attribute, an empty string is never returned
+        '''
         return smart_str(self.accession_number)
 
     def get_pretty_accession_number(self):
+        '''
+        returns the accession number
+            same as get_accession_number
+        '''
         return self.get_accession_number
 
     def get_call_number(self):
-        if self.call_number in [None,'None']:
+        '''
+        returns the call number or empty string
+        '''
+        if self.call_number in [None, 'None']:
             return ""
         if self.language == "EN":
             return smart_str(self.call_number)
@@ -547,107 +614,153 @@ class Book(models.Model):
             return smart_str(call_no)
 
     def get_pretty_call_nnumber(self):
+        '''
+        same as get_call_number
+        '''
         return self.get_call_number()
 
     def get_language(self):
-        if self.language in [None,"None"]:
+        '''
+        returns the langauge of the book.
+
+        Note : language attribute is obsolete
+        '''
+        if self.language in [None, "None"]:
             return ''
         return smart_str(self.language)
 
-
     def get_pretty_language(self):
+        '''
+        same as get_langauge
+
+        Note : language attribute is obsolete
+        '''
         return self.get_language()
 
     def get_series(self):
-        if self.series in  [None,"None"]:
+        '''
+        returns the series of the book or empty string
+        '''
+        if self.series in [None, "None"]:
             return ""
         else:
             return smart_str(self.series)
 
-
     def get_pretty_series(self):
-        if self.series in [None,"None"]:
+        '''
+        returns the series, or config.text['no_series']
+        '''
+        if self.series in [None, "None"]:
             return config.text["no_series"]
         else:
             return smart_str(self.series)
 
     def get_edition(self):
-        print self.edition
+        '''
+        returns the edition or empty string
+        '''
         if self.edition in [None, "None"]:
             return ""
         else:
             return smart_str(self.edition)
 
-
     def get_pretty_edition(self):
+        '''
+        returns the edition or config.text['no_edition']
+        '''
         if self.edition in [None, "None"]:
             return config.text['no_edition']
         else:
             return smart_str(self.edition)
 
     def get_price(self):
+        '''
+        returns the price or empty string
+        '''
         if self.price in [None, 'None']:
             return ""
         else:
-            print self.price
             if self.price.isdigit():
-                return u"Rs. " + smart_str(self.price)
+                return "Rs. " + smart_str(self.price)
             else:
                 return smart_str(self.price)
 
-
     def get_pretty_price(self):
-        if self.price in [None,"None"]:
+        '''
+        returns the price or config.text['no_price'] text
+        '''
+        if self.price in [None, "None"]:
             return config.text['no_price']
         else:
             return self.get_price()
 
-
     def get_volume(self):
-        if self.volume in [None,'None']:
+        '''
+        returns the volume of hte book or 1
+        '''
+        if self.volume in [None, 'None']:
             return 1
         else:
             return smart_str(self.volume)
 
     def get_gifted_by(self):
-        if self.gifted_by in [None,"None"]:
+        '''
+        returns the __str__() operation of gifted_by instance
+        '''
+        if self.gifted_by in [None, "None"]:
             return ""
         else:
             return smart_str(self.gifted_by.__str__())
 
-
     def get_pretty_gifted_by(self):
-        if self.gifted_by in [None,'None']:
+        '''
+        returns __str__() operation of Gifter or helpful message
+        '''
+        if self.gifted_by in [None, 'None']:
             return "Not Gifted By Anyone"
         else:
             return smart_str(self.gifted_by.__str__())
 
     def get_title(self):
-        if self.title in [None,"None"]:
+        '''
+        returns the title of the book or empty string
+        '''
+        if self.title in [None, "None"]:
             return ''
         return smart_str(self.title)
 
     def get_pretty_title(self):
+        '''
+        same as get_title
+        '''
         return self.get_title()
 
     def __str__(self):
+        '''
+        returns the string representation of the object
+        '''
         if self.title is not None:
             return smart_str(self.get_title())
         else:
             return ""
 
-    '''
-    What's up with all the get_* functions you ask?
-    These functions help the template system display data in a meaningful way
-    is all.
-    I don't see any other use for these.
-    '''
+    # What's up with all the get_* functions you ask?
+    # These functions help the template system display data in a meaningful
+    # way. I don't see any other use for these.
 
     @staticmethod
     def get_largest_accession_number():
+        '''
+        static method
+        returns the largest accession number among all the books in Book
+        '''
         return Book.objects.all().order_by("-accession_number")[0].accession_number
 
     def get_borrower(self):
+        '''
+        returns account.models.ModUser object of the person who lent this book
+        or returns None
+        '''
         lends = Lend.objects.filter(book=self,returned=False)
         if len(lends) == 1:
             return lends[0].user
@@ -655,6 +768,10 @@ class Book(models.Model):
             return None
 
     def get_lend_obj(self):
+        '''
+        returns the Lend object of the borrower of the book
+        else,returns None
+        '''
         lends = Lend.objects.filter(book=self,returned=False)
         if len(lends) == 1:
             return lends[0]
@@ -662,42 +779,68 @@ class Book(models.Model):
             return None
 
     def is_borrowed(self):
+        '''
+        checks if book is borrowed
+        '''
         return self.state == 2
 
     def get_authors(self):
-        author_list =  self.author.all()
+        '''
+        returns a string containing all the author's of the book
+        or returns empty string
+        '''
+        author_list = self.author.all()
         if len(author_list) > 0:
-            return "%".join([smart_str(x.get_name()) for x in author_list])
+            return ", ".join([smart_str(x.get_name()) for x in author_list])
         else:
             return ""
 
     def get_pretty_authors(self):
-        author_list =  self.author.all()
+        '''
+        returns a string containing all the author's of the book
+        or returns helpful message
+        '''
+        author_list = self.author.all()
         if len(author_list) > 0:
-            return ", ".join([smart_str(x.get_name()) for x in author_list])
+            return unicode(" र ", encoding="utf-8").join([x.get_name() for x in author_list])
         else:
-            return "No Authors"
-
+            return u"No Authors"
 
     def get_publishers(self):
+        '''
+        returns string contianing publisher
+        or returns empty string
+        '''
         if self.publisher is not None:
             return self.publisher.__str__()
         else:
             return ""
 
     def get_pretty_publishers(self):
+        '''
+        returns string contianing publisher
+        or returns helpful message
+        '''
         if self.publisher is not None:
             return self.publisher.__str__()
         else:
             return "No Publishers"
 
     def get_catalog_publishers(self):
+        '''
+        returns the __catalog() operation of Publicher instance related to
+        this book, else returns empty string
+        '''
         if self.publisher is not None:
             return self.publisher.__catalog__()
         else:
             return ""
 
     def get_keywords(self):
+        '''
+        returns a string containing all the keywords related to this book
+        else, returns empty string
+        '''
         if self.keywords is not None:
             return ", ".join([smart_str(
                 each.__str__()) for each in self.keywords.all() if each.__str__() not in [None, "None", ""]])
@@ -705,6 +848,10 @@ class Book(models.Model):
             return ""
 
     def get_pretty_keywords(self):
+        '''
+        returns a string containing all the keywords related to this book
+        else, returns a helpful message
+        '''
         if self.keywords is not None:
             return ", ".join([smart_str(
                 each.__str__()) for each in self.keywords.all() if each.__str__() is not None])
@@ -712,6 +859,9 @@ class Book(models.Model):
             return "No Keywords"
 
     def set_borrowed_by(self, user, date=None):
+        '''
+        makes a person borrow this book, and changes it's state as well.
+        '''
         if user.is_authenticated():
             if len([1 for x in user.groups.values() if x['name'] == 'member']) != 0:
                 lend_obj = Lend.objects.create(book=self, user = user)

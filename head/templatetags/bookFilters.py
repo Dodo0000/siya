@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 from django import template
 from django.db import models
+from django.core.exceptions import ObjectDoesNotExist
 
-from head.models import Book
+from miscFields.models import GenericField
 from settings.models import Globals
 
 
@@ -10,21 +11,38 @@ from pyBSDate.BSDate import convert_to_bs
 
 register = template.Library()
 
-NONE_LS = [None,"None"]
+NONE_LS = [None, "None"]
+
 
 @register.filter(name="tobs")
 def to_bs(value):
     return convert_to_bs(value)
 
+
+@register.filter(name="get_obj")
+def get_obj(value, arg):
+    return value.eval()
+
+
 @register.filter(name="getBookValue")
-def getBookValue(value,arg):
+def getBookValue(value, arg):
     '''
     The value is a Book class
     '''
     if value not in NONE_LS:
+        # is the arg starts with __gen_,
+        # it is a key for the GenericField class and isn't directly
+        # affiliated to the Book class
+        if arg.startswith("__gen_"):
+            gf = GenericField.objects.get(key=arg[6:])
+            try:  # if the book does not have value for that field, return ""
+                value = gf.value.get(book=value).value
+            except ObjectDoesNotExist:
+                value = ""
+            return value
         if arg == 'call_no':
             return value.get_call_number()
-        elif arg== 'auth':
+        elif arg == 'auth':
             return value.get_authors()
         elif arg == 'title':
             return value.get_title()
@@ -57,17 +75,17 @@ def getBookValue(value,arg):
         elif arg == 'kwds':
             return value.get_keywords()
         elif arg == 'gftd_name':
-            if value.gifted_by == None:
+            if value.gifted_by is None:
                 return ""
             else:
                 return value.gifted_by.get_name()
         elif arg == 'gftd_phn':
-            if value.gifted_by == None:
+            if value.gifted_by is None:
                 return ''
             else:
                 return value.gifted_by.get_phone_no()
         elif arg == "gftd_email":
-            if value.gifted_by == None:
+            if value.gifted_by is None:
                 return ''
             else:
                 return value.gifted_by.get_email()

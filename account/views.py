@@ -50,15 +50,16 @@ def search_member(request):
     config.refresh()
     import string
     username = request.GET.get("username", None)
-    if username is not None:
+    if username not in [None, "", "None"]:
         user = ModUser.objects.filter(username=username)
         if len(user) == 1:
             user = user[0]
             return HttpResponseRedirect(reverse('profile', kwargs={"username": user.username}))
         else:
-            return render(request, 'account/search_user.html', addGlobalContext({'not_found': True, 'username': username, "alphabets": string.ascii_lowercase, 'globals': config, 'date': datetime.date.today()}))
+            users = ModUser.objects.filter(username__contains=username)
+            return render(request, 'account/search_user.html', addGlobalContext({'not_found': True, "users": users, 'username': username}))
     else:
-        return render(request, 'account/search_user.html', addGlobalContext({"alphabets": string.ascii_lowercase,"globals": config, 'date': datetime.date.today()}))
+        return render(request, 'account/search_user.html', addGlobalContext())
 
 
 
@@ -87,7 +88,8 @@ def login_user(request):
     0 : Login Successful
     1 : User is Not Active! Accoutn disabled
     2 : Invalid Login creds!
-    3 : request method was not POST
+    3 : Request was not POST ( It was GET (maybe) )
+    4 : request wasn't either GET or POST
     '''
     code = None
 
@@ -114,10 +116,13 @@ def login_user(request):
         else:
             code = INVALID_LOGIN_CREDS  # invalid login creds
     else:
-        if unicode(request.POST.get('username', None)) is not None and unicode(request.POST.get("password", None)) is not None:
-            code = METHOD_NOT_POST  # request method was not POST
+        usrnme = unicode(request.POST.get("username", None))
+        passwd = unicode(request.POST.get("password", None))
+        print usrnme, passwd
+        if unicode(request.POST.get('username', None)) is not None or unicode(request.POST.get("password", None)) is not None:
+            code = NO_DATA_GIVEN  # request method was not POST
         else:
-            code = NO_DATA_GIVEN
+            code = METHOD_NOT_POST
 
     if code is not LOGIN_SUCCESS:
         # error occured during login proc.
@@ -186,7 +191,6 @@ def addWorkerWithArgs(request, created):
                 worker.save()
                 worker.set_password(password)
                 created = True
-                print "member created with username %s" % member
 
                 return HttpResponseRedirect(reverse("addWorkerWithArgs", kwargs={"created": created}))
 
@@ -266,7 +270,6 @@ def addMemberWithArgs(request, created):
                 member.groups.add(Group.objects.get(name="Member"))
                 member.save()
                 created = True
-                print "member created with username %s" % member
 
                 return HttpResponseRedirect(reverse("addMemberWithArgs", kwargs={"created": created}))
             
@@ -288,7 +291,6 @@ def addMember(request):
 
 @login_required(login_url="/login/")
 def verifySchool(request, userName):
-    print "hello"
     users = ModUser.objects.filter(username=userName)
     if len(users) == 1:
         users[0].school_varified = True

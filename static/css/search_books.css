@@ -31,3 +31,16 @@
 
 .more_info > a{
 }
+
+.gly{
+  color: #666;
+}
+.gly-success:hover, gly-success:active{
+  color: green;
+}
+.gly-info:hover, gly-info:active{
+  color: #337ab7;
+}
+.gly-warning:hover, gly-warning:active{
+  color: orange;
+}

@@ -39,7 +39,6 @@ def deleteGroup(request,group_id):
             deleted = True
         else:
             deleted=False
-        print group_found, deleted
         return render(
                 request,
                 "almsGroups/deleteGroup.html",
@@ -87,7 +86,6 @@ def editGroup(request, group_id):
                         group.permissions.get(codename=perm[0])
                     except ObjectDoesNotExist:
                         perm_spl =  perm[0].split("_")
-                        print perm_spl
                         if perm_spl[1].lower() == "book":
                             group.permissions.add(Permission.objects.get(codename=perm_spl[0]+"_author"))
                             group.permissions.add(Permission.objects.get(codename=perm_spl[0]+"_publisher"))

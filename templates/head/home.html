@@ -1,15 +1,49 @@
 {% extends 'base.html' %}
-{% load format %}
 
 {% load static %}
 {% block css %}
-<link href="{% static 'css/dashboard.css' %}" rel="stylesheet">
 <link href="{% static 'css/home.css' %}" rel="stylesheet">
 {% endblock %}
 
+{% block search_navbar %}
+{% endblock %}
+
+{% block extras %}
+{% endblock %}
 
 {% block content %}
-
-{{ body_code|addSmilies|safe }}
-
+<div style="position: relative; top: 10em" class="container-fluid">
+  <div  class="col col-sm-4 col-sm-offset-4 logo logo_2"></div>
+  <div class="col col-sm-4"></div>
+  <div class="col col-sm-12">
+    <h2 align=center>
+        {{ globals.yalms.org_long_name}}का संग्रहहरुमा खोजी गर्नुहोस्
+    </h2>
+  </div>
+  <div class="col col-sm-8 col-sm-offset-2">
+    {% include "head/search_body.html" %}
+    <br>
+    <div align=center>
+      <a href="{% url 'about-library' %}"> {{ globals.yalms.org_long_name }}का बारेमा {{ globals.text.more_info }}</a>
+    </div>
+  </div>
+  <div class="col col-sm-2"></div>
+  <div class="container">
+    <div align=center class="col col-sm-12">
+      <h3>केही लोकप्रिय किताबहरु</h3>
+      </div>
+    {% for book in popular_books %}
+    <div class="col col-sm-3">
+      <a href="{% url 'book' accNo=book.accession_number  %}">
+        <h4>{% if book.get_authors %}{{ book.get_pretty_authors }}को   {% endif %} {{ book.get_pretty_title }}</h4>
+      </a>
+      <p>
+	{% if book.get_keywords %}{{ globals.text.keywords }} : {{ book.get_pretty_keywords }}{% endif %}
+      </p>
+      <p>
+	{% if book.get_publishers %}{{ globals.text.publisher }} - {{ book.get_pretty_publishers }}{% endif %}
+    </div>
+    {% endfor %}
+  </div>
+</div>
 {% endblock %}

@@ -81,7 +81,7 @@ var max_accession_number = parseInt("{{ largest_accession_number }}", 10);
     <div class="form-group">
       <label>{{ each.0.1.0|nepali }}</label>
       <font id="input-font" face=''>
-        <input type="text" id="{{ each.0.0 }}" mid="{{ each.0.1.1  }}" style="width:100%;" name="{{ each.0.1.0 }}" value="{{ book|getBookValue:each.0.1.1 }}"  placeholder="{{ each.0.1.0|nepali }}" class="form-control input input-{{ each.0.1.1 }}" required {% if each.0.0 == 1 %} autofocus {% endif %} spellcheck="true">
+        <input type="text" id="{{ each.0.0 }}" mid="{{ each.0.1.1  }}" style="width:100%;" name="{{ each.0.1.0 }}" value="{{ book|getBookValue:each.0.1.1 }}"  placeholder="{{ each.0.1.0 }}" class="form-control input input-{{ each.0.1.1 }}" required {% if each.0.0 == 1 %} autofocus {% endif %} spellcheck="true">
       </font>
     </div>
     {% endif %}
@@ -91,7 +91,7 @@ var max_accession_number = parseInt("{{ largest_accession_number }}", 10);
     <div class="form-group">
       <label>{{ each.1.1.0|nepali }}</label>
       <font id="input-font" face=''>
-        <input type="text" id="{{ each.1.0 }}" mid="{{each.1.1.1  }}" style="width:100%"  name="{{ each.1.1.0 }}" value="{{ book|getBookValue:each.1.1.1 }}" placeholder="{{ each.1.1.0|nepali }}" class="form-control input input-{{ each.1.1.1 }}" required {% if each.1.0 == 1 %} autofocus {% endif %} spellcheck="true">
+        <input type="text" id="{{ each.1.0 }}" mid="{{each.1.1.1  }}" style="width:100%"  name="{{ each.1.1.0 }}" value="{{ book|getBookValue:each.1.1.1 }}" placeholder="{{ each.1.1.0 }}" class="form-control input input-{{ each.1.1.1 }}" required {% if each.1.0 == 1 %} autofocus {% endif %} spellcheck="true">
       </font>
     </div>
   </div>

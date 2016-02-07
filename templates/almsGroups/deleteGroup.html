@@ -28,14 +28,21 @@
 </h3>
 {% if deleted == False %}
 
-<div class="well" align=center>
-  <label>
-    Do You Really Want To Delete This Group?
-  </label>
-  <form method="POST">{% csrf_token %}
-    <input type="hidden" value="1" name="really_delete">
-    <input type="submit" class="btn btn-success" value="Yes">
-  </form>
+<div class="container-fluid">
+  <div class="col col-sm-6 col-sm-offset-2">
+    <h4>
+      Do You Really Want To Delete This Group?
+    </h4>
+  </div>
+</div>
+<div class="container-fluid">
+  <div class="col col-sm-6 col-sm-offset-4">
+    <form method="POST">{% csrf_token %}
+      <input type="hidden" value="1" name="really_delete">
+      <input type="submit" class="btn btn-success" value="Yes">
+      <a href="{% url 'almsGroupsHome' %}" class="btn btn-primary">No</a>
+    </form>
+  </div>
 </div>
 
 {% elif group_found == False %}

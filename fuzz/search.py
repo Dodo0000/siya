@@ -27,7 +27,7 @@ def search(needle, heystack):
             for heyeach in heystackl:
                 if needeach in heyeach:
                     ranks[needlel.index(needeach)].append(
-                            1 - 1./(len(heystack) - heystack.index(heyeach)))
+                            1 - 1./max(len(heystack) - heystack.index(heyeach),1))
                 else:
                     seq = SequenceMatcher(None,needeach,heyeach)
                     ranks[needlel.index(needeach)].append(seq.ratio())

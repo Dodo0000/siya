@@ -30,7 +30,7 @@ function saveBook(){
    * */
   acc_no = $(".input-acc_no").val();
   var book_exists = true;
-  $.get("/book/validate",{accNo: parseInt(acc_no)}).success(function(data){
+  $.get("/head/book/validate",{accNo: parseInt(acc_no)}).success(function(data){
     if (data.exists == 0)
       book_exists = false;
     console.log("book exists: " + book_exists.toString());
@@ -45,7 +45,7 @@ function saveBook(){
       post_data.csrfmiddlewaretoken = document.getElementsByName("csrfmiddlewaretoken")[0].value;
       console.log(post_data);
 
-      $.post('/book/add', post_data, function(data){
+      $.post('/head/book/add', post_data, function(data){
         if (data.success === true){
           max_accession_number = data.acc_no;
           $(".current_acc_no").text(max_accession_number);

@@ -1,4 +1,3 @@
-__author__ = 'sushil'
 
 import re
 import os
@@ -7,14 +6,27 @@ from cexceptions import InvalidDate, InvalidDateFormat
 
 from django.conf import settings
 
-date_map_file = os.path.join(settings.BASE_DIR,"pyBSDate","datemap.json")
+import datetime
+
+__author__ = 'sushil'
+
+date_map_file = os.path.join(settings.BASE_DIR, "pyBSDate", "datemap.json")
 DATE_MAP = json.load(open(date_map_file))
 AD_MONTH_DAYS = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 AD_MONTH_DAYS_LEAP = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 
+
+class natetime(datetime.datetime):
+    def __init__(self, year, month, day):
+        self.year = year
+        self.month = month
+        self.day = day
+
+
 def validate_date_bs(year, month, day):
     '''
-    Answers BS date is valid or not. Raise InvalidDate exception if date is invalid.
+    Answers BS date is valid or not.
+    Raise InvalidDate exception if date is invalid.
     :param year:
     :param month:
     :param day:
@@ -25,38 +37,42 @@ def validate_date_bs(year, month, day):
     if not year_calendar:
         raise DateOutOfRange
 
-    if month>12 or day>32:
+    if month > 12 or day > 32:
         raise InvalidDate
 
     # Month have valid days
     days_in_month = year_calendar['daysonmonth']
     day_in_month = days_in_month[month-1]
-    if day>day_in_month:
+    if day > day_in_month:
         raise InvalidDate
 
     return True
 
+
 def validate_date_ad(year, month, day):
     '''
-    Answers AD date is valid or not. Raise InvalidDate exception if date is invalid.
+    Answers AD date is valid or not.
+    Raise InvalidDate exception if date is invalid.
     :param year:
     :param month:
     :param day:
     :return:
     '''
-    # chop off tails we don't want our code to break and too lazy to chop off precise
+    # chop off tails we don't want our code to break
+    # and too lazy to chop off precise
     validate_date_bs(year+56, 1, 1)
     validate_date_bs(year+57, 1, 1)
 
-    if month>12 or day>31:
+    if month > 12 or day > 31:
         raise InvalidDate
 
     days_in_month = AD_MONTH_DAYS
     if is_leap_year(year):
         days_in_month = AD_MONTH_DAYS_LEAP
     day_in_month = days_in_month[month-1]
-    if day>day_in_month:
+    if day > day_in_month:
         raise InvalidDate
+
 
 def _bs_to_ad(year, month, day):
     '''

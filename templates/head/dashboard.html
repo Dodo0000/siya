@@ -9,15 +9,33 @@
 
 
 {% block content %}
-
 <div class="container-fluid">
+  <!--
+      The following menu has the following structure. 
+      [ Note that the structure and content will be different for different
+      users depending on their permission levels.]
+
+
+              {{ globals.text.add_person }}
+                            |
+                            |
+                            |
+              _____________________________
+              |                           |
+              |                           |
+        Add a new member           Add a new worker 
+
+  -->
   <div class="actions" align=center>
     <div class="btn-group">
       <a title="Manage Permission Groups" href="{% url 'almsGroupsHome' %}" class="btn btn-lg btn-primary">{{ globals.text.permissions }}</a>
       <a title="Manage Book Data" href="{% url 'booktoolHome'%}" class="btn btn-lg btn-primary">{{ globals.text.books }}</a>
       <a title="Manage Home Page" href="{% url 'writeHomeBody' %}" class="btn btn-lg btn-primary">{{ globals.text.home }}</a>
       <a href="" class="btn btn-lg btn-primary">{{ globals.text.groups }}</a>
-      {% if request.user.groups.all.0.name == 'librarian' %}<a href="{%  url 'settingsHome' %}" class="btn btn-lg btn-primary">{{ globals.text.settings }}</a>{% endif %}
+      {% if request.user.is_superuser %}
+      <a href="{%  url 'settingsHome' %}" class="btn btn-lg btn-primary">{{ globals.text.settings }}</a>
+      <a href="{%  url 'addWorker' %}" class="btn btn-lg btn-primary">{{ globals.text.worker }}हरु</a>
+      {% endif %}
       <a href="{% url 'addMember' %}" class="btn btn-lg btn-primary">{{ globals.text.members }}</a>
     </div>
   </div>
@@ -33,30 +51,30 @@
     <tbody>
       <tr>
         <td>
-          {{ start_date|tobs|no_to_np }} सम्म
+          {{ start_date|tobs }} सम्म
         </td>
         <td>
-          {{ members_added_before_tp|length|no_to_np }}
+          {{ members_added_before_tp|length }}
         </td>
         <td>
-          {{ books_cataloged_before_tp|length|no_to_np }}
+          {{ books_cataloged_before_tp|length }}
         </td>
         <td>
-          {{ late_fees_charged_before_tp|no_to_np }}
+          {{ late_fees_charged_before_tp }}
         </td>
       </tr>
       <tr>
         <td>
-          अघिल्लो {{ time_period|no_to_np }} महिना - {{ start_date|tobs|no_to_np}} देखि {{ date|tobs|no_to_np}} सम्म
+          अघिल्लो {{ time_period }} महिना - {{ start_date|tobs|no_to_np}} देखि {{ date|tobs|no_to_np}} सम्म
         </td>
         <td>
-          {{ members_added_during_tp|length|no_to_np }}
+          {{ members_added_during_tp|length }}
         </td>
         <td>
-          {{ books_cataloged_during_tp|length|no_to_np }}
+          {{ books_cataloged_during_tp|length }}
         </td>
         <td>
-          {{ late_fees_charged_during_tp|no_to_np }}
+          {{ late_fees_charged_during_tp }}
         </td>
       </tr>
       <tr>
@@ -64,13 +82,13 @@
           {{globals.text.total}}
         </td>
         <td>
-          {{ total_members|length|no_to_np }}
+          {{ total_members|length }}
         </td>
         <td>
-          {{ total_books|length|no_to_np }}
+          {{ total_books|length }}
         </td>
         <td>
-          {{ total_fees_charged|no_to_np }}
+          {{ total_fees_charged }}
         </td>
       </tr>
     </tbody>
@@ -125,7 +143,7 @@
       <tr>
         <td> {{ member.get_name }} </td>
         <td> {{ member.username }} </td>
-        <td> {{ member.school_name }} </td>
+        <td> {{ member.school_name|nepali }} </td>
         <td> {{ member.date_joined.date|nepali }} </td>
       </tr>
       {% endfor %}

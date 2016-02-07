@@ -2,13 +2,51 @@
 {% load nepali %}
 {% load datefilters %}
 {% load group_filters %}
+{% load bookFilters %}
 
 {% block content %}
+
+<div id="addNewField" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span class="glyphicon glyphicon-remove"></span>
+        </button>
+        <h4 class="modal-title">{{ globals.text.add_new_field }}</h4>
+      </div>
+      <div class="modal-body">
+        <form action="{% url 'addNewField' %}" method="POST">
+          {% csrf_token %}
+          <div class="input-group">
+            <span class="input-group-addon" id="basic-addon1">{{ globals.text.field_name }} </span>
+            <input type="text" name="key" class="form-control" placeholder="{{ globals.text.field_name }}" aria-describedby="basic-addon1">
+          </div>
+          <input type="hidden" name="accNo" value="{{ book.accession_number }}">
+        </div>
+        <div class="modal-footer">
+          <input type="submit" value="Add" class="btn btn-primary">
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+
 <div class="container-fluid">
   <div class=" btn-group">
     {% if book.is_discarded == False and user.is_authenticated == True and user|hasPerm:"head.change_book" and user|hasPerm:"head.delete_book" %}
     <a class="btn btn-warning" href="{% url 'delete_book_confirm' book.get_accession_number %}">
       <span class="glyphicon glyphicon-remove"></span> {{ globals.text.discard_book }}
+    </a>
+    <a class="btn btn-warning" data-toggle="modal" data-target="#addNewField" >
+      <span class="glyphicon glyphicon-plus"></span> {{ globals.text.add_new_field }}
+    </a>
+    <a class="btn btn-warning" href="{% url 'miscFieldsHome' %}" >
+      <span class="glyphicon glyphicon-book"></span> {{ globals.text.see_all_new_fields }}
     </a>
     <a class="btn btn-info" href="{% url 'editEntry' acc_no=book.get_accession_number %}">
       <span class="glyphicon glyphicon-edit"></span> {{ globals.text.edit_book }}
@@ -29,15 +67,19 @@
   </div>
 
   <h3>
-    <div>
-      <span class="text-info">
-        {% if book.get_authors != "" %}{{ book.get_authors|title }} को {% endif %}
-      </span>
-      <i>
-        <span class="{% if book.is_borrowed %}text-warning glyphicon glyphicon-info-sign{% elif book.is_discarded %}text-danger glyphicon glyphicon-remove-sign{% else %}text-success glyphicon glyphicon-ok-sign{% endif %}"></span> <span class="text-primary">
-          {{ book.title|title }}
+    <div class="row">
+      <div class="col col-sm-1"> <span class="{% if book.is_borrowed %}text-warning glyphicon glyphicon-info-sign{% elif book.is_discarded %}text-danger glyphicon glyphicon-remove-sign{% else %}text-success glyphicon glyphicon-ok-sign{% endif %}"></span> 
+      </div>
+      <div class="col col-sm-11">
+        <span class="text-info">
+          {% if book.get_authors %}{{ book.get_pretty_authors|title }}को {% endif %}
         </span>
-      </i>
+        <i>
+          <span class="text-primary">
+            {{ book.get_pretty_title|title }}
+          </span>
+        </i>
+      </div>
     </div>
   </h3>
   {% if book.is_borrowed %}
@@ -50,10 +92,16 @@
     <tr> 
       <td>{{ each.0|nepali }}</td>
       {% if each.0 == "Author" %}
-      <td><a href="/search/book/?type={{ globals.text.author }}&search={{each.1}}">{{ each.1|title }}</a></td>
+      <td><a href="/head/search/book/?type={{ globals.text.author }}&search={{each.1}}">{{ each.1|title }}</a></td>
       {% else %}
       <td >{{each.1|title}}</td>
       {% endif %}
+    </tr>
+    {% endfor %}
+    {% for field in genericFields %}
+    <tr>
+      <td>{{ field.0 }}</td>
+      <td>{{ field.1 }}</td>
     </tr>
     {% endfor %}
     <tr>

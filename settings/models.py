@@ -164,7 +164,6 @@ def no_to_en(value):
         u'\u096f',
         ]
     out = ""
-    print value+"||"+",".join(nepali_numbers)
     for _ in value:
         if _ in nepali_numbers:
             out += unicode(nepali_numbers.index(_))
