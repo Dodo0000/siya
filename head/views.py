@@ -239,7 +239,8 @@ def add_book(request):
             gifter_phn = each['gftd_phn']
             gifter_email = each['gftd_email']
             # only create new database object if the data has been changed
-            if (book.gifted_by is None and gifter_name not in [None, '']) or gifter_name.lower() != book.gifted_by.gifter_name.lower() or gifter_email != book.gifted_by.email or gifter_phn != book.gifted_by.phone:
+
+            if book.gifted_by is None or (gifter_name not in [None, ''] or gifter_name.lower() != book.gifted_by.get_name().lower() or gifter_email != book.gifted_by.get_email() or gifter_phn != book.gifted_by.get_phone_no()):
                 gifter = Gifter.objects.get_or_create(gifter_name=gifter_name)
                 gifter = gifter[0]
                 if gifter_phn.isdigit():
@@ -406,7 +407,7 @@ def report(request):
 def home(request):
     config.reload()
     home_template = "head/home.html"
-    return render(request, home_template, addGlobalContext({"popular_books": Book.objects.order_by("?")[0:4]}))
+    return render(request, home_template, addGlobalContext({"popular_books": Book.objects.order_by("?")[0:3]}))
 
 
 def about(request):

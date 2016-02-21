@@ -28,6 +28,8 @@ from miscFields.models import GenericField
 
 import datetime
 
+from pyBSDate.BSDate import convert_to_bs
+
 
 config = Globals()
 
@@ -153,6 +155,16 @@ class Publisher(models.Model):
             return ""
         return smart_str(self.year)
 
+    def get_nepali_year(self):
+        if self.year.isdigit():
+            year = int(self.year)
+        else:
+            return self.year
+        if year > datetime.datetime.today().year:  # date is in nepali
+            return unicode(year)
+        else:  # date is in english
+            return unicode(year+52) + u' वि.सं'
+
     def __str__(self):
         '''
         returns a str object for the publisher object.
@@ -169,19 +181,20 @@ class Publisher(models.Model):
         out = u''  # return value
         if self.name == [u"", "", None]:
             out = smart_str("")
-        elif (self.year == 0 or self.year == u'0') and self.place not in [None, 'None'] and self.name not in [None, 'None']:
+        elif (self.year == 0 or self.year == u'0' or self.year.isdigit() is False) and self.place not in [None, 'None'] and self.name not in [None, 'None']:
             out = smart_str(u"{0}, {1}".format(
                 self.name,
                 self.place))
-        elif self.place in [None, 'None'] and self.year not in [None, 'None', '0'] and self.name not in [None, 'None']:
-            out = smart_str(u"{0} in {1}".format(
+        elif self.place in [None, 'None'] and self.year not in [None, 'None', '0', 0] and self.name not in [None, 'None']:
+            out = smart_str(u"{0} - {1} मा".format(
                 self.name,
-                self.year))
+                self.get_nepali_year()))
         else:
-            out = smart_str(u"{0}, {1} in {2}".format(
+            # fixing a little problem with self.year
+            out = smart_str(u"{0}, {1} - {2} मा".format(
                 self.name,
                 self.place,
-                self.year))
+                self.get_nepali_year()))
         if out.strip(" ") == ",":  # if the output is only a "," return nothing
             return ""
         return out

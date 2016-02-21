@@ -106,13 +106,12 @@ body{font-family: "kalimati";background-color:#fff;height:100%;}.errorlist{color
   </div> <!-- container-fluid -->
 
   {% block extras %}
-
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-sm-3 col-md-2 sidebar">
-        <ul class="nav nav-sidebar" align=center>
-          <li class="logo" ></li>
-        </ul>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar" id="sidePanel">
+          <ul class="nav nav-sidebar" align=center>
+            <li class="logo" ></li>
+          </ul>
           <ul class="nav nav-sidebar">
             {% if request.user.is_authenticated %}
             <li><a href="{% url 'dashboard' %}"><span class="glyphicon glyphicon-dashboard"></span> {{ globals.text.dashboard }}</a></li>
@@ -139,11 +138,12 @@ body{font-family: "kalimati";background-color:#fff;height:100%;}.errorlist{color
             {% endif %}
             </li>
           </ul>
-      </div>
-      <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-        <h2 class="page-header">{{ globals.yalms.org_long_name }}</h2>
-        <h4><span class="text-info page-subheader">{{ globals.yalms.org_motto }}</span></h4>
-
+        </div> <!-- sidePanel -->
+        <div class="col col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+        {% endblock %}
+        {% block title-tag %}
+          <h2 class="page-header">{{ globals.yalms.org_long_name }}</h2>
+          <h4><span class="text-info page-subheader">{{ globals.yalms.org_motto }}</span></h4>
         {% endblock %}
 
         {% block content %}
@@ -163,6 +163,7 @@ body{font-family: "kalimati";background-color:#fff;height:100%;}.errorlist{color
 <script src="{% static 'bootstrap/js/jquery.js' %}"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/all_pages.js' %}"></script>
 
 {% block post-js-external %}
 {% endblock %}
