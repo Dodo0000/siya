@@ -7,3 +7,4 @@ markdown
 simpleyaml
 configparser
 django-widget-tweaks
+django-markdown
