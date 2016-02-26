@@ -2,7 +2,6 @@
 
 ## download from github
 sudo apt-get install git
-sudo apt-get install nginx
 pip install --user -r install_requirements.txt
 
 cd ~
