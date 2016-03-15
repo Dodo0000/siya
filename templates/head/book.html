@@ -88,13 +88,13 @@
   </div>
   {% endif %}
   <table class="table table-hover table-responsive">
-    {% for each in book.get_all_attr %}
+    {% for each in book.get_all_attr_for_spreadsheet %}
     <tr> 
       <td>{{ each.0|nepali }}</td>
       {% if each.0 == "Author" %}
       <td><a href="/head/search/book/?type={{ globals.text.author }}&search={{each.1}}">{{ each.1|title }}</a></td>
       {% else %}
-      <td >{{each.1|title}}</td>
+      <td >{{each.1}}</td>
       {% endif %}
     </tr>
     {% endfor %}
@@ -120,9 +120,9 @@
       </td>
       <td>
 	{% if book.is_borrowed == False %}
-  <span class="text-success"> <b>{{globals.text.no}}</b>, the book isn't borrowed</span>
+  <span class="text-success"> <b>{{globals.text.no}}</b></span>
 	{% elif late_fees != 0 %}
-  <span class="text-warning"><b>{{globals.text.yes}}</b>, late fees :<i>{{ late_fees }}</i></span>
+  <span class="text-warning"><b>{{globals.text.yes}}</b>, {{ globals.text.late_fees }} :<i>{{ late_fees }}</i></span>
 	{% elif late_fees == 0 %}
   <span class="text-success"><b>{{globals.text.no}}</b></span>
 	{% endif %}
@@ -140,7 +140,7 @@
     </thead>
     {% for booksaver in book.saved_by.all %}
     <tr>
-      <td>{{booksaver.user.get_name}}</td>
+      <td><a href="{% url 'profile' booksaver.user.username %}">{{booksaver.user.get_name}}</a></td>
       <td>{{booksaver.date|date:"d M Y"|nepali}}, {{ booksaver.date|date:"H:i A" }}</td>
     </tr>
     {% endfor %}

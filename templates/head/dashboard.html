@@ -30,7 +30,9 @@
     <div class="btn-group">
       <a title="Manage Permission Groups" href="{% url 'almsGroupsHome' %}" class="btn btn-lg btn-primary">{{ globals.text.permissions }}</a>
       <a title="Manage Book Data" href="{% url 'booktoolHome'%}" class="btn btn-lg btn-primary">{{ globals.text.books }}</a>
+      {% if request.user.is_staff %}
       <a title="Manage Home Page" href="{% url 'writeHomeBody' %}" class="btn btn-lg btn-primary">{{ globals.text.home }}</a>
+      {% endif %}
       <a href="" class="btn btn-lg btn-primary">{{ globals.text.groups }}</a>
       {% if request.user.is_superuser %}
       <a href="{%  url 'settingsHome' %}" class="btn btn-lg btn-primary">{{ globals.text.settings }}</a>

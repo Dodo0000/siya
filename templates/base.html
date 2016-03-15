@@ -85,7 +85,13 @@ body{font-family: "kalimati";background-color:#fff;height:100%;}.errorlist{color
             {% include "head/search_navbar.html" %}
             {% endblock %}
             <ul class="nav navbar-nav navbar-right">
-              <li><a class="navbar-inactive" >{{date|tobs|pdate}} | {{ date|date:"d M Y"}}</a></li>
+              <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Address<span class="glyphicon glyphicon-menu-down"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="http://{{ ip_addr }}:8000" class="navbar-inactive" ><font face="monospace">http://{{ ip_addr }}:8000</font></a></li>
+              </ul>
+              </li>
+              <li><a class="navbar-inactive" title="{{ date|date:"d M Y"}}" href="javascript:swapDate();" id="navDateElement">{{date|tobs|pdate}} </a></li>
               {% if request.user.is_authenticated %}
               <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ request.user.first_name|title }} <span class="glyphicon glyphicon-menu-down"></span></a>
@@ -168,6 +174,19 @@ body{font-family: "kalimati";background-color:#fff;height:100%;}.errorlist{color
 {% block post-js-external %}
 {% endblock %}
 <script>
+var np_date = "{{date|tobs|pdate}}";
+var en_date = "{{ date|date:"d M Y" }}";
+function swapDate(){
+  var element = x = document.getElementById("navDateElement");
+  if (element.text == en_date){
+    element.text = np_date;
+    element.title = en_date;
+  }
+  else{
+    element.text = en_date;
+    element.title = np_date;
+  }
+}
 {% block post-js-internal %}
 {% endblock %}
 </script>

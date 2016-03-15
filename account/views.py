@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.views.decorators.csrf import csrf_protect
@@ -150,6 +150,7 @@ def create_username(*args):
 
 
 @login_required(login_url="/login")
+@permission_required(("add_moduser"))
 def addWorkerWithArgs(request, created):
     config.refresh()
     form = CreateWorkerForm()
@@ -188,8 +189,8 @@ def addWorkerWithArgs(request, created):
                         worker.groups.add(group_grp[0])
                 # school_number and telephone_mobile are not added
                 worker.is_staff = True
-                worker.save()
                 worker.set_password(password)
+                worker.save()
                 created = True
 
                 return HttpResponseRedirect(reverse("addWorkerWithArgs", kwargs={"created": created}))
@@ -205,6 +206,7 @@ def addWorkerWithArgs(request, created):
 
 
 @login_required(login_url="/login/")
+@permission_required(("add_moduser"))
 def addWorker(request):
     config.refresh()
     return addWorkerWithArgs(request, created=False)
@@ -212,6 +214,7 @@ def addWorker(request):
 
 
 @login_required(login_url="/login")
+@permission_required(("add_moduser"))
 def addMemberWithArgs(request, created):
     config.refresh()
     form = CreateMemberForm()
@@ -284,6 +287,7 @@ def addMemberWithArgs(request, created):
                 )
 
 @login_required(login_url="/login/")
+@permission_required(("add_moduser"))
 def addMember(request):
     config.refresh()
     return addMemberWithArgs(request,created=False)

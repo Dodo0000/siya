@@ -8,6 +8,8 @@ from django.conf import settings
 import os
 import codecs
 
+from miscFields.models import GenericField
+
 
 import hashlib
 
@@ -74,8 +76,8 @@ class Globals:
         self.db_load()
 
     def refresh(self):
-        self.load();
-        self.reload();
+        self.load()
+        self.reload()
 
     def file_is_same(self):
         checksum = md5Checksum(CONFIG_INI)
@@ -92,7 +94,6 @@ class Globals:
     def save(self):
         with codecs.open(CONFIG_INI, "w", encoding="utf-8") as configfile:
             self.config.write(configfile)
-
 
 
 class AccessionNumberCount(models.Model):
@@ -118,6 +119,8 @@ class AccessionNumberCount(models.Model):
 
 
 config = Globals()
+
+
 TYPES = [
     config.text['title'],
     config.text['author'],
@@ -128,7 +131,14 @@ TYPES = [
     ]
 
 
+def get_ip_addr():
+    import socket
+    return socket.gethostbyname(socket.gethostname())
+
+
 def addGlobalContext(context=None):
+    types = TYPES + ["."+_.get_key() for _ in GenericField.objects.all()]
+    print types
     global_dict = {
         "globals": Globals(),  # user Globals() not config because the updates
         # to config files need to be seen immediately
@@ -136,7 +146,8 @@ def addGlobalContext(context=None):
         "date": datetime.date.today(),
         'main_color': "#"+str(config.main_color),
         'accent_color': "#"+str(config.accent_color),
-        'types': TYPES
+        'types': types,
+        'ip_addr': get_ip_addr()
         }
     if context is not None and context.__class__ == dict:
         context.update(global_dict)
@@ -187,3 +198,5 @@ def no_to_np(value):
             else:
                 out += np_txt
     return out
+
+

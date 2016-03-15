@@ -46,6 +46,7 @@ import json
 import time
 
 from fuzz.search import searchBookTitle, searchBookAuthor, searchBookKeywords
+from fuzz.search import searchGenericField
 
 # Create your views here.
 
@@ -407,7 +408,8 @@ def report(request):
 def home(request):
     config.reload()
     home_template = "head/home.html"
-    return render(request, home_template, addGlobalContext({"popular_books": Book.objects.order_by("?")[0:3]}))
+    context = addGlobalContext({"popular_books": Book.objects.order_by("?")[0:3]})
+    return render(request, home_template, context)
 
 
 def about(request):
@@ -423,12 +425,7 @@ def dashboard(request):
 
     logged_in = request.META.get('logged_in', None)
     today = datetime.date.today()
-    if today.month - TIME_PERIOD < 0:
-        month = 12 - today.month - TIME_PERIOD
-        start_date = datetime.date(today.year - 1, month, min(today.day, calendar.monthrange(today.year-1, month)[1]))
-    else:
-        month = today.month - TIME_PERIOD
-        start_date = datetime.date(today.year, month, min(today.day, calendar.monthrange(today.year, month)[1]))
+    start_date = today - datetime.timedelta(days=TIME_PERIOD*30)
 
     # problem, the _gte filter with `today' excludes the data entered on today...fix this
     time_period = today - start_date
@@ -515,28 +512,32 @@ def searchBook(request):
 
     if value is not None:
         value = value.split(" ")
-        if type_ in TYPES:
-            if type_ == config.text['title']:
-                books = searchBookTitle(" ".join(value), all_books)
-            elif type_ == config.text['call_number']:
-                books = Book.objects.filter(call_number__contains=value[0], state=0).order_by("call_number")
-            elif type_ == config.text['accession_number']:
-                books = Book.objects.filter(
-                    state=0,
-                    accession_number__contains=no_to_en(value[0])).order_by("-accession_number")
+        if type_.startswith("."):  # search in generic fields. ( generic field types start with .)
+            gen_field = GenericField.objects.filter(key=type_[1:])
+            if len(gen_field) == 1:
+                gen_field = gen_field[0]
+                books = searchGenericField(" ".join(value), gen_field)
+        if type_ == config.text['title']:
+            books = searchBookTitle(" ".join(value), all_books)
+        elif type_ == config.text['call_number']:
+            books = Book.objects.filter(call_number__contains=value[0], state=0).order_by("call_number")
+        elif type_ == config.text['accession_number']:
+            books = Book.objects.filter(
+                state=0,
+                accession_number__contains=no_to_en(value[0])).order_by("-accession_number")
 
-            elif type_ == config.text['keyword']:
-                books = searchBookKeywords(" ".join(value), all_books)
-            elif type_ == config.text['publisher']:
-                books = Book.objects.filter(publisher__name__contains=value[0], state=0).order_by("publisher__name")
-                for each in value[1:]:
-                    bookf = books.filter(publisher__name__contains=each, state=0).order_by("publisher__name")
-                    if bookf.count() > 0:
-                        books = bookf
-                    else:
-                        break
-            elif type_ == config.text['author']:
-                books = searchBookAuthor(" ".join(value), all_books)
+        elif type_ == config.text['keyword']:
+            books = searchBookKeywords(" ".join(value), all_books)
+        elif type_ == config.text['publisher']:
+            books = Book.objects.filter(publisher__name__contains=value[0], state=0).order_by("publisher__name")
+            for each in value[1:]:
+                bookf = books.filter(publisher__name__contains=each, state=0).order_by("publisher__name")
+                if bookf.count() > 0:
+                    books = bookf
+                else:
+                    break
+        elif type_ == config.text['author']:
+            books = searchBookAuthor(" ".join(value), all_books)
         booklist = books
         if len(booklist) == 0:
             not_found = True
@@ -603,8 +604,11 @@ def bookInfo(request, accNo):
         try:
             genFieldLink = _.value.get(book=book)
         except ObjectDoesNotExist:
-            genFieldLink = ""
-        generic_fields.append((_, genFieldLink))
+            genFieldLink = None
+        if genFieldLink is not None:
+            generic_fields.append((_, genFieldLink.get_value()))
+        else:
+            generic_fields.append((_, ""))
 
     return render(request,
                   "head/book.html",

@@ -4,6 +4,12 @@
 * Improve the Find Person Interface - 
     * fix dates when converted to nepali
     * Change Nepali -Preeti/Kantipur to unicode
+* add the following in the list of search-filters
+    * all fields
+    * generic fields
+    * starts with "x"
+    * ends with "x"
+    * contains "x"
 
 ### Medium Priority - Things to do this month
 

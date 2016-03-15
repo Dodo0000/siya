@@ -137,7 +137,7 @@ class Publisher(models.Model):
         '''
         if self.name in [None, "None"]:
             return ""
-        return smart_str(self.name)
+        return smart_str(self.name).title()
 
     def get_place(self):
         '''
@@ -528,7 +528,7 @@ class Book(models.Model):
         value = (
             ('Accession Number', self.get_accession_number()),
             ('Call Number', self.get_call_number()),
-            ('Title', self.get_title()),
+            ('Title', self.get_pretty_title()),
             ('Author', self.get_authors()),
             ('Publisher Name', self.get_publisher_name()),
             ('Year Of Publication', self.get_published_year()),
@@ -746,7 +746,7 @@ class Book(models.Model):
         '''
         same as get_title
         '''
-        return self.get_title()
+        return self.get_title().title()
 
     def __str__(self):
         '''
