@@ -18,3 +18,6 @@ To install on a debian system, run this :
   The above code will start the server and run it in the default browser.
 
   To start the server again, simply go to the `alms` directory and run start.sh
+
+
+###__Programmer's Documentation__ is on our [wiki page](https://github.com/ayys/alms/wiki)
