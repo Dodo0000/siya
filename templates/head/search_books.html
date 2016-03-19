@@ -41,13 +41,13 @@
             <a href="{% url 'book' book.accession_number %}"> <span class="glyphicon glyphicon-book text-primary"></span> {{book.get_title}}</a>
           </div> <!-- title div -->
           <div class="book_prop authors">
-            {{ globals.text.authors }}<i> {{book.get_pretty_authors}}</i>
+            {{ globals.text.authors }} : <i>{% if book.get_authors %} {{book.get_authors}} {% else %}{{ globals.text.no_authors }}{% endif %}</i>
           </div> <!-- authors div -->
           <div class="book_prop keywords">
             {{ globals.text.keywords}} :<i> {{book.get_pretty_keywords}}</i>
           </div> <!-- keywords div -->
           <div class="book_prop publishers">
-            {{ globals.text.published_by }} <i> {{book.get_pretty_publishers}}</i>
+            {{ globals.text.publisher }} : <i> {{book.get_pretty_publishers}}</i>
           </div> <!-- publishers div -->
           <div class="misc">
             <div class="book_prop col col-sm-3 accession_number">
@@ -57,7 +57,7 @@
               {{ globals.text.call_number }} : {{book.get_call_number}}
             </div> <!-- call_number div -->
             <div class="book_prop col col-sm-3 series">
-              {{ globals.text.series }} : {{book.get_pretty_series}}
+              {{ globals.text.series }} :{% if book.get_series %} {{book.get_pretty_series}}{% else %}{{ globals.etxt.no_series}}{% endif %}
             </div> <!-- series div -->
             <div class="book_prop col col-sm-3 edition">
               {{ globals.text.edition }} : {{book.get_pretty_edition}}
