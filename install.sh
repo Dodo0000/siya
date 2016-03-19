@@ -13,7 +13,7 @@ echo "Removed old version of ALMS in the current directory"
 
 echo "Downloading the latest version of ALMS..."
 
-wget https://github.com/ayys/alms/archive/master.zip -O alms.zip
+wget https://github.com/ayys/alms/archive/master.tar.gz -O alms.tar.gz
 
 echo "Done Downloading the latest version of ALMS"
 
@@ -21,7 +21,7 @@ echo "Extracting alms.zip into the alms in the current directory..."
 
 mkdir alms
 cd alms
-tar -xvf alms.zip
+tar -xvf alms.tar.gz
 
 echo "Done extracting alms"
 
