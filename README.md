@@ -1,4 +1,5 @@
-# ALMS - ALMS Library Management System
+# THIS PROJECT IS DEPRECIATED FOR [SIYA](https://github.com/ayys/siya)
+## ALMS - ALMS Library Management System
 #####[Currently Being Hosted At [Nepal Japan Children Library](https://www.facebook.com/Nepal-Japan-Children-Library-117390398337579), Lainchaur, Kathmandu]
 ALMS is a Django Based Library Management System
 
