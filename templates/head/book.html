@@ -69,16 +69,7 @@
   <h3>
     <div class="row">
       <div class="col col-sm-1">
-	<div class="btn-group dropdown">
-  <span class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                           <span {% if book.is_borrowed %}class="text-warning glyphicon glyphicon-info-sign" title="{{ globals.book_is_borrowed }}"{% elif book.is_discarded %}class="text-danger glyphicon glyphicon-remove-sign"{% else %} title="{{ globals.text.book_is_available }}" class="text-success glyphicon glyphicon-ok-sign"{% endif %} data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ></span>
- <span class="caret">
-  </span>
-  <ul class="dropdown-menu">
-    <li><a href="#">{% if book.is_borrowed %}{{ globals.text.book_is_borrowed }}{% elif book.is_discarded %}{{ globals.text.book_is_discarded }}{% else %}{{ globals.text.book_is_available}}{% endif %}</a></li>
-  </ul>
-</div>
-
+                           <a {% if book.is_borrowed %}class="text-warning glyphicon glyphicon-info-sign" title="{{ globals.book_is_borrowed }}"{% elif book.is_discarded %}class="text-danger glyphicon glyphicon-remove-sign" title="{{ globals.text.book_is_discarded }}"{% else %} class="text-success glyphicon glyphicon-ok-sign" title="{{ globals.text.book_is_available }}"{% endif %}  ></a>
       </div>
       <div class="col col-sm-11">
         <span class="text-info">
@@ -158,13 +149,4 @@
     {% endif %}
   </font>
 </div>
-{% endblock %}
-
-
-{% block css-code %}
-
-.dropdown:hover .dropdown-menu {
-    display: block;
-    margin-top: 0; // remove the gap so it doesn't close
- }
 {% endblock %}
