@@ -31,5 +31,12 @@ pip install --user -r install_requirements.txt
 
 echo "Done installing dependencies"
 
+echo "creating a global script for everyone to use"
+mkdir $HOME/bin
+echo PATH="$PATH:$HOME/bin"
+
 echo "starting ALMS..."
+
+
+
 ./start.sh

@@ -14,6 +14,21 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 
+
+def generate_secret_key(filename):
+    '''
+    generates a secret key and stores it in the specified file in format:
+        SECRET_KEY = "..........some random secret key............"
+    '''
+    from django.utils.crypto import get_random_string
+
+    chars = 'abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)<>,./?:";\'\{\}\[\]'
+    secret_key = get_random_string(50, chars)
+    file = open(filename, "w")
+    file.writelines("SECRET_KEY = \"{}\"".format(secret_key))
+    file.close()
+
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 ROOT_URLCONF = []
@@ -27,7 +42,13 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["192.168.*", "localhost"]
 
-SECRET_KEY = "ksahfsadfda8sfdsayfd8a7sfdhaishfdasusf879sfduaosdf*&^*&YHIUH*&HIH*&(IKBVGSHDI327r398fhd"
+
+try:
+    from secret_key import *
+except ImportError:
+        SETTINGS_DIR = os.path.abspath(os.path.dirname(__file__))
+        generate_secret_key(os.path.join(SETTINGS_DIR, 'secret_key.py'))
+        from secret_key import *
 
 # Application definition
 
