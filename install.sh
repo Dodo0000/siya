@@ -32,11 +32,13 @@ pip install --user -r install_requirements.txt
 echo "Done installing dependencies"
 
 echo "creating a global script for everyone to use"
-mkdir $HOME/bin
-echo PATH="$PATH:$HOME/bin"
+mkdir -p $HOME/bin
 
-echo "starting ALMS..."
+echo PATH="$PATH:$HOME/bin" > $HOME/.custom_bins
+echo "source $HOME/.custom_bins" > $HOME/.bashrc
 
+echo "please restart bash"
 
-
-./start.sh
+echo "Installation Complete"
+echo
+echo "You can now run ALMS by running start-alms"
