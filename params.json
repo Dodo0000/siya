@@ -1,0 +1,6 @@
+{
+  "name": "Alms",
+  "tagline": "ALMS is a django based library management program",
+  "body": "## ALMS - ALMS Library Management System\r\n#####[Currently Being Hosted At [Nepal Japan Children Library](https://www.facebook.com/Nepal-Japan-Children-Library-117390398337579), Lainchaur, Kathmandu]\r\nALMS is a Django Based Library Management System\r\n\r\n###__What Can ALMS Do?__\r\n  * Catalog Books\r\n  * Manage Members, volunteers and librarians\r\n  * Lend books, return books\r\n  * Take care of your accounting journal, ledger and trial balances\r\n  * Search For Books based on all their properties\r\n\r\n###__How To Install ALMS__\r\n\r\nTo install on a debian system, run this : \r\n\r\n    wget -qO- https://raw.githubusercontent.com/ayys/alms/master/install.sh | sh\r\n\r\n  The above code will start the server and run it in the default browser.\r\n\r\n  To start the server again, simply go to the `alms` directory and run start.sh\r\n\r\n\r\n###__Programmer's Documentation__ is on our [wiki page](https://github.com/ayys/alms/wiki)\r\n",
+  "note": "Don't delete this file! It's used internally to help with page regeneration."
+}
