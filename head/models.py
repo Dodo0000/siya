@@ -446,6 +446,14 @@ class Book(models.Model):
     gifted_by = models.ForeignKey(Gifter, null=True, db_index=True)
     saved_by = models.ManyToManyField(BookSaver, default=timezone.now,  db_index=True)
 
+    rating = models.IntegerField()
+
+    def get_rating(self):
+        return self.rating
+
+    def set_rating(self, rating):
+        self.rating = max(min(rating, 5), 1)
+
     def bring_back(self):
         '''
         यदि किताब खारेज गरीएको छ भने फिर्ता ल्याउने

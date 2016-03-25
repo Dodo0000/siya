@@ -4,6 +4,37 @@
 {% load group_filters %}
 {% load bookFilters %}
 
+{% block post-js-internal %}
+
+$("#star_1").hover(function(){
+  $("#star_1").attr("class", "glyphicon glyphicon-star");
+}, function(){
+  $("#star_1").attr("class", "glyphicon glyphicon-star-empty");
+});
+
+$("#star_2").hover(function(){
+  $("#star_1 , #star_2").attr("class", "glyphicon glyphicon-star");
+}, function(){
+  $("#star_1 , #star_2").attr("class", "glyphicon glyphicon-star-empty");
+});
+$("#star_3").hover(function(){
+  $("#star_1 , #star_2 , #star_3").attr("class", "glyphicon glyphicon-star");
+}, function(){
+  $("#star_1 , #star_2 , #star_3").attr("class", "glyphicon glyphicon-star-empty");
+});
+$("#star_4").hover(function(){
+  $("#star_1 , #star_2 , #star_3 , #star_4").attr("class", "glyphicon glyphicon-star");
+}, function(){
+  $("#star_1 , #star_2 , #star_3 , #star_4").attr("class", "glyphicon glyphicon-star-empty");
+});
+$("#star_5").hover(function(){
+  $("#star_1 , #star_2 , #star_3 , #star_4 , #star_5").attr("class", "glyphicon glyphicon-star");
+}, function(){
+  $("#star_1 , #star_2 , #star_3 , #star_4 , #star_5").attr("class", "glyphicon glyphicon-star-empty");
+});
+{% endblock %}
+
+
 {% block content %}
 
 <div id="addNewField" class="modal fade" role="dialog">
@@ -66,6 +97,20 @@
     {% endif %}
   </div>
 
+
+  <div class="container-fluid">
+    <div class="col-sm-12">
+      <br>
+      <font size="5">
+        <a id="star_1" href="#" class="glyphicon glyphicon-star-empty"></a>
+        <a id="star_2" href="#" class="glyphicon glyphicon-star-empty"></a>
+        <a id="star_3" href="#" class="glyphicon glyphicon-star-empty"></a>
+        <a id="star_4" href="#" class="glyphicon glyphicon-star-empty"></a>
+        <a id="star_5" href="#" class="glyphicon glyphicon-star-empty"></a>
+      </font>
+      <br>
+    </div>
+  </div>
   <h3>
     <div class="row">
       <div class="col col-sm-1">
