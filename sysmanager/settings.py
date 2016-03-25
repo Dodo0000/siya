@@ -22,7 +22,7 @@ def generate_secret_key(filename):
     '''
     from django.utils.crypto import get_random_string
 
-    chars = 'abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)<>,./?:";\'\{\}\[\]'
+    chars = 'abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)<>,./?:;\'\{\}\[\]'
     secret_key = get_random_string(50, chars)
     file = open(filename, "w")
     file.writelines("SECRET_KEY = \"{}\"".format(secret_key))
