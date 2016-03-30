@@ -446,7 +446,7 @@ class Book(models.Model):
     gifted_by = models.ForeignKey(Gifter, null=True, db_index=True)
     saved_by = models.ManyToManyField(BookSaver, default=timezone.now,  db_index=True)
 
-    votes = models.IntegerField()
+    votes = models.IntegerField(default=0)
     views = models.IntegerField(default = 0)
 
     def get_votes(self):

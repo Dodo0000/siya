@@ -47,11 +47,20 @@ def getBookValue(value, arg):
         elif arg == 'title':
             return value.get_title()
         elif arg == 'pub_place':
-            return value.publisher.get_place()
+            if value.publisher is not None:
+                return value.publisher.get_place()
+	    else:
+                return ""
         elif arg == 'pub_name':
-            return value.publisher.get_name()
+	    if value.publisher is not None:
+                return value.publisher.get_name()
+            else:
+                return ""
         elif arg == 'pub_year':
-            return value.publisher.get_year()
+            if value.publisher is not None:
+                return value.publisher.get_year()
+            else:
+                return ""
         elif arg == 'no_of_pages':
             if value.no_of_pages not in NONE_LS:
                 return value.no_of_pages

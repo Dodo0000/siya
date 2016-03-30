@@ -178,8 +178,7 @@ def add_book(request):
         # either create a new book or edit an already existing book
         book_was_created = True
         try:
-            book = Book.objects.filter(accession_number=toint(accession_number))
-            book = book[0]
+            book = Book.objects.get(accession_number=toint(accession_number))
             book_was_created = False
         except ObjectDoesNotExist:
             book = Book.objects.create(accession_number=toint(accession_number),
