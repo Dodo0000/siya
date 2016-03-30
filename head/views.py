@@ -178,7 +178,11 @@ def add_book(request):
         # either create a new book or edit an already existing book
         book_was_created = True
         try:
-            book = Book.objects.get(accession_number=toint(accession_number))
+            book = Book.objects.filter(accession_number=toint(accession_number))
+            if book.count() == 0:
+                raise ObjectDoesNotExist()
+            else:
+                book = book[0]
             book_was_created = False
         except ObjectDoesNotExist:
             book = Book.objects.create(accession_number=toint(accession_number),
@@ -434,7 +438,7 @@ def dashboard(request):
     total_members = ModUser.objects.all()
     books_cataloged_during_tp = Book.objects.exclude(
             accessioned_date__gte=today).filter(accessioned_date__gte=start_date, state=0)
-    recently_added_books = list(Book.objects.filter(state=0, accessioned_date=datetime.date.today()).order_by("-accessioned_date"))
+    recently_added_books = list(Book.objects.filter(state=0, accessioned_date=datetime.date.today()).order_by("-accessioned_date"))[:20]
     recently_added_books.reverse()
     total_books = Book.objects.all()
 

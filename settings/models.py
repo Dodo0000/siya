@@ -132,8 +132,9 @@ TYPES = [
 
 
 def get_ip_addr():
-    import socket
-    return socket.gethostbyname(socket.gethostname())
+    import commands
+    return commands.getoutput("hostname -I") # -I stands for --all-ip-addresses
+    
 
 
 def addGlobalContext(context=None):
