@@ -6,7 +6,6 @@ About this script
     Usage: Puts a strutured spreadhseet info into the database
             for the yalms
 '''
-import os
 from openpyxl import load_workbook as open_workbook
 
 from head.models import Book, Publisher, KeyWord, Author
@@ -16,6 +15,7 @@ from django.utils.text import slugify
 A revamp is in order.
 '''
 
+
 def print_usage():
     print(
             '''
@@ -23,8 +23,8 @@ def print_usage():
             '''
             )
 
-## this is the struct of each column in the given spreadsheet
-## the user will have to structure the file themselves
+# this is the struct of each column in the given spreadsheet
+# the user will have to structure the file themselves
 
 NP_NUM = {
         [
@@ -37,7 +37,7 @@ NP_NUM = {
             '^',
             '&',
             '*',
-            '('][x]: str(x)  for x in range(0,10)
+            '('][x]: str(x) for x in range(0, 10)
         }
 
 SHEET = [
@@ -67,7 +67,8 @@ LANG_LIST = [
             'NP'
         ]
 
-def toint(val,lang="EN"):
+
+def toint(val, lang="EN"):
     if val is None or val == "None" or val == "":
         return 0
     else:
@@ -83,7 +84,7 @@ def toint(val,lang="EN"):
 
 
 def getLang(val):
-    if val == None or val == "":
+    if val is None or val == "":
         return "EN"
     else:
         if smart_str(val.upper()) in LANG_LIST:
@@ -91,9 +92,10 @@ def getLang(val):
         else:
             raise ValueError("Language %s not found" % val)
 
+
 def getVal(FILE_NAME):
     wb = open_workbook(FILE_NAME, read_only=True)
-    vals=[]
+    vals = []
     for sht in wb:
         sht_vals = []
         for row in list(sht.rows)[1:]:
@@ -107,12 +109,13 @@ def getVal(FILE_NAME):
             sht_vals.append(row_vals)
         for each in sht_vals:
             vals.append(each)
-    
+
     dont_have = [None] * len(vals[0])
     while dont_have in vals:
         vals.remove(dont_have)
 
     return vals
+
 
 def main(FILE_NAME):
     values = getVal(FILE_NAME)
@@ -132,7 +135,7 @@ def main(FILE_NAME):
                 arr_0 = array[0]
                 if arr_0 < len(SHEET):
                     if array[1] is not None:
-                        print arr_0, array[1],FILE_NAME
+                        print arr_0, array[1], FILE_NAME
                     sheet_arr = SHEET[arr_0]
                     x[sheet_arr] = smart_str(array[1])
         vals.append(x)
@@ -159,23 +162,23 @@ def main(FILE_NAME):
                 else:
                     raise TypeError("accession number is not str or int or float")
             print each, FILE_NAME
-            if accession_number == None or accession_number == "None":
+            if accession_number is None or accession_number == "None":
                 continue
             book = Book.objects.get_or_create(accession_number=toint(accession_number,each['language']),
-                                    title=each['title'],
-                                    no_of_pages=toint(
-                                        each['no_of_pages'], each['language']))
+                    title=each['title'],
+                    no_of_pages=toint(
+                        each['no_of_pages'], each['language']))
 
             if book[1] is False:
-                ## if the book already exists, don't create it
+                # if the book already exists, don't create it
                 continue
             else:
                 book = book[0]
 
-            if each['author'] != None:
+            if each['author'] is not None:
                 author = Author.objects.get_or_create(
                     name=each['author'],
-                    slug = slugify(each['author']))
+                    slug=slugify(each['author']))
                 if author[1]:
                     author = author[0]
                     author.save()
@@ -191,7 +194,7 @@ def main(FILE_NAME):
                 publisher = Publisher.objects.get_or_create(
                     place=each['place'],
                     name=each['publisher_name'],
-                    year=toint(each['year'],each['language']))
+                    year=toint(each['year'], each['language']))
                 if publisher[1]:
                     publisher = publisher[0]
                     publisher.save()
@@ -211,8 +214,8 @@ def main(FILE_NAME):
             if (each['price'] is None) is False:
                 book.price = each['price']
 
-            if each['volume'] != None and each['volume'] != "None":
-                if each['volume'].isdigit() == True:
+            if each['volume'] is not None and each['volume'] != "None":
+                if each['volume'].isdigit() is True:
                     book.volume = int(each['volume'])
                 else:
                     book.volume = acc_list.index(val) + 1
@@ -221,9 +224,9 @@ def main(FILE_NAME):
 
             book.language = getLang(each['language'])
 
-            for keyword in each['kw1'],each['kw2'],each['kw3'],each['kw4']:
-                if keyword != None:
-                    kw = KeyWord.objects.get_or_create(name=keyword,slug=slugify(keyword))
+            for keyword in each['kw1'], each['kw2'], each['kw3'], each['kw4']:
+                if keyword is not None:
+                    kw = KeyWord.objects.get_or_create(name=keyword, slug=slugify(keyword))
                     if kw[1]:
                         kw = kw[0]
                         kw.save()
