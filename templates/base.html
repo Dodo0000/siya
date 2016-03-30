@@ -94,7 +94,7 @@ body{font-family: "kalimati";background-color:#fff;height:100%;}.errorlist{color
               <li><a class="navbar-inactive" title="{{ date|date:"d M Y"}}" href="javascript:swapDate();" id="navDateElement">{{date|tobs|pdate}} </a></li>
               {% if request.user.is_authenticated %}
               <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ request.user.first_name|title }} <span class="glyphicon glyphicon-menu-down"></span></a>
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ request.user.first_name|title|truncatechars:10 }} <span class="glyphicon glyphicon-menu-down"></span></a>
               <ul class="dropdown-menu">
                 <li><a href="{% url 'profile' username=request.user.username %}"> <span class="glyphicon glyphicon-user"></span>  {{ request.user.first_name }}को परिचय </a></li>
                 <li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-out"></span> {{ globals.text.logout }}</a></li>

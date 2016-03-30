@@ -114,6 +114,10 @@
     </tr>
     {% endfor %}
     <tr>
+        <td>ISBN Number</td>
+        <td>{{ book.isbn|default:"" }}</td>
+    </tr>
+    <tr>
       <td>{{globals.text.is_book_available }}</td>
       <td>
 	{% if book.is_borrowed == False %}
