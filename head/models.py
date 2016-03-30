@@ -446,13 +446,22 @@ class Book(models.Model):
     gifted_by = models.ForeignKey(Gifter, null=True, db_index=True)
     saved_by = models.ManyToManyField(BookSaver, default=timezone.now,  db_index=True)
 
-    rating = models.IntegerField()
+    votes = models.IntegerField()
+    views = models.IntegerField(default = 0)
 
-    def get_rating(self):
-        return self.rating
+    def get_votes(self):
+        return self.votes
 
-    def set_rating(self, rating):
-        self.rating = max(min(rating, 5), 1)
+    def add_vote(self):
+        self.votes += 1
+        self.save()
+
+    def get_views(self):
+        return self.views
+
+    def add_view(self):
+        self.views += 1
+        self.save()
 
     def bring_back(self):
         '''
@@ -476,6 +485,12 @@ class Book(models.Model):
         '''
         return self.state == 1
 
+    def is_available(self):
+        '''
+        किताब छ कि ?
+        '''
+        return self.state == 0
+    
     @staticmethod
     def get_attr_list():
         '''

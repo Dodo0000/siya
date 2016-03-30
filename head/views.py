@@ -178,7 +178,8 @@ def add_book(request):
         # either create a new book or edit an already existing book
         book_was_created = True
         try:
-            book = Book.objects.get(accession_number=toint(accession_number))
+            book = Book.objects.filter(accession_number=toint(accession_number))
+            book = book[0]
             book_was_created = False
         except ObjectDoesNotExist:
             book = Book.objects.create(accession_number=toint(accession_number),
@@ -610,6 +611,31 @@ def bookInfo(request, accNo):
         else:
             generic_fields.append((_, ""))
 
+    '''
+    when someone searches for the book, ?source=search is appended to the url.
+    WHen sources=search is found in request.GET, a view is added to the book,
+    then the user is redirected to a url for the book without the
+    ?source=search tail. This is because views are only added when a book is
+    searched, not simply when the page is refreshed.
+    '''
+
+    '''
+    If the book is simply refreshed, then views are not added, but if the book
+    is searhced for, or found some other way,
+    then a view is added
+    '''
+    get_source = request.GET.get("source", None)
+    refreshedHttpRedir = HttpResponseRedirect(
+            reverse(
+                'book',
+                kwargs={'accNo': book.accession_number}) + "?search=refreshed")
+    if get_source != "refreshed" and get_source is not None:
+        book.add_view()
+        return refreshedHttpRedir
+    elif get_source == "":
+        # don't add view if nothing is specified
+        return refreshedHttpRedir
+
     return render(request,
                   "head/book.html",
                   addGlobalContext({
@@ -625,7 +651,7 @@ def bookInfo(request, accNo):
 
 @login_required(login_url="/login")
 @permission_required(("change_lend", "add_lend"))
-def borrow(request):
+def __borrow__(request, acc_no = None, username = None):
     config.reload()
     username = request.POST.get("username", None)
     bookID = request.POST.get("bookID", None)
@@ -671,13 +697,37 @@ def borrow(request):
     # 3 - User has borrowed MAX_NUM_OF_BOOKS_TO_BORROW books already
     # 4 - username and bookID were not given
 
-    return render(request, 'head/borrow.html', addGlobalContext({
+    context = addGlobalContext({
         'date_val': date,
         'borrowed': borrowed,
         'book': book,
         'got_user': user,
         'book_acc': borrowed
-    }))
+    })
+    if username is not None:
+        context.update({'username': username})
+    if acc_no is not None:
+        context.update({"acc_no": acc_no})
+
+    return render(request, 'head/borrow.html', context)
+
+
+@login_required(login_url="/login")
+@permission_required(("change_lend", "add_lend"))
+def borrow(request):
+    return __borrow__()
+
+
+@login_required(login_url="/login")
+@permission_required(("change_lend", "add_lend"))
+def borrow_with_acc_no(request, acc_no):
+    return __borrow__(acc_no=acc_no)
+
+
+@login_required(login_url="/login")
+@permission_required(("change_lend", "add_lend"))
+def borrow_with_username(request, username):
+    return __borrow__(username=username)
 
 
 @login_required(login_url="/login")
@@ -747,6 +797,7 @@ def copyBook(request):
 def reviveBook(request, accNo):
     books = Book.objects.filter(accession_number=accNo)
     if books.count() == 1:
-        books[0].state = 0
-        books[0].save()
+        books[0].bring_back()
+    else:
+        print accNo
     return bookInfo(request, accNo=accNo)

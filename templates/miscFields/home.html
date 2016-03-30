@@ -68,8 +68,8 @@
       </div>
       <div class="col col-sm-1">
         <font size=5>
-        <a href="{% url 'miscFieldsEdit' field_id=field.id %}" class="field_edit_link"><span class="glyphicon glyphicon-edit"></span></a>
-        <a href="{% url 'miscFieldsDelete' field_id=field.id  %}" class="field_delete_link"><span class="glyphicon glyphicon-remove"></span></a>
+        <a href="{% url 'miscFieldsEdit' field_id=field.id %}" title="{{ globals.text.edit_field }}" class="field_edit_link"><span class="glyphicon glyphicon-edit"></span></a>
+        <a href="{% url 'miscFieldsDelete' field_id=field.id  %}" title="{{ globals.text.delete_field }}"  class="field_delete_link"><span class="glyphicon glyphicon-remove"></span></a>
       </font>
       </div>
     </div>

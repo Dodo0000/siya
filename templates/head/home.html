@@ -12,6 +12,12 @@
 body{
 background-color: #f7f7f7;
 }
+.input-group-lg>.form-control, .input-group-lg>.input-group-addon, .input-group-lg>.input-group-btn>.btn{
+padding: 1px 25px;
+font-size: 20px;
+line-height: 1.5;
+border-radius: 6px;
+}
 {% endblock %}
 
 {% block search_navbar %}
@@ -24,7 +30,7 @@ background-color: #f7f7f7;
 {% endblock %}
 
 {% block content %}
-<div style="position: relative; top: 10em" class="container-fluid">
+<div style="position: relative; top: 2em" class="container-fluid">
   <div  class="col col-sm-4 col-sm-offset-4 logo logo_2"></div>
   <div class="col col-sm-4"></div>
   <div class="col col-sm-12">
@@ -41,7 +47,7 @@ background-color: #f7f7f7;
     <div align=center class="col col-sm-12">
       <h3>केही लोकप्रिय किताबहरु</h3>
     </div>
-    <div class="featured-books">
+    <div class="featured-books col-sm-12">
       <table>
         <td>
           {% for book in popular_books %}

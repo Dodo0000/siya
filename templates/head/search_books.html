@@ -29,7 +29,7 @@
         <div class="col col-sm-1">
           <font size=5>
             <div align=center>
-              <a class="gly gly-info" href="{% url 'book' book.accession_number %}" title="{{ globals.text.more_info }}"><span class="glyphicon glyphicon-info-sign"></span></a>
+              <a class="gly gly-info" href="{% url 'book' book.accession_number %}?source=search" title="{{ globals.text.more_info }}"><span class="glyphicon glyphicon-info-sign"></span></a>
             </div> <!-- more_info div -->
             <div align=center>
               <a class="gly gly-warning" href="{% url 'editEntry' book.accession_number %}" title="{{ globals.text.edit_book }}"><span class="glyphicon glyphicon-edit"></span></a>
@@ -38,7 +38,7 @@
         </div>
         <div class="col col-sm-11">
           <div class="book_prop title">
-            <a href="{% url 'book' book.accession_number %}"> <span class="glyphicon glyphicon-book text-primary"></span> {{book.get_title}}</a>
+            <a href="{% url 'book' book.accession_number %}?source=search"> <span class="glyphicon glyphicon-book text-primary"></span> {{book.get_title}}</a>
           </div> <!-- title div -->
           <div class="book_prop authors">
             {{ globals.text.authors }} : <i>{% if book.get_authors %} {{book.get_authors}} {% else %}{{ globals.text.no_authors }}{% endif %}</i>

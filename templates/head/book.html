@@ -6,32 +6,6 @@
 
 {% block post-js-internal %}
 
-$("#star_1").hover(function(){
-  $("#star_1").attr("class", "glyphicon glyphicon-star");
-}, function(){
-  $("#star_1").attr("class", "glyphicon glyphicon-star-empty");
-});
-
-$("#star_2").hover(function(){
-  $("#star_1 , #star_2").attr("class", "glyphicon glyphicon-star");
-}, function(){
-  $("#star_1 , #star_2").attr("class", "glyphicon glyphicon-star-empty");
-});
-$("#star_3").hover(function(){
-  $("#star_1 , #star_2 , #star_3").attr("class", "glyphicon glyphicon-star");
-}, function(){
-  $("#star_1 , #star_2 , #star_3").attr("class", "glyphicon glyphicon-star-empty");
-});
-$("#star_4").hover(function(){
-  $("#star_1 , #star_2 , #star_3 , #star_4").attr("class", "glyphicon glyphicon-star");
-}, function(){
-  $("#star_1 , #star_2 , #star_3 , #star_4").attr("class", "glyphicon glyphicon-star-empty");
-});
-$("#star_5").hover(function(){
-  $("#star_1 , #star_2 , #star_3 , #star_4 , #star_5").attr("class", "glyphicon glyphicon-star");
-}, function(){
-  $("#star_1 , #star_2 , #star_3 , #star_4 , #star_5").attr("class", "glyphicon glyphicon-star-empty");
-});
 {% endblock %}
 
 
@@ -92,31 +66,22 @@ $("#star_5").hover(function(){
     </a>
     {% elif book.is_discarded == True and user.is_authenticated == True %}
     <a class="btn btn-info" href="{% url 'revive_book' accNo=book.get_accession_number %}">
-      <span class="glyphicon glyphicon-edit"></span> Revive Book
+      <span class="glyphicon glyphicon-edit"></span> {{ globals.text.revive_book }}
     </a>
     {% endif %}
   </div>
 
-
   <div class="container-fluid">
     <div class="col-sm-12">
       <br>
-      <font size="5">
-        <a id="star_1" href="#" class="glyphicon glyphicon-star-empty"></a>
-        <a id="star_2" href="#" class="glyphicon glyphicon-star-empty"></a>
-        <a id="star_3" href="#" class="glyphicon glyphicon-star-empty"></a>
-        <a id="star_4" href="#" class="glyphicon glyphicon-star-empty"></a>
-        <a id="star_5" href="#" class="glyphicon glyphicon-star-empty"></a>
-      </font>
+    <span class="text-primary" style="font-size:16px">यो किताब <span class="glyphicon glyphicon-{{ book.get_votes }}" style="font-size:24px"></span> जनाले पढ्नुभएको छ।</span> 
       <br>
-    </div>
-  </div>
   <h3>
     <div class="row">
       <div class="col col-sm-1">
-                           <a {% if book.is_borrowed %}class="text-warning glyphicon glyphicon-info-sign" title="{{ globals.book_is_borrowed }}"{% elif book.is_discarded %}class="text-danger glyphicon glyphicon-remove-sign" title="{{ globals.text.book_is_discarded }}"{% else %} class="text-success glyphicon glyphicon-ok-sign" title="{{ globals.text.book_is_available }}"{% endif %}  ></a>
+                           <a href="#" {% if book.is_borrowed %}class="text-warning glyphicon glyphicon-info-sign" title="{{ book.get_borrower.get_name }} {{ globals.text.book_is_borrowed }}"{% elif book.is_discarded %}class="text-danger glyphicon glyphicon-remove-sign" title="{{ globals.text.book_is_discarded }}"{% else %} class="text-success glyphicon glyphicon-ok-sign" title="{{ globals.text.book_is_available }}"{% endif %}  ></a>
       </div>
-      <div class="col col-sm-11">
+      <div class="col col-sm-9">
         <span class="text-info">
           {% if book.get_authors %}{{ book.get_pretty_authors|title }}को {% endif %}
         </span>
@@ -126,13 +91,11 @@ $("#star_5").hover(function(){
           </span>
         </i>
       </div>
+      <div class= "col col-sm-2">
+        <i>{{ book.get_views }} खोजीहरु </i>
+      </div>
     </div>
   </h3>
-  {% if book.is_borrowed %}
-  <div class="text-warning">
-    {{ globals.text.borrowed_by }} <a href="{% url 'profile' username=book.get_borrower.username %}">{{ book.get_borrower.get_name }}</a>
-  </div>
-  {% endif %}
   <table class="table table-hover table-responsive">
     {% for each in book.get_all_attr_for_spreadsheet %}
     <tr> 

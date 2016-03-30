@@ -12,7 +12,7 @@
             {% endfor %}
           </select>
         </div>
-        <input type="text" name="search" placeholder="{{ globals.text.search_book }}" class="form-control panel-success" value="{{ value|default:"" }}" aria-label="" required oninvalid="this.setCustomValidity('{{ globals.text.fill_book_information }}')" >
+        <input type="text" name="search" id="bookSearchTextInput" placeholder="{{ globals.text.search_book }}" class="form-control panel-success" value="{{ value|default:"" }}" aria-label="" required oninvalid="this.setCustomValidity('{{ globals.text.fill_book_information }}')" >
       </div><!-- /input-group -->
   </form>
 </ul>

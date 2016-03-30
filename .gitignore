@@ -4,3 +4,4 @@
 .*.sw[op]
 \.*.sw[op]
 sysmanager/secret_key.py
+*.sqlite3
