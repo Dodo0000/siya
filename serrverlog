@@ -1,0 +1,129 @@
+[03/Jun/2016 21:36:41] "GET / HTTP/1.1" 200 15048
+[03/Jun/2016 21:36:41] "GET / HTTP/1.1" 200 15048
+[03/Jun/2016 21:36:41] "GET /static/bootstrap/css/bootstrap.min.css HTTP/1.1" 304 0
+[03/Jun/2016 21:36:41] "GET /static/bootstrap/js/jquery.js HTTP/1.1" 304 0
+[03/Jun/2016 21:36:41] "GET /static/css/home.css HTTP/1.1" 304 0
+[03/Jun/2016 21:36:41] "GET /static/bootstrap/js/bootstrap.min.js HTTP/1.1" 304 0
+[03/Jun/2016 21:36:41] "GET /static/js/all_pages.js HTTP/1.1" 304 0
+- Broken pipe from ('127.0.0.1', 40756)
+[03/Jun/2016 21:36:41] "GET /static/fonts/kalimati.ttf HTTP/1.1" 304 0
+[03/Jun/2016 21:36:41] "GET /static/bootstrap/fonts/glyphicons-halflings-regular.woff2 HTTP/1.1" 304 0
+[03/Jun/2016 21:36:41] "GET /static/images/logo.svg HTTP/1.1" 304 0
+[03/Jun/2016 21:36:49] "GET / HTTP/1.1" 200 15048
+[03/Jun/2016 21:36:49] "GET /static/bootstrap/css/bootstrap.min.css HTTP/1.1" 304 0
+[03/Jun/2016 21:36:49] "GET /static/js/all_pages.js HTTP/1.1" 304 0
+[03/Jun/2016 21:36:49] "GET /static/bootstrap/js/bootstrap.min.js HTTP/1.1" 304 0
+[03/Jun/2016 21:36:49] "GET /static/bootstrap/js/jquery.js HTTP/1.1" 304 0
+[03/Jun/2016 21:36:49] "GET /static/css/home.css HTTP/1.1" 304 0
+[03/Jun/2016 21:36:49] "GET /static/bootstrap/fonts/glyphicons-halflings-regular.woff2 HTTP/1.1" 304 0
+[03/Jun/2016 21:36:49] "GET /static/fonts/kalimati.ttf HTTP/1.1" 304 0
+[03/Jun/2016 21:36:49] "GET /static/images/logo.svg HTTP/1.1" 304 0
+[03/Jun/2016 21:37:00] "GET / HTTP/1.1" 200 15048
+[03/Jun/2016 21:37:00] "GET /static/js/all_pages.js HTTP/1.1" 304 0
+[03/Jun/2016 21:37:00] "GET /static/bootstrap/js/bootstrap.min.js HTTP/1.1" 304 0
+[03/Jun/2016 21:37:00] "GET /static/css/home.css HTTP/1.1" 304 0
+[03/Jun/2016 21:37:00] "GET /static/bootstrap/css/bootstrap.min.css HTTP/1.1" 304 0
+[03/Jun/2016 21:37:00] "GET /static/bootstrap/js/jquery.js HTTP/1.1" 304 0
+[03/Jun/2016 21:37:00] "GET /static/bootstrap/fonts/glyphicons-halflings-regular.woff2 HTTP/1.1" 304 0
+[03/Jun/2016 21:37:00] "GET /static/fonts/kalimati.ttf HTTP/1.1" 304 0
+[03/Jun/2016 21:37:00] "GET /static/images/logo.svg HTTP/1.1" 304 0
+[03/Jun/2016 21:37:02] "GET /head/about/library HTTP/1.1" 200 15261
+[03/Jun/2016 21:37:02] "GET /static/css/dashboard.css HTTP/1.1" 200 201
+[03/Jun/2016 21:37:20] "GET /head/about/library HTTP/1.1" 200 15261
+[03/Jun/2016 21:37:20] "GET /head/about/library HTTP/1.1" 200 15261
+[03/Jun/2016 21:37:41] "GET /rst/create/ HTTP/1.1" 200 15765
+[03/Jun/2016 21:37:41] "GET /static/css/restructuredText/styles.css HTTP/1.1" 200 21
+[03/Jun/2016 21:37:41] "GET /static/js/autosize.min.js HTTP/1.1" 200 3261
+/usr/local/lib/python2.7/dist-packages/django/db/models/fields/__init__.py:1414: RuntimeWarning: DateTimeField ModUser.date_joined received a naive datetime (2016-06-03 00:00:00) while time zone support is active.
+  RuntimeWarning)
+
+/usr/local/lib/python2.7/dist-packages/django/db/models/fields/__init__.py:1414: RuntimeWarning: DateTimeField ModUser.date_joined received a naive datetime (2016-03-05 00:00:00) while time zone support is active.
+  RuntimeWarning)
+
+[03/Jun/2016 21:38:38] "GET /head/dashboard/ HTTP/1.1" 200 17805
+[03/Jun/2016 21:38:40] "GET /user/search/member/ HTTP/1.1" 200 15540
+[03/Jun/2016 21:38:42] "GET /user/search/member/?username=%E0%A4%BE%E0%A4%AF%E0%A4%B8 HTTP/1.1" 200 15760
+[03/Jun/2016 21:38:43] "GET /user/search/member/?username=ays HTTP/1.1" 302 0
+[03/Jun/2016 21:38:43] "GET /user/user/ays/ HTTP/1.1" 200 16640
+Performing system checks...
+
+System check identified no issues (0 silenced).
+June 03, 2016 - 21:36:40
+Django version 1.8.6, using settings 'sysmanager.settings'
+Starting development server at http://127.0.0.1:8000/
+Quit the server with CONTROL-C.
+[u'\u0936\u093f\u0930\u094d\u0936\u0915', u'\u0932\u0947\u0916\u0915', u'\u0926\u0930\u094d\u0924\u093e \u0905\u0902\u0915', u'\u0915\u0932 \u0905\u0902\u0915', u'\u092a\u094d\u0930\u0915\u093e\u0936\u0915', u'\u0915\u093f\u0935\u0930\u094d\u0921']
+<type 'datetime.date'>
+[u'\u0936\u093f\u0930\u094d\u0936\u0915', u'\u0932\u0947\u0916\u0915', u'\u0926\u0930\u094d\u0924\u093e \u0905\u0902\u0915', u'\u0915\u0932 \u0905\u0902\u0915', u'\u092a\u094d\u0930\u0915\u093e\u0936\u0915', u'\u0915\u093f\u0935\u0930\u094d\u0921']
+<type 'datetime.date'>
+<type 'datetime.date'>
+<type 'datetime.date'>
+[u'\u0936\u093f\u0930\u094d\u0936\u0915', u'\u0932\u0947\u0916\u0915', u'\u0926\u0930\u094d\u0924\u093e \u0905\u0902\u0915', u'\u0915\u0932 \u0905\u0902\u0915', u'\u092a\u094d\u0930\u0915\u093e\u0936\u0915', u'\u0915\u093f\u0935\u0930\u094d\u0921']
+<type 'datetime.date'>
+<type 'datetime.date'>
+[u'\u0936\u093f\u0930\u094d\u0936\u0915', u'\u0932\u0947\u0916\u0915', u'\u0926\u0930\u094d\u0924\u093e \u0905\u0902\u0915', u'\u0915\u0932 \u0905\u0902\u0915', u'\u092a\u094d\u0930\u0915\u093e\u0936\u0915', u'\u0915\u093f\u0935\u0930\u094d\u0921']
+<type 'datetime.date'>
+<type 'datetime.date'>
+[u'\u0936\u093f\u0930\u094d\u0936\u0915', u'\u0932\u0947\u0916\u0915', u'\u0926\u0930\u094d\u0924\u093e \u0905\u0902\u0915', u'\u0915\u0932 \u0905\u0902\u0915', u'\u092a\u094d\u0930\u0915\u093e\u0936\u0915', u'\u0915\u093f\u0935\u0930\u094d\u0921']
+<type 'datetime.date'>
+<type 'datetime.date'>
+[u'\u0936\u093f\u0930\u094d\u0936\u0915', u'\u0932\u0947\u0916\u0915', u'\u0926\u0930\u094d\u0924\u093e \u0905\u0902\u0915', u'\u0915\u0932 \u0905\u0902\u0915', u'\u092a\u094d\u0930\u0915\u093e\u0936\u0915', u'\u0915\u093f\u0935\u0930\u094d\u0921']
+<type 'datetime.date'>
+<type 'datetime.date'>
+[u'\u0936\u093f\u0930\u094d\u0936\u0915', u'\u0932\u0947\u0916\u0915', u'\u0926\u0930\u094d\u0924\u093e \u0905\u0902\u0915', u'\u0915\u0932 \u0905\u0902\u0915', u'\u092a\u094d\u0930\u0915\u093e\u0936\u0915', u'\u0915\u093f\u0935\u0930\u094d\u0921']
+<type 'datetime.date'>
+<type 'datetime.date'>
+[u'\u0936\u093f\u0930\u094d\u0936\u0915', u'\u0932\u0947\u0916\u0915', u'\u0926\u0930\u094d\u0924\u093e \u0905\u0902\u0915', u'\u0915\u0932 \u0905\u0902\u0915', u'\u092a\u094d\u0930\u0915\u093e\u0936\u0915', u'\u0915\u093f\u0935\u0930\u094d\u0921']
+<type 'datetime.date'>
+<type 'datetime.date'>
+[u'\u0936\u093f\u0930\u094d\u0936\u0915', u'\u0932\u0947\u0916\u0915', u'\u0926\u0930\u094d\u0924\u093e \u0905\u0902\u0915', u'\u0915\u0932 \u0905\u0902\u0915', u'\u092a\u094d\u0930\u0915\u093e\u0936\u0915', u'\u0915\u093f\u0935\u0930\u094d\u0921']
+<type 'datetime.date'>
+<type 'datetime.date'>
+<type 'datetime.date'>
+<type 'datetime.date'>
+<type 'datetime.date'>
+[u'\u0936\u093f\u0930\u094d\u0936\u0915', u'\u0932\u0947\u0916\u0915', u'\u0926\u0930\u094d\u0924\u093e \u0905\u0902\u0915', u'\u0915\u0932 \u0905\u0902\u0915', u'\u092a\u094d\u0930\u0915\u093e\u0936\u0915', u'\u0915\u093f\u0935\u0930\u094d\u0921']
+<type 'datetime.date'>
+<type 'datetime.date'>
+[u'\u0936\u093f\u0930\u094d\u0936\u0915', u'\u0932\u0947\u0916\u0915', u'\u0926\u0930\u094d\u0924\u093e \u0905\u0902\u0915', u'\u0915\u0932 \u0905\u0902\u0915', u'\u092a\u094d\u0930\u0915\u093e\u0936\u0915', u'\u0915\u093f\u0935\u0930\u094d\u0921']
+<type 'datetime.date'>
+<type 'datetime.date'>
+[u'\u0936\u093f\u0930\u094d\u0936\u0915', u'\u0932\u0947\u0916\u0915', u'\u0926\u0930\u094d\u0924\u093e \u0905\u0902\u0915', u'\u0915\u0932 \u0905\u0902\u0915', u'\u092a\u094d\u0930\u0915\u093e\u0936\u0915', u'\u0915\u093f\u0935\u0930\u094d\u0921']
+<type 'datetime.date'>
+<type 'datetime.datetime'>
+<type 'datetime.date'>
+[u'\u0936\u093f\u0930\u094d\u0936\u0915', u'\u0932\u0947\u0916\u0915', u'\u0926\u0930\u094d\u0924\u093e \u0905\u0902\u0915', u'\u0915\u0932 \u0905\u0902\u0915', u'\u092a\u094d\u0930\u0915\u093e\u0936\u0915', u'\u0[03/Jun/2016 21:38:44] "GET /user/search/member/ HTTP/1.1" 200 15540
+[03/Jun/2016 21:38:44] "GET /user/search/member/ HTTP/1.1" 200 15540
+[03/Jun/2016 21:38:45] "GET /head/dashboard/ HTTP/1.1" 200 17805
+[03/Jun/2016 21:38:47] "GET /head/about/library HTTP/1.1" 200 15261
+[03/Jun/2016 21:38:47] "GET /head/about/library HTTP/1.1" 200 15261
+[03/Jun/2016 21:38:47] "GET /head/about/library HTTP/1.1" 200 15261
+[03/Jun/2016 21:38:49] "GET /head/dashboard/ HTTP/1.1" 200 17805
+[2016-06-03 21:43:02,062 pyinotify ERROR] The pathname '/home/ays/alms/head/views.py' of this watch <Watch wd=1041 path=/home/ays/alms/head/views.py mask=4038 proc_fun=None auto_add=False exclude_filter=<function <lambda> at 0x7f2f0d32b1b8> dir=False > has probably changed and couldn't be updated, so it cannot be trusted anymore. To fix this error move directories/files only between watched parents directories, in this case e.g. put a watch on '/home/ays/alms/head'.
+915\u093f\u0935\u0930\u094d\u0921']
+<type 'datetime.date'>
+<type 'datetime.date'>
+[u'\u0936\u093f\u0930\u094d\u0936\u0915', u'\u0932\u0947\u0916\u0915', u'\u0926\u0930\u094d\u0924\u093e \u0905\u0902\u0915', u'\u0915\u0932 \u0905\u0902\u0915', u'\u092a\u094d\u0930\u0915\u093e\u0936\u0915', u'\u0915\u093f\u0935\u0930\u094d\u0921']
+<type 'datetime.date'>
+<type 'datetime.date'>
+[u'\u0936\u093f\u0930\u094d\u0936\u0915', u'\u0932\u0947\u0916\u0915', u'\u0926\u0930\u094d\u0924\u093e \u0905\u0902\u0915', u'\u0915\u0932 \u0905\u0902\u0915', u'\u092a\u094d\u0930\u0915\u093e\u0936\u0915', u'\u0915\u093f\u0935\u0930\u094d\u0921']
+<type 'datetime.date'>
+<type 'datetime.date'>
+<type 'datetime.date'>
+<type 'datetime.date'>
+<type 'datetime.date'>
+[u'\u0936\u093f\u0930\u094d\u0936\u0915', u'\u0932\u0947\u0916\u0915', u'\u0926\u0930\u094d\u0924\u093e \u0905\u0902\u0915', u'\u0915\u0932 \u0905\u0902\u0915', u'\u092a\u094d\u0930\u0915\u093e\u0936\u0915', u'\u0915\u093f\u0935\u0930\u094d\u0921']
+<type 'datetime.date'>
+<type 'datetime.date'>
+[u'\u0936\u093f\u0930\u094d\u0936\u0915', u'\u0932\u0947\u0916\u0915', u'\u0926\u0930\u094d\u0924\u093e \u0905\u0902\u0915', u'\u0915\u0932 \u0905\u0902\u0915', u'\u092a\u094d\u0930\u0915\u093e\u0936\u0915', u'\u0915\u093f\u0935\u0930\u094d\u0921']
+<type 'datetime.date'>
+<type 'datetime.date'>
+[u'\u0936\u093f\u0930\u094d\u0936\u0915', u'\u0932\u0947\u0916\u0915', u'\u0926\u0930\u094d\u0924\u093e \u0905\u0902\u0915', u'\u0915\u0932 \u0905\u0902\u0915', u'\u092a\u094d\u0930\u0915\u093e\u0936\u0915', u'\u0915\u093f\u0935\u0930\u094d\u0921']
+<type 'datetime.date'>
+<type 'datetime.date'>
+[u'\u0936\u093f\u0930\u094d\u0936\u0915', u'\u0932\u0947\u0916\u0915', u'\u0926\u0930\u094d\u0924\u093e \u0905\u0902\u0915', u'\u0915\u0932 \u0905\u0902\u0915', u'\u092a\u094d\u0930\u0915\u093e\u0936\u0915', u'\u0915\u093f\u0935\u0930\u094d\u0921']
+<type 'datetime.date'>
+<type 'datetime.date'>
+<type 'datetime.date'>
+<type 'datetime.date'>
+<type 'datetime.date'>

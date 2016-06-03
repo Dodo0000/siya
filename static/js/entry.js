@@ -1,6 +1,3 @@
-
-
-
 var LANG_SHEET = {
   "acc_no": {
     NP: "btf{=g+=",
@@ -92,4 +89,5 @@ function clearInputFields(){
   for (i=0;i < inputs.length;i++){
     inputs[i].value = "";
   }
+  $("#allFieldsEmptyMessage").show("fast").delay(2000).hide("slow");
 }

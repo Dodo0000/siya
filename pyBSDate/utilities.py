@@ -175,6 +175,7 @@ def _convert_to_days(month, day, days_on_month):
     total_days += day-1
     return total_days
 
+
 def decompose_date(date):
     '''
     Gives tuple of year, month, day if format is valid else raise InvalidFormatException
@@ -185,7 +186,7 @@ def decompose_date(date):
 
     valid_date = re.match(re_date_format, date)
     if not valid_date:
-        raise InvalidDateFormat
+        raise InvalidDateFormat(date)
 
     year, month, day = map(int, valid_date.groups())
 

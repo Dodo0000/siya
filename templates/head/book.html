@@ -154,7 +154,7 @@
     {% for booksaver in book.saved_by.all %}
     <tr>
       <td><a href="{% url 'profile' booksaver.user.username %}">{{booksaver.user.get_name}}</a></td>
-      <td>{{booksaver.date|date:"d M Y"|nepali}}, {{ booksaver.date|date:"H:i A" }}</td>
+      <td>{{booksaver.date|date:"Y/m/d"|tobs}}, {{ booksaver.date|date:"H:i A" }}</td>
     </tr>
     {% endfor %}
   </table>

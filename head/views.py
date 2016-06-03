@@ -138,33 +138,62 @@ def validate_book(request):
 
 
 @login_required(login_url="/login/")
-@permission_required(("head.add_book", "head.change_book"), login_url="/login/")
+@permission_required(
+        ("head.add_book", "head.change_book"),
+        login_url="/login/")
 def add_book(request):
+    '''
+    the add_book function takes too long, and since this function is executed
+    many times, sometimes at once by multiple users, it needs to be resized
+    into something managable, I don't know how though :(
+    '''
     t0 = time.time()
     config.reload()
+
+    # all_attrs is a list of all the default fields for HADES - such as
+    # title, authors etc. More in config.ini
     all_attrs = [_[1] for _ in config.config['columns'].items()]
+
     each = dict()   # store post data
     STATE = 0
 
+    books_list = []  # this is a list of all the books added, which will be
+    # saved at once using bulk_save
+
     for _ in all_attrs:
+        # check which of the all_attrs are sent by javascript
         each[_] = request.POST.get(_)
 
     if "," in str(each['acc_no']):
+        # if the accession numbers are seperated by a ',' then add the same
+        # info should be aded for each of the accession numbers specified
         acc_list = [_.strip(" ") for _ in each['acc_no'].split(",")]
+
     elif "-" in str(each['acc_no']):
+        # if the accession numbers are seperated by a '-', then a range is
+        # specified and the same info is added to the range a - b
         acc_strip = [int(_) for _ in each['acc_no'].split("-")]
         if len(acc_strip) != 2:
             raise TypeError("Range Too Many or To Few (not 2) ")
         acc_list = list(range(acc_strip[0], acc_strip[1]+1))
     else:
+        # if only a single accession number is given, add only that to acc_list
         acc_list = [each['acc_no']]
 
     for val in acc_list:
+        # check if the accession number is a string, if it is a string, then
+        # stip off all the space, else if it is an integer, then let it be
         if val.__class__ == str:
             accession_number = val.strip(" ")
         else:
             accession_number = val
 
+        # the three fields that are necessary for each book are:
+        #           1) Accession Number
+        #           2) No. of pages
+        #           3) Title
+        # if any of these fields is not given, then the STATE is changed to -1
+        # and the book is not saved.
         if accession_number in [None, "None", 0, "0", ""] or "-" in accession_number:
             STATE = -1
             continue
@@ -178,17 +207,19 @@ def add_book(request):
         # either create a new book or edit an already existing book
         book_was_created = True
         try:
-            book = Book.objects.filter(accession_number=toint(accession_number))
+            book = Book.objects.filter(
+                    accession_number=toint(accession_number))
             if book.count() == 0:
                 raise ObjectDoesNotExist()
             else:
                 book = book[0]
             book_was_created = False
         except ObjectDoesNotExist:
-            book = Book.objects.create(accession_number=toint(accession_number),
-                                       title=each['title'].lower(),
-                                       no_of_pages=toint(
-                                       each['no_of_pages']))
+            book = Book.objects.create(
+                    accession_number=toint(accession_number),
+                    title=each['title'].lower(),
+                    no_of_pages=toint(
+                        each['no_of_pages']))
 
         # if the book was found, the title, page No. and accession number
         # can also to change
@@ -217,7 +248,7 @@ def add_book(request):
                 year=toint(each['pub_year']))
             if publisher[1]:
                 publisher = publisher[0]
-                publisher.save()
+                # publisher.save()
             else:
                 publisher = publisher[0]
             book.publisher = publisher
@@ -244,7 +275,6 @@ def add_book(request):
             gifter_phn = each['gftd_phn']
             gifter_email = each['gftd_email']
             # only create new database object if the data has been changed
-
             if book.gifted_by is None or (gifter_name not in [None, ''] or gifter_name.lower() != book.gifted_by.get_name().lower() or gifter_email != book.gifted_by.get_email() or gifter_phn != book.gifted_by.get_phone_no()):
                 gifter = Gifter.objects.get_or_create(gifter_name=gifter_name)
                 gifter = gifter[0]
@@ -268,14 +298,15 @@ def add_book(request):
             book.keywords.clear()
             for keyword in keywords:
                 keyword = keyword.strip(' ')
-                book.keywords.get_or_create(name=keyword, slug=slugify(keyword))
+                book.keywords.get_or_create(
+                        name=keyword,
+                        slug=slugify(keyword))
 
         # this stores the name of the person who uodated the book, along with
         # the date and time of modification
         bookSaver = BookSaver.objects.create(user=request.user)
-        bookSaver.save()
         book.saved_by.add(bookSaver)
-        book.save()
+        books_list.append(book)
         # generic fields
         for field in GenericField.objects.all():
             program_key = field.get_programatic_key()
@@ -286,9 +317,14 @@ def add_book(request):
                 link.value = request.POST.get(key)
                 link.save()
 
-        STATE = 0
+        STATE = 0  # STATE = 0 menas teh book was saved
+
     t1 = time.time()
     print t1 - t0
+
+    for book in books_list:
+        book.save()
+
     if STATE == 0:
         return JsonResponse({"success": True})
     else:
@@ -336,7 +372,6 @@ def editEntry(request, acc_no):
         div_len = total_no_of_cols_entry / 12
         div_offset = ((div_len * total_no_of_cols_entry) - 12) / 2
 
-    print columns_for_entry_div
 
     return render(request,
                   "head/entry.html", addGlobalContext({
@@ -654,7 +689,7 @@ def bookInfo(request, accNo):
 
 @login_required(login_url="/login")
 @permission_required(("change_lend", "add_lend"))
-def __borrow__(request, acc_no = None, username = None):
+def __borrow__(request, acc_no=None, username=None):
     config.reload()
     username = request.POST.get("username", None)
     bookID = request.POST.get("bookID", None)
@@ -718,7 +753,7 @@ def __borrow__(request, acc_no = None, username = None):
 @login_required(login_url="/login")
 @permission_required(("change_lend", "add_lend"))
 def borrow(request):
-    return __borrow__()
+    return __borrow__(request)
 
 
 @login_required(login_url="/login")
@@ -802,5 +837,5 @@ def reviveBook(request, accNo):
     if books.count() == 1:
         books[0].bring_back()
     else:
-        print accNo
+        print "there are many books with accession number " + str(accNo)
     return bookInfo(request, accNo=accNo)

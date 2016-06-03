@@ -19,6 +19,7 @@ var NP_EN_STRUCT = {
 };
 
 $("#dataEntrySuccessful").hide();
+$("#allFieldsEmptyMessage").hide();
 $("#dataEntryUnSuccessful").hide();
 
 function saveBook(){

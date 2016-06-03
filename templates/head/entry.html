@@ -1,4 +1,4 @@
-n{% extends 'base.html' %}
+{% extends 'base.html' %}
 {% load static %}
 {% load bookFilters %}
 {% load nepali %}
@@ -30,9 +30,83 @@ var max_accession_number = parseInt("{{ largest_accession_number }}", 10);
 <script src="{% static 'js/entry-move.js' %}"></script>
 <script src="{% static 'js/entry.js' %}"></script>
 {% endblock %}
+{% block post-js-internal %}
+
+
+$("#isbn_book_not_found").hide();
+$("#book_info").hide();
+$("#automatic_entry_div").hide();
+$("#bookNotFoundOnline").hide();
+
+var book_info = {};
+var currentStateIsManual = 0;
+
+function getData(data){
+return data;
+}
+
+function showData(isbn){
+// this function takes the value of a book in book_info and displays it
+if ($.isEmptyObject(book_info))
+{
+$("#bookNotFoundOnline").show("slow");
+}
+else{
+var isbn_field = "ISBN:" + isbn.toString();
+var arr = book_info[isbn_field];
+var authors = "";
+$("#span_title").text(arr.title);
+for (i = 0; i < arr.authors.length; i++ )
+authors += arr.authors[i].name + " | ";
+$("#span_authors").text(authors);
+for (i = 0; i < arr.authors.length; i++ )
+$("#span_published_date").text(arr.publish_date);
+$("#span_number_of_pages").text(arr.number_of_pages);
+$("#span_call_number").text(arr.classifications.dewey_decimal_class);
+$("#book_info").show();
+}
+}
+
+$("#search_book_online_trigger").click(function(){
+var isbn = $("#isbn_input").val();
+if (isNaN(isbn) == false)
+$.ajax(
+{
+url:"https://openlibrary.org/api/books?bibkeys=ISBN:"+isbn.toString()+"&jscmd=data&callback=getData",
+crossDomain:true,
+dataType:"jsonp"
+}
+).done(function(data){book_info=data;showData(isbn);});
+else{
+$("#isbn_span").text(isbn);
+$("#isbn_book_not_found").show("slow").delay(2000).hide("slow");
+}
+});
+
+
+$("#automatic_entry_btn").click(
+function(){
+var toggleBtn = $("#toggleManAutoBtn");
+//prefix space ` ` to the button text to make it look good with glyphicon
+if (currentStateIsManual == 0)
+{
+$("#manual_entry_div").hide("slow");$("#automatic_entry_div").show("slow");
+toggleBtn.text(" Manually Enter Data");
+currentStateIsManual = 1;
+}
+else{
+$("#automatic_entry_div").hide("slow");$("#manual_entry_div").show("slow");
+toggleBtn.text(" Find Book Online");
+currentStateIsManual = 0;
+}
+}
+);
+
+{% endblock %}
 
 {% block extras %}
 {% endblock %}
+
 
 
 {% block jumbotron %}
@@ -40,11 +114,13 @@ var max_accession_number = parseInt("{{ largest_accession_number }}", 10);
 
 
 {% block content %}
-  <div class="container-fluid">
-    <div class=" col-sm-12">
-      <h3><span class="text-hades">HADES</span> - <span class="text-hades">H</span>ere's <span class="text-hades">A</span>nother <span class="text-hades">D</span>ata <span class="text-hades">E</span>ntry <span class="text-hades">S</span>ystem</h3>
-    </div>
+
+
+<div class="container-fluid">
+  <div class=" col-sm-12">
+    <h3><span class="">HADES</span> - <span class="">H</span>eres <span class="">A</span>nother <span class="">D</span>ata <span class="">E</span>ntry <span class="">S</span>ystem</h3>
   </div>
+</div>
 
 <div class="container-fluid">
   <div class="container-fluid">
@@ -52,6 +128,7 @@ var max_accession_number = parseInt("{{ largest_accession_number }}", 10);
       <div class="btn-group">
         <button class="btn btn-success btn-menu" id="saveBook"><span class="glyphicon glyphicon-save"></span> {{ globals.text.save_book }}</button>
         <button class="btn btn-info btn-menu" onclick="clearInputFields()"> <span class="glyphicon glyphicon-erase"></span>  {{ globals.text.clear_fields }}</button>
+        <button class="btn btn-info btn-menu" id="automatic_entry_btn"> <span class="glyphicon glyphicon-search"></span><span id="toggleManAutoBtn"> Find Book Online</span></button>
         {% if book != None %}
         <a class="btn btn-info btn-menu" href="{% url 'book' accNo=book.accession_number%}"><span class="glyphicon glyphicon-info-sign"></span> {{ globals.text.about_book }}</a>
         {% endif %}
@@ -60,40 +137,94 @@ var max_accession_number = parseInt("{{ largest_accession_number }}", 10);
   </div>
 </div>
 
-<div align=center id="dataEntrySuccessful" class="panel panel-success">
-  <div class="panel-heading">
-    <b><span> {{globals.text.book_was_saved}}।</span></b>
+
+
+<div id="automatic_entry_div" class="container" align=center>
+  <div>
+    <h4 class="modal-title" id="myModalLabel">{{ globals.text.search_book_online }}</h4>
+  </div>
+  <div>
+    <label for="isbn_input">{{globals.text.isbn}}</label>
+    <input id="isbn_input" type="text" class="form-control"/>
+    <div class="panel panel-danger" id="isbn_book_not_found">
+      <div class="panel-heading">Book Not Found</div>
+      <div class="panel-body">
+        The book with isbn number <span id="isbn_span"></span> was not found!
+      </div>
+    </div>
+    <div class="panel panel-info" id="book_info">
+      <div class="panel-heading">{{ globals.text.about_book }}</div>
+      <div class="panel-body">
+        <p>
+        Title: <span id="span_title"></span>
+        </p>
+        <p>
+        Authors: <span id="span_authors"></span>
+        </p>
+        <p>
+        Published Date: <span id="span_published_date"></span>
+        </p>
+        <p>
+        Dewey Call Number: <span id="span_call_number"></span>
+        </p>
+        <p>
+        No. of pages: <span id="span_number_of_pages"></span>
+        </p>
+      </div>
+    </div>
+  </div>
+  <div>
+    <button class="btn btn-default" id="search_book_online_trigger">{{globals.text.search_book}}</button>
+  </div>
+  <div id="bookNotFoundOnline" class="panel panel-default">
+    <div class="panel-heading">
+      Book was not found
+    </div>
   </div>
 </div>
-<div align=center id="dataEntryUnSuccessful" class="panel panel-danger">
-  <div class="panel-heading">
-    <b><span> {{globals.text.book_was_not_saved}}।</span></b>
+
+
+<div id="manual_entry_div">
+  <div align=center id="allFieldsEmptyMessage" class="panel panel-info">
+    <div class="panel-heading">
+      <b><span> सबै छेत्रहरु खाली भए।</span></b>
+    </div>
   </div>
-</div>
-<br>
-{% csrf_token %}
-<div id="body" class="container">
-  {% for each in columns_for_entry_div %}
-  <div class="col col-sm-6">
-    {% if each.0 != None %}
-    <div class="form-group">
-      <label>{{each.0.1.0|nepali }} <span style="color:gray">{{ each.0.1.0|title }}</span></label>
+  <div align=center id="dataEntrySuccessful" class="panel panel-success">
+    <div class="panel-heading">
+      <b><span> {{globals.text.book_was_saved}}।</span></b>
+    </div>
+  </div>
+  <div align=center id="dataEntryUnSuccessful" class="panel panel-danger">
+    <div class="panel-heading">
+      <b><span> {{globals.text.book_was_not_saved}}।</span></b>
+    </div>
+  </div>
+  <br>
+  {% csrf_token %}
+  <div id="body" class="container">
+    {% for each in columns_for_entry_div %}
+    <div class="col col-sm-6">
+      {% if each.0 != None %}
+      <div class="form-group">
+        <label>{{each.0.1.0|nepali }} <span style="color:gray">{{ each.0.1.0|title }}</span></label>
         <font id="input-font" face=''>
-        <input type="text" id="{{ each.0.0 }}" mid="{{ each.0.1.1  }}" style="width:100%;" name="{{ each.0.1.0 }}" value="{{ book|getBookValue:each.0.1.1 }}"  placeholder="{{ each.0.1.0|nepali}}" class="form-control input input-{{ each.0.1.1 }}" required {% if each.0.0 == 1 %} autofocus {% endif %} spellcheck="true">
-      </font>
+          <input type="text" id="{{ each.0.0 }}" mid="{{ each.0.1.1  }}" style="width:100%;" name="{{ each.0.1.0 }}" value="{{ book|getBookValue:each.0.1.1 }}"  placeholder="{{ each.0.1.0|nepali}}" class="form-control input input-{{ each.0.1.1 }}" required {% if each.0.0 == 1 %} autofocus {% endif %} spellcheck="true">
+        </font>
+      </div>
+      {% endif %}
+    </div>
+    {% if each.1 != None %}
+    <div class="col col-sm-6">
+      <div class="form-group">
+        <label>{{ each.1.1.0|nepali }} <span style="color:gray">{{ each.1.1.0|title }}</span></label>
+        <font id="input-font" face=''>
+          <input type="text" id="{{ each.1.0 }}" mid="{{each.1.1.1  }}" style="width:100%"  name="{{ each.1.1.0 }}" value="{{ book|getBookValue:each.1.1.1 }}" placeholder="{{ each.1.1.0|nepali }}" class="form-control input input-{{ each.1.1.1 }}" required {% if each.1.0 == 1 %} autofocus {% endif %} spellcheck="true">
+        </font>
+      </div>
     </div>
     {% endif %}
+    {% endfor %}
   </div>
-  {% if each.1 != None %}
-  <div class="col col-sm-6">
-    <div class="form-group">
-      <label>{{ each.1.1.0|nepali }} <span style="color:gray">{{ each.1.1.0|title }}</span></label>
-      <font id="input-font" face=''>
-        <input type="text" id="{{ each.1.0 }}" mid="{{each.1.1.1  }}" style="width:100%"  name="{{ each.1.1.0 }}" value="{{ book|getBookValue:each.1.1.1 }}" placeholder="{{ each.1.1.0|nepali }}" class="form-control input input-{{ each.1.1.1 }}" required {% if each.1.0 == 1 %} autofocus {% endif %} spellcheck="true">
-      </font>
-    </div>
-  </div>
-  {% endif %}
-  {% endfor %}
 </div>
 {% endblock %}

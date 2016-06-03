@@ -133,13 +133,11 @@ TYPES = [
 
 def get_ip_addr():
     import commands
-    return commands.getoutput("hostname -I") # -I stands for --all-ip-addresses
-    
+    return commands.getoutput("hostname -I")  # -I is for --all-ip-addresses
 
 
 def addGlobalContext(context=None):
     types = TYPES + ["."+_.get_key() for _ in GenericField.objects.all()]
-    print types
     global_dict = {
         "globals": Globals(),  # user Globals() not config because the updates
         # to config files need to be seen immediately

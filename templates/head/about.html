@@ -10,6 +10,13 @@
 
 {% block content %}
 
-{{ body_code|addSmilies|safe }}
+{% if user.is_superuser %}
 
+<a href="{% url 'writeHomeBody' %}" class="btn btn-primary">{{ globals.text.edit_page }}</a>
+<hr>
+{% endif %}
+
+<div class="container-fluid">
+  {{ body_code|addSmilies|safe }}
+</div>
 {% endblock %}

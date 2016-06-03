@@ -23,7 +23,6 @@ config = Globals()
 def to_bs(value):
     if value.__class__ not in [unicode, str] and value is not None:
         try:
-            print value.__class__
             if value.__class__ is datetime.datetime:
                 value = value.date()
             value = value.isoformat()

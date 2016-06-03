@@ -35,10 +35,8 @@ def addNewField(request):
     # 1 - invalid accession number
     # 2 - invalid field name
 
-    print request.method
     if request.method.upper() == "POST":
         key = request.POST.get("key", None)
-        print key
         if key not in [None, ""]:
             gen_field = GenericField.objects.create(key=key)
             accNo = request.POST.get("accNo", None)
