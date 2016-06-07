@@ -21,6 +21,23 @@ var NP_EN_STRUCT = {
 $("#dataEntrySuccessful").hide();
 $("#allFieldsEmptyMessage").hide();
 $("#dataEntryUnSuccessful").hide();
+$("#accessionNumberExistsPanel").hide();
+$("#accessionNumberDoesNotExistPanel").hide();
+
+function checkIfAccNoExists(accNo){
+  var exists = 0;
+  $.getJSON('/head/book/does_the_accession_number_exist/'+accNo.toString(), function(data){
+    if (data.exists == 1)
+      $("#accessionNumberExistsPanel").show('slow').delay(2000).hide('fast');
+    else
+      $("#accessionNumberDoesNotExistPanel").show('slow').delay(2000).hide('fast');
+  });
+}
+
+
+function checkIfEnteredAccessionNumberExists(){
+  checkIfAccNoExists($(".input-acc_no")[0].value);
+}
 
 function saveBook(){
   /*

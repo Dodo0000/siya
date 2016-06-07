@@ -23,20 +23,19 @@ var is_edit = {{ is_edit }};
 
 var no_of_rows = {{ no_of_rows }};
 var max_accession_number = parseInt("{{ largest_accession_number }}", 10);
+
+
 {% endblock %}
 <!-- The bootstrap and Jquery libraries will be in the middle, here -->
 
 {% block post-js-external %}
+<script src="{% static 'js/check_if_accession_exists.js' %}"></script>
 <script src="{% static 'js/entry-move.js' %}"></script>
 <script src="{% static 'js/entry.js' %}"></script>
 {% endblock %}
 {% block post-js-internal %}
 
 
-$("#isbn_book_not_found").hide();
-$("#book_info").hide();
-$("#automatic_entry_div").hide();
-$("#bookNotFoundOnline").hide();
 
 var book_info = {};
 var currentStateIsManual = 0;
@@ -129,6 +128,7 @@ currentStateIsManual = 0;
         <button class="btn btn-success btn-menu" id="saveBook"><span class="glyphicon glyphicon-save"></span> {{ globals.text.save_book }}</button>
         <button class="btn btn-info btn-menu" onclick="clearInputFields()"> <span class="glyphicon glyphicon-erase"></span>  {{ globals.text.clear_fields }}</button>
         <button class="btn btn-info btn-menu" id="automatic_entry_btn"> <span class="glyphicon glyphicon-search"></span><span id="toggleManAutoBtn"> Find Book Online</span></button>
+        <button class="btn btn-info btn-menu" id="check_if_acc_exists" onclick="checkIfEnteredAccessionNumberExists()"> <span class="glyphicon glyphicon-"></span><span id="CheckAccessionNumber">{{ globals.text.accession_number }} छ?</span></button>
         {% if book != None %}
         <a class="btn btn-info btn-menu" href="{% url 'book' id=book.id%}"><span class="glyphicon glyphicon-info-sign"></span> {{ globals.text.about_book }}</a>
         {% endif %}
@@ -139,20 +139,20 @@ currentStateIsManual = 0;
 
 
 
-<div id="automatic_entry_div" class="container" align=center>
+<div id="automatic_entry_div" class="container initHide" align=center>
   <div>
     <h4 class="modal-title" id="myModalLabel">{{ globals.text.search_book_online }}</h4>
   </div>
   <div>
     <label for="isbn_input">{{globals.text.isbn}}</label>
     <input id="isbn_input" type="text" class="form-control"/>
-    <div class="panel panel-danger" id="isbn_book_not_found">
+    <div class="panel panel-danger initHide" id="isbn_book_not_found">
       <div class="panel-heading">Book Not Found</div>
       <div class="panel-body">
         The book with isbn number <span id="isbn_span"></span> was not found!
       </div>
     </div>
-    <div class="panel panel-info" id="book_info">
+    <div class="panel panel-info initHide" id="book_info">
       <div class="panel-heading">{{ globals.text.about_book }}</div>
       <div class="panel-body">
         <p>
@@ -176,26 +176,36 @@ currentStateIsManual = 0;
   <div>
     <button class="btn btn-default" id="search_book_online_trigger">{{globals.text.search_book}}</button>
   </div>
-  <div id="bookNotFoundOnline" class="panel panel-default">
+  <div id="bookNotFoundOnline" class="panel panel-default initHide">
     <div class="panel-heading">
-      Book was not found
+      किताब  भेटिएन।  
     </div>
   </div>
 </div>
 
 
 <div id="manual_entry_div">
-  <div align=center id="allFieldsEmptyMessage" class="panel panel-info">
+  <div align=center id="accessionNumberExistsPanel" class="panel panel-success">
+    <div class="panel-heading">
+      <b><span> {{ globals.text.accession_number }} भेटियो। </b></span>
+    </div>
+  </div>
+  <div align=center id="accessionNumberDoesNotExistPanel" class="panel panel-info initHide">
+    <div class="panel-heading">
+      <b><span> {{ globals.text.accession_number }} भेटिएन।</b></span>
+    </div>
+  </div>
+  <div align=center id="allFieldsEmptyMessage" class="panel panel-info initHide">
     <div class="panel-heading">
       <b><span> सबै छेत्रहरु खाली भए।</span></b>
     </div>
   </div>
-  <div align=center id="dataEntrySuccessful" class="panel panel-success">
+  <div align=center id="dataEntrySuccessful" class="panel panel-success initHide">
     <div class="panel-heading">
       <b><span> {{globals.text.book_was_saved}}।</span></b>
     </div>
   </div>
-  <div align=center id="dataEntryUnSuccessful" class="panel panel-danger">
+  <div align=center id="dataEntryUnSuccessful" class="panel panel-danger initHide">
     <div class="panel-heading">
       <b><span> {{globals.text.book_was_not_saved}}।</span></b>
     </div>
@@ -207,7 +217,7 @@ currentStateIsManual = 0;
     <div class="col col-sm-6">
       {% if each.0 != None %}
       <div class="form-group">
-        <label>{{each.0.1.0|nepali }} <span style="color:gray">{{ each.0.1.0|title }}</span></label>
+        <label for="{{each.0.1.0}}" id="label-{{ each.0.1.1 }}">{{each.0.1.0|nepali }} <span style="color:gray">{{ each.0.1.0|title }}</span></label>
         <font id="input-font" face=''>
           <input type="text" id="{{ each.0.0 }}" mid="{{ each.0.1.1  }}" style="width:100%;" name="{{ each.0.1.0 }}" value="{{ book|getBookValue:each.0.1.1 }}"  placeholder="{{ each.0.1.0|nepali}}" class="form-control input input-{{ each.0.1.1 }}" required {% if each.0.0 == 1 %} autofocus {% endif %} spellcheck="true">
         </font>
@@ -217,7 +227,7 @@ currentStateIsManual = 0;
     {% if each.1 != None %}
     <div class="col col-sm-6">
       <div class="form-group">
-        <label>{{ each.1.1.0|nepali }} <span style="color:gray">{{ each.1.1.0|title }}</span></label>
+        <label for="{{each.1.1.0}}" id="label-{{ each.1.1.1 }}">{{ each.1.1.0|nepali }} <span style="color:gray">{{ each.1.1.0|title }}</span></label>
         <font id="input-font" face=''>
           <input type="text" id="{{ each.1.0 }}" mid="{{each.1.1.1  }}" style="width:100%"  name="{{ each.1.1.0 }}" value="{{ book|getBookValue:each.1.1.1 }}" placeholder="{{ each.1.1.0|nepali }}" class="form-control input input-{{ each.1.1.1 }}" required {% if each.1.0 == 1 %} autofocus {% endif %} spellcheck="true">
         </font>

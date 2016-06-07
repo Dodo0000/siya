@@ -38,7 +38,7 @@
         </div>
         <div class="col col-sm-11">
           <div class="book_prop title">
-            <a href="{% url 'book' book.accession_number %}?source=search"> <span class="glyphicon glyphicon-book text-primary"></span> {{book.get_title}}</a>
+            <a href="{% url 'book' book.id %}?source=search"> <span class="glyphicon glyphicon-book text-primary"></span> {{book.get_title}}</a>
           </div> <!-- title div -->
           <div class="book_prop authors">
             {{ globals.text.authors }} : <i>{% if book.get_authors %} {{book.get_authors}} {% else %}{{ globals.text.no_authors }}{% endif %}</i>

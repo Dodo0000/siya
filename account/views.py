@@ -31,6 +31,17 @@ def profile(request, username):
     user = get_object_or_404(ModUser, username=username)
     books_borrowed = Lend.objects.filter(user=user, returned=False)
     len_books_borrowed = len(books_borrowed)
+    if user.is_staff:
+        books_saved = [
+                {
+                    'book': _,
+                    'date': _.saved_by.filter(
+                        user=user).order_by('date')[0].date
+                    }
+                for _ in Book.objects.filter(saved_by__user=user)
+                ]
+    else:
+        books_saved = None
     return render(
         request,
         'account/user.html',
@@ -40,7 +51,8 @@ def profile(request, username):
                 'date': datetime.date.today(),
                 'search_user': user,
                 'books_borrowed': books_borrowed,
-                'len_books_borrowed': len_books_borrowed
+                'len_books_borrowed': len_books_borrowed,
+                'books_saved': books_saved
                 }
             ))
 

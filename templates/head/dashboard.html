@@ -116,7 +116,7 @@
         {% for book in recently_added_books %}
         <tr>
           <td>{{book.accession_number}}</td>
-          <td><a href="{% url 'book' book.accession_number %}">{{book.get_title}}</a></td>
+          <td><a href="{% url 'book' book.id %}">{{book.get_title}}</a></td>
           <td>{{book.call_number}}</td>
           <td>{{book.get_authors}}</td>
           <td>{{book.get_publishers}}</td>

@@ -47,12 +47,31 @@
       <td>
 	{% for each in books_borrowed %}
 	<p>
-	  <span class="text-info"><a href="{% url 'book' accNo=each.book.accession_number %}">{{each}}</a></span>
+	  <span class="text-info"><a href="{% url 'book' id=each.book.id %}">{{each}}</a></span>
 	</p>
 	{% endfor %}
       </td>
     </tr>
-    
   </table>
 
+  <table class="table table-responsive table-hover">
+    <thead>
+      <td>
+        दर्ता  गरेका  {{ globals.text.books }} 
+        <span class="label label-primary">{{ books_saved|length }}</span>
+      </td>
+      <td>
+        {{ globals.text.date }}
+    </thead>
+        {% for each in books_saved %}
+    <tr>
+      <td>
+        <span class="text-info"><a href="{% url 'book' id=each.book.id %}">{{ each.book.get_title|title }}</a></span>
+      </td>
+      <td>
+        {{ each.date|tobs }}
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
 {% endblock %}

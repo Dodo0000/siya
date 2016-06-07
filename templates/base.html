@@ -119,7 +119,7 @@ body{font-family: "kalimati";background-color:#fff;height:100%;}.errorlist{color
   <div class="row">
     <div class="col-sm-3 col-md-2 sidebar" id="sidePanel">
       <ul class="nav nav-sidebar" align=center>
-        <li class="logo" >
+        <li class="logo button" href="{% url 'home' %}">
         </li>
       </ul>
       <ul class="nav nav-sidebar">
@@ -148,6 +148,32 @@ body{font-family: "kalimati";background-color:#fff;height:100%;}.errorlist{color
         {% endif %}
         </li>
       </ul>
+      {% if user.is_staff %}
+      <ul class="nav nav-sidebar">
+        <li>
+        <input class="form-control" id="checkIfAccessionNumberExistsInput" type="text" placeholder="{{ globals.text.accession_number }} छ?">
+        </li>
+        <li>
+        <button class="btn btn-primary" onclick="checkIfAccessionNumberExists('checkIfAccessionNumberExistsInput','accNoExistsSpan','accNoDoesNotExistSpan')">
+          {{ globals.text.accession_number }} छ?
+        </button>
+        </li>
+        <li>
+        <div class='panel panel-success initHide' id="accNoExistsSpan">
+          <div class='panel-heading'>
+            {{ globals.text.accession_number }} छ!!
+          </div>
+        </div>
+        </li>
+        <li>
+        <div class='panel panel-danger initHide' id="accNoDoesNotExistSpan">
+          <div class='panel-heading'>
+            {{ globals.text.accession_number }} छैन।
+          </div>
+        </div>
+        </li>
+      </ul>
+      {% endif %}
     </div> <!-- sidePanel -->
     <div class="col col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2">
       {% endblock %}

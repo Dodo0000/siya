@@ -113,8 +113,17 @@ def toint(val, lang="EN"):
 # #############################################################################
 # ############################## AJAX CALL VIEWS ##############################
 
+
 @login_required(login_url="/login/")
-@permission_required(("head.add_book", "head.change_book"), login_url="/login/")
+def does_the_accession_number_exist(request, accNo):
+    if Book.objects.filter(accession_number=accNo).count() > 0:
+        return JsonResponse({'exists': 1})
+    return JsonResponse({'exists': 0})
+
+
+@login_required(login_url="/login/")
+@permission_required(
+        ("head.add_book", "head.change_book"), login_url="/login/")
 def validate_book(request):
     '''
     checks if book with the given accession number exists
@@ -126,7 +135,8 @@ def validate_book(request):
         return JsonResponse({"data_correct": False, "valid": False})
     is_valid = -1
     if acc_no is not None:
-        is_valid = int(len(Book.objects.filter(accession_number=acc_no, state=0)) > 0)
+        is_valid = int(
+                len(Book.objects.filter(accession_number=acc_no, state=0)) > 0)
 
     json_dict = {
         'data_correct': True,
