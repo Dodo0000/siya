@@ -51,7 +51,7 @@ border-radius: 6px;
         <td>
           {% for book in popular_books %}
           <tr>
-          <a href="{% url 'book' accNo=book.accession_number  %}">
+          <a href="{% url 'book' id=book.id  %}">
             <div class="col col-sm-4 featured-book">
                 <h4><i>{% if book.get_authors %}{{ book.get_pretty_authors }}को   {% endif %} {{ book.get_pretty_title }}</h4></i>
               {% if book.get_publishers %}

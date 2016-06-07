@@ -44,7 +44,7 @@
 <div class="container-fluid">
   <div class=" btn-group">
     {% if book.is_discarded == False and user.is_authenticated == True and user|hasPerm:"head.change_book" and user|hasPerm:"head.delete_book" %}
-    <a class="btn btn-warning" href="{% url 'delete_book_confirm' book.get_accession_number %}">
+    <a class="btn btn-warning" href="{% url 'delete_book_confirm' book.id %}">
       <span class="glyphicon glyphicon-remove"></span> {{ globals.text.discard_book }}
     </a>
     <a class="btn btn-warning" data-toggle="modal" data-target="#addNewField" >
@@ -53,19 +53,19 @@
     <a class="btn btn-warning" href="{% url 'miscFieldsHome' %}" >
       <span class="glyphicon glyphicon-book"></span> {{ globals.text.see_all_new_fields }}
     </a>
-    <a class="btn btn-info" href="{% url 'editEntry' acc_no=book.get_accession_number %}">
+    <a class="btn btn-info" href="{% url 'editEntry' id=book.id %}">
       <span class="glyphicon glyphicon-edit"></span> {{ globals.text.edit_book }}
     </a>
     {% elif book.is_discarded == False and user.is_authenticated == True and user|hasPerm:"head.change_book" and user|hasPerm:"head.delete_book" == 0 %}
-    <a class="btn btn-info" href="{% url 'editEntry' acc_no=book.get_accession_number %}">
+    <a class="btn btn-info" href="{% url 'editEntry' id=book.id %}">
       <span class="glyphicon glyphicon-edit"></span> {{ globals.text.edit_book }}
     </a>
     {% elif book.is_discarded == False and user.is_authenticated == True and user|hasPerm:"head.change_book" == 0 and user|hasPerm:"head.delete_book" %}
-    <a class="btn btn-warning" href="{% url 'delete_book_confirm' book.get_accession_number %}">
+    <a class="btn btn-warning" href="{% url 'delete_book_confirm' book.id %}">
       <span class="glyphicon glyphicon-remove"></span> {{ globals.text.discard_book }}
     </a>
     {% elif book.is_discarded == True and user.is_authenticated == True %}
-    <a class="btn btn-info" href="{% url 'revive_book' accNo=book.get_accession_number %}">
+    <a class="btn btn-info" href="{% url 'revive_book' id=book.id %}">
       <span class="glyphicon glyphicon-edit"></span> {{ globals.text.revive_book }}
     </a>
     {% endif %}

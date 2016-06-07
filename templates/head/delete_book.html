@@ -9,7 +9,7 @@
     <h1>{{ book.title|title }}</h1>
     <h4>{{ globals.text.author }} :  {{ book.get_authors|title }}</h4> <!--  -->
     <h4> {{ globals.text.accession_number}} {{ book.accession_number }} </h4> <!--  -->
-    <a href="{% url 'book' book.accession_number %}">{{globals.text.more_info}}</a> <!--  -->
+    <a href="{% url 'book' book.id %}">{{globals.text.more_info}}</a> <!--  -->
   </div> <!-- jumbotron -->
   </div>
   
@@ -17,7 +17,7 @@
 
 <div align=center>
   <h3>के यो किताबलाई हटाउने हो?</h3>
-  <a class="btn btn-danger" href="{% url 'delete_book' book.get_accession_number %}">{{globals.text.discard_book}}</a>
+  <a class="btn btn-danger" href="{% url 'delete_book' book.id %}">{{globals.text.discard_book}}</a>
 </div>
 
 {% elif state == -1 %}

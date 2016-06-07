@@ -10,7 +10,7 @@
 {% endblock %}
 
 {% block pre-js-internal %}
-// the variables here should come before teh js/entry.js script
+// the variables here should come before the js/entry.js script
 {% autoescape off %}
 var cols_table = {{ columns_table_json }}
 var cols_entry = {{ columns_entry_json }}
@@ -130,7 +130,7 @@ currentStateIsManual = 0;
         <button class="btn btn-info btn-menu" onclick="clearInputFields()"> <span class="glyphicon glyphicon-erase"></span>  {{ globals.text.clear_fields }}</button>
         <button class="btn btn-info btn-menu" id="automatic_entry_btn"> <span class="glyphicon glyphicon-search"></span><span id="toggleManAutoBtn"> Find Book Online</span></button>
         {% if book != None %}
-        <a class="btn btn-info btn-menu" href="{% url 'book' accNo=book.accession_number%}"><span class="glyphicon glyphicon-info-sign"></span> {{ globals.text.about_book }}</a>
+        <a class="btn btn-info btn-menu" href="{% url 'book' id=book.id%}"><span class="glyphicon glyphicon-info-sign"></span> {{ globals.text.about_book }}</a>
         {% endif %}
       </div> <!-- button group -->
     </div>

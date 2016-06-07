@@ -335,11 +335,11 @@ def add_book(request):
 
 @login_required(login_url="/login")
 @permission_required(("head.add_book", "head.change_book"), login_url="/login/")
-def editEntry(request, acc_no):
+def editEntry(request, id):
     config.reload()
     book_exists = True
-    if acc_no is not None:
-        books = Book.objects.filter(accession_number=acc_no)
+    if id is not None:
+        books = Book.objects.filter(id=id)
         if len(books) < 1:
             return HttpResponseRedirect(reverse("entry"))
         else:
@@ -494,15 +494,15 @@ def dashboard(request):
 
 @login_required(login_url="/login")
 @permission_required("delete_book")
-def deleteBookConfirm(request, accNo):
+def deleteBookConfirm(request, id):
     config.reload()
-    if accNo.isdigit():
-        book = Book.objects.filter(accession_number=accNo, state=0)
+    if id.isdigit():
+        book = Book.objects.filter(id=id, state=0)
         len_book = book.count()
         if len_book == 0 or len_book > 1:
             context_dict = {
                     "state": -1,
-                    "message": "The No. of  book With Accession Number `{}` Was not 1".format(accNo),
+                    "message": "The No. of  book With ID `{}` Was not 1".format(id),
                     }
         else:
             context_dict = {
@@ -522,9 +522,9 @@ def deleteBookConfirm(request, accNo):
 
 @login_required(login_url="/login")
 @permission_required("delete_book")
-def deleteBook(request, accNo):
+def deleteBook(request, id):
     config.reload()
-    book = Book.objects.get(accession_number=accNo)
+    book = Book.objects.get(id=id)
     book.discard()
     context_dict = {"book": book}
     context_dict.update(GLOBAL_CONTEXT)
@@ -607,9 +607,9 @@ def searchBook(request):
                   }))
 
 
-def bookInfo(request, accNo):
+def bookInfo(request, id):
     config.reload()
-    books = Book.objects.filter(accession_number=accNo)
+    books = Book.objects.filter(id=id)
     if books.count() == 0:
         return HttpResponse("Book Not Found")
     else:
@@ -666,7 +666,7 @@ def bookInfo(request, accNo):
     refreshedHttpRedir = HttpResponseRedirect(
             reverse(
                 'book',
-                kwargs={'accNo': book.accession_number}) + "?search=refreshed")
+                kwargs={'id': book.id}) + "?search=refreshed")
     if get_source != "refreshed" and get_source is not None:
         book.add_view()
         return refreshedHttpRedir
@@ -832,10 +832,10 @@ def copyBook(request):
 
 
 @login_required(login_url="/login")
-def reviveBook(request, accNo):
-    books = Book.objects.filter(accession_number=accNo)
+def reviveBook(request, id):
+    books = Book.objects.filter(id=id)
     if books.count() == 1:
         books[0].bring_back()
     else:
         print "there are many books with accession number " + str(accNo)
-    return bookInfo(request, accNo=accNo)
+    return bookInfo(request, id=id)
