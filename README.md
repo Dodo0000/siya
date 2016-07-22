@@ -1,15 +1,15 @@
-## सिया पुस्तकालय सफ्टवेर
+## ALMS - ALMS Library Management System
 #####[Currently Being Hosted At [Nepal Japan Children Library](https://www.facebook.com/Nepal-Japan-Children-Library-117390398337579), Lainchaur, Kathmandu]
-Siya is a Django Based Library Management System
+ALMS is a Django Based Library Management System
 
-###__What Can Siya Do?__
+###__What Can ALMS Do?__
   * Catalog Books
   * Manage Members, volunteers and librarians
   * Lend books, return books
   * Take care of your accounting journal, ledger and trial balances
   * Search For Books based on all their properties
 
-###__How To Install Siya__
+###__How To Install ALMS__
 
 To install on a debian system, run this : 
 
