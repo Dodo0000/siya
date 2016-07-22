@@ -29,10 +29,10 @@
         <div class="col col-sm-1">
           <font size=5>
             <div align=center>
-              <a class="gly gly-info" href="{% url 'book' book.accession_number %}?source=search" title="{{ globals.text.more_info }}"><span class="glyphicon glyphicon-info-sign"></span></a>
+              <a class="gly gly-info" href="{% url 'book' book.id %}?source=search" title="{{ globals.text.more_info }}"><span class="glyphicon glyphicon-info-sign"></span></a>
             </div> <!-- more_info div -->
             <div align=center>
-              <a class="gly gly-warning" href="{% url 'editEntry' book.accession_number %}" title="{{ globals.text.edit_book }}"><span class="glyphicon glyphicon-edit"></span></a>
+              <a class="gly gly-warning" href="{% url 'editEntry' book.id %}" title="{{ globals.text.edit_book }}"><span class="glyphicon glyphicon-edit"></span></a>
             </div> <!-- more_info div -->
           </font>
         </div>

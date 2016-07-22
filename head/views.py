@@ -303,13 +303,12 @@ def add_book(request):
             book.volume = acc_list.index(val) + 1
 
         keywords = each['kwds'].split(",")
-        if len(keywords) != book.keywords.count():
-            book.keywords.clear()
-            for keyword in keywords:
-                keyword = keyword.strip(' ')
-                book.keywords.get_or_create(
-                        name=keyword,
-                        slug=slugify(keyword))
+	book.keywords.clear()
+	for keyword in keywords:
+	    keyword = keyword.strip(' ')
+	    book.keywords.get_or_create(
+	        name=keyword,
+		slug=slugify(keyword))
 
         # this stores the name of the person who uodated the book, along with
         # the date and time of modification
