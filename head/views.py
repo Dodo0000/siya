@@ -238,15 +238,14 @@ def add_book(request):
             book.no_of_pages = toint(each['no_of_pages'])
 
         authors = each['auth'].lower().split(",")
-        if len(authors) != book.author.count():
-            book.author.clear()
-            for author_name in each['auth'].lower().split(","):
-                # when saving, author names are seperated by a ,
-                author_name = author_name.strip(" ")
-                book.author.get_or_create(
-                    name=author_name,
-                    slug=slugify(author_name))
 
+	book.author.clear()
+	for author_name in each['auth'].lower().split(","):
+		# when saving, author names are seperated by a ,
+		author_name = author_name.strip(" ")
+		author = book.author.get_or_create(
+			name=author_name,
+			slug=slugify(author_name))
         if (
                 each['pub_place'] is None or
                 each['pub_year'] is None or
@@ -258,7 +257,7 @@ def add_book(request):
                 year=toint(each['pub_year']))
             if publisher[1]:
                 publisher = publisher[0]
-                # publisher.save()
+                publisher.save()
             else:
                 publisher = publisher[0]
             book.publisher = publisher
