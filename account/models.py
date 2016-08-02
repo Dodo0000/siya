@@ -41,10 +41,13 @@ from django.utils import timezone
 from django.core.mail import EmailMessage
 from django.core.urlresolvers import reverse
 
+from settings.models import Globals
 
 import datetime
 
 # Create your models here.
+
+config = Globals()
 
 class UserType(models.Model):
     '''
@@ -142,12 +145,25 @@ class ModUser(AbstractBaseUser, PermissionsMixin):
     school_varified = models.NullBooleanField(default=False)
     
     date_of_birth = models.DateField(null=True,blank=True)
+    
+    last_renew_date = models.DateField(default=timezone.now)
 
     is_staff = models.BooleanField(default=False)
 
     objects = UserManager()
 
     USERNAME_FIELD = "username"
+    
+    def how_old_am_i(self):
+	return (datetime.date.today() - self.last_renew_date).days
+		
+		
+    def has_expired(self):
+        return self.how_old_am_i() > int(config.misc['membership_valid_days'])
+	
+    def renew(self):
+	self.last_renew_date = datetime.datetime.today()
+	self.save()
 
     def get_address(self):
         return u"{0} ward, {1}, {2}".format(self.addr_ward_no, self.addr_tole, self.addr_municipality)

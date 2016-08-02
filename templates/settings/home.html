@@ -25,6 +25,17 @@
     <label for="late_fees_price">{{ config.text.how_much_late_fees_to_charge }}</label>
     <input type="late_fees_price" name="late_fees_price" class="form-control" id="late_fees_price" value="{{ config.misc.late_fees_price }}">
   </div>
+  
+    <div class="form-group">
+    <label for="max_books_borrow_days">{{ config.text.how_many_days_to_borrow_a_book }}</label>
+    <input type="max_books_borrow_days" name="max_books_borrow_days" class="form-control" id="max_books_borrow_days" value="{{ config.books.borrow_max_days }}">
+  </div>
+
+  <div class="form-group">
+    <label for="membership_valid_days">{{ config.text.how_long_is_membership_valid }}</label>
+    <input type="membership_valid_days" name="membership_valid_days" class="form-control" id="membership_valid_days" value="{{ config.misc.membership_valid_days }}">
+  </div>
+
   <input class="btn btn-primary" type=submit value="{{ config.text.save }}">
 </form>
 

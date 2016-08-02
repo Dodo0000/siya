@@ -8,3 +8,4 @@ simpleyaml
 configparser
 django-widget-tweaks
 django-markdown
+pygal

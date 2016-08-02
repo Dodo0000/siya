@@ -24,6 +24,7 @@ urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^accounts/', include('ledger.urls')),
     url(r'^groups/', include('almsGroups.urls')),
+    url(r'^graph/', include('graphs.urls')),
     url(r'^booktool/', include('booktool.urls')),
     url(r'^spreadsheet/', include('spreadsheet.urls')),
     url(r'^rst/', include('restructuredText.urls')),

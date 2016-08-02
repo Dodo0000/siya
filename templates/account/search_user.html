@@ -30,12 +30,12 @@
   {% for usr in users %}
   <div class="col col-sm-8 col-sm-offset-2">
     <div align=center class="well">
-      <h1><a href="{% url 'profile' username=user.username %}">{{ usr.get_name|title }}</a></h1>
+      <h1><a href="{% url 'profile' username=usr.username %}">{{ usr.get_name|title }}</a></h1>
       <h4>{{ usr.user_type.type|title }} {{ usr.date_joined|tobs }} देखी  {{ globals.text.member }}</h4>
       <p>उहाँले <span class="label label-info">{{ usr.lend_set.all.count }}</span> {% if len_books_borrowed == 1 %}{{ globals.text.book }}{% else %}{{ globals.text.books }}{% endif %} लिनु भएको छ।</p>
       <p> {{ globals.text.group }} - {% for group in usr.groups.all %} {{ group.name }} {% endfor %}</p>
       <br>
-      <a href="{% url 'profile' username=user.username %}">{{ globals.text.more_info }} </a>
+      <a href="{% url 'profile' username=usr.username %}">{{ globals.text.more_info }} </a>
     </div> <!-- well -->
   </div>
 {% endfor %}

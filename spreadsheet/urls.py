@@ -10,4 +10,5 @@ urlpatterns = [
             url(r'^borrowedbooks/$', 'spreadsheet.views.getBorrowedBookData',name="spreadsheetGetBorrowedBookData"),
             url(r'^allpublishers/$', 'spreadsheet.views.getAllPublisherData',name="spreadsheetGetAllPublisherData"),
             url(r'^booksWithoutCallNumber/$', 'spreadsheet.views.getBooksWithoutCallNumber',name="spreadsheetBooksWithoutCallNumber"),
+            url(r'^getSavedBooks/(?P<username>.+)$', 'spreadsheet.views.getSavedBooks',name="spreadsheetSavedBooks"),
         ]

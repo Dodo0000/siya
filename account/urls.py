@@ -10,6 +10,7 @@ urlpatterns = [
     url(r'^register/member/$', 'account.views.addMember', name="addMember"),
     url(r'^register/member/new/(?P<created>.*)$', 'account.views.addMemberWithArgs', name="addMemberWithArgs"),
     url(r'^logout/', 'account.views.logout_user', name="logout"),
-    url(r'^user/(?P<username>.+)/$', 'account.views.profile', name='profile'),
+    url(r'^account/(?P<username>.+)/$', 'account.views.profile', name='profile'),
     url(r'^verifySchool/(?P<userName>.+)/$', 'account.views.verifySchool', name='verifySchool'),
+    url(r'^renew/(?P<userName>.+)/$', 'account.views.renewUser', name='renewUser'),
         ]

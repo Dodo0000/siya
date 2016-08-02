@@ -7,19 +7,48 @@
 {% endblock %}
 
 {% block content %}
+{% if user.is_staff %}
+<!-- Modal -->
+<div id="monthlyReport" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">मासिक दर्ता गरिएका किताबहरु</h4>
+      </div>
+      <div class="modal-body">
+    <figure>
+      <embed type="image/svg+xml" src="{% url 'graphGetMonthlyBooksSavedGraph' username=search_user.username %}" />
+    </figure>      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">बन्द</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endif %}
 <div class="container-fluid">
   <div align=center class="col col-sm-offset-3 col-sm-6">
   <div class="well">
-    <h1>{{ search_user.get_name|title }}</h1>
-    <h4>{{ search_user.user_type.type|title }} {{ search_user.date_joined|tobs }} देखी  {{ globals.text.member }}</h4>
+    <h1>{% if search_user.has_expired %} <span class="text-danger">{% else %} <span class="text-primary">{% endif %} {{ search_user.get_name|title }}</span></h1>
+    <h4>{{ search_user.user_type.type|title }} {{ search_user.date_joined|tobs }} देखी  {{ globals.text.member }}  {% if search_user.has_expired %} (<span class="text-danger">सदस्यता सकिसक्यो</span>) {% endif %}</h4>
     <p>उहाँले <span class="label label-info">{{ len_books_borrowed }}</span> {% if len_books_borrowed == 1 %}{{ globals.text.book }}{% else %}{{ globals.text.books }}{% endif %} {{ globals.text.borrow }} गर्नु भयेको छ।</p>
     <p> {{ globals.text.group }} - {% for group in search_user.groups.all %} {{ group.name }} {% endfor %}</p>
+    <p> उँहाको खाताको नवीकरण <span class="label label-info"> {{ search_user.how_old_am_i }}</span> दिन अघि गरिएको थियो </p>
+    {% if search_user.is_staff and user.is_staff %}
+    <p>{{ books_saved|length }} दिनमा {{ len_books_saved }} किताबहरु दर्ता गर्नुभयो। <a class="btn btn-primary" href="{% url 'spreadsheetSavedBooks' username=search_user.username %}">दर्ता गरेका किताबहरुको स्प्रेड-शिट निकाल्नुहोस्।</a></p>
+    <p><button data-target="#monthlyReport" data-toggle="modal" class="btn btn-primary"> मासिक दर्ता गरिएका किताबहरु </button></p>
+    {% endif %}
   </div> <!-- jumbotron -->
   </div>
 </div><!-- container -->
 
 {%if request.user|hasPerm:"change_moduser" == True  or request.user.username == search_user.username %}
 <div class="container-fluid">
+  {% if search_user.has_expired %}<a class="btn btn-danger" href="{% url 'renewUser' userName=search_user.username %}"><b>{{ globals.text.renew_account }}</b></a> {% endif %}
   <a class="btn btn-info">{{ globals.text.set_new_password }}</a>
   <a class="btn btn-info">{{ globals.text.edit_user }}</a>
   <a class="btn btn-info">{{ globals.text.remove_user }}</a>
@@ -53,25 +82,5 @@
       </td>
     </tr>
   </table>
-
-  <table class="table table-responsive table-hover">
-    <thead>
-      <td>
-        दर्ता  गरेका  {{ globals.text.books }} 
-        <span class="label label-primary">{{ books_saved|length }}</span>
-      </td>
-      <td>
-        {{ globals.text.date }}
-    </thead>
-        {% for each in books_saved %}
-    <tr>
-      <td>
-        <span class="text-info"><a href="{% url 'book' id=each.book.id %}">{{ each.book.get_title|title }}</a></span>
-      </td>
-      <td>
-        {{ each.date|tobs }}
-      </td>
-    </tr>
-    {% endfor %}
-  </table>
+</div>
 {% endblock %}

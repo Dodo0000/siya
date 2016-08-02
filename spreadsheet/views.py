@@ -8,6 +8,7 @@ from django.http import HttpResponse
 from openpyxl import Workbook
 # Create your views here.
 from head.models import Book, Author, Publisher, Lend
+from account.models import ModUser
 
 import datetime
 
@@ -28,6 +29,11 @@ def returnSpreadSheet(queryset, filename, title):
     response = HttpResponse(open(filename,"r").read(),content_type="application/spreadsheet")
     response['Content-Disposition'] = 'attachment; filename='+filename
     return response
+
+def getSavedBooks(request, username):
+   saved_books_obj = Book.objects.filter(saved_by__user__username=username)
+   all_attr = [_[0] for _ in saved_books_obj[0].get_all_attr_for_spreadsheet()]
+   return returnSpreadSheet(queryset=saved_books_obj,filename=username+"_Saved_Books.xls", title=all_attr)
 
 
 def getBorrowedBookData(request):

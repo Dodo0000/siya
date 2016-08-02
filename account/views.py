@@ -13,7 +13,7 @@ from django.utils.encoding import smart_str
 
 from .models import ModUser
 from .forms import CreateMemberForm, CreateWorkerForm
-from head.models import Book, Lend
+from head.models import Book, Lend, BookSaver
 from head.views import home
 from settings.models  import addGlobalContext
 
@@ -30,18 +30,14 @@ def profile(request, username):
     config.refresh()
     user = get_object_or_404(ModUser, username=username)
     books_borrowed = Lend.objects.filter(user=user, returned=False)
-    len_books_borrowed = len(books_borrowed)
+    len_books_borrowed = books_borrowed.count()
+    books_saved_by_date = []
     if user.is_staff:
-        books_saved = [
-                {
-                    'book': _,
-                    'date': _.saved_by.filter(
-                        user=user).order_by('date')[0].date
-                    }
-                for _ in Book.objects.filter(saved_by__user=user)
-                ]
+        dates  =set()
+        books_saved =  BookSaver.objects.filter(user__username=username)
+        len_books_saved = books_saved.count()
     else:
-        books_saved = None
+        len_books_saved = 0
     return render(
         request,
         'account/user.html',
@@ -52,7 +48,7 @@ def profile(request, username):
                 'search_user': user,
                 'books_borrowed': books_borrowed,
                 'len_books_borrowed': len_books_borrowed,
-                'books_saved': books_saved
+                'len_books_saved': len_books_saved,
                 }
             ))
 
@@ -64,7 +60,7 @@ def search_member(request):
     username = request.GET.get("username", None)
     if username not in [None, "", "None"]:
         user = ModUser.objects.filter(username=username)
-        if len(user) == 1:
+        if user.count() == 1:
             user = user[0]
             return HttpResponseRedirect(reverse('profile', kwargs={"username": user.username}))
         else:
@@ -159,6 +155,20 @@ def create_username(*args):
     for each in args:
         vals.append(smart_str(each))
     return "".join(vals)
+
+
+
+
+@login_required(login_url="/login")
+@permission_required(("add_moduser"))
+def renewUser(request, userName):
+    config.refresh()
+    print userName
+    users = ModUser.objects.filter(username=userName)
+    if users.count() == 1:
+        users[0].renew()
+        users[0].save()
+    return profile(request, username=userName)
 
 
 @login_required(login_url="/login")
@@ -307,8 +317,7 @@ def addMember(request):
 
 @login_required(login_url="/login/")
 def verifySchool(request, userName):
-    users = ModUser.objects.filter(username=userName)
-    if len(users) == 1:
-        users[0].school_varified = True
-        users[0].save()
-    return profile(request, username=userName)
+    user = get_object_or_404(ModUser, username=userName)
+    user.school_varified = True
+    user.save()
+    return HttpResponseRedirect(reverse("profile", kwargs={"username":userName}))
