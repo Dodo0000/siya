@@ -86,12 +86,16 @@ def editGroup(request, group_id):
                         group.permissions.get(codename=perm[0])
                     except ObjectDoesNotExist:
                         perm_spl =  perm[0].split("_")
+                        print perm_spl, perm
                         if perm_spl[1].lower() == "book":
                             group.permissions.add(Permission.objects.get(codename=perm_spl[0]+"_author"))
                             group.permissions.add(Permission.objects.get(codename=perm_spl[0]+"_publisher"))
                             group.permissions.add(Permission.objects.get(codename=perm_spl[0]+"_gifter"))
                         elif perm_spl[1].lower() == "moduser":
                             group.permissions.add(Permission.objects.get(codename=perm_spl[0]+"_usertype"))
+                        elif perm_spl[1].lower() == "lend":
+							group.permissions.add(Permission.objects.get(codename="add_lend"))
+							group.permissions.add(Permission.objects.get(codename="change_lend"))
                         group.permissions.add(Permission.objects.get(codename=perm[0]))
             group.save()
             group_added = True

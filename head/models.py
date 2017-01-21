@@ -367,7 +367,7 @@ class Gifter(models.Model):
         return smart_str(self.email)
 
     def get_phone_no(self):
-        if self.phone in [None, "None"]:
+        if self.phone in [None, "None", 9780007251414L]:
             return ""
         return smart_str(self.phone)
 

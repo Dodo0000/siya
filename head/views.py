@@ -20,8 +20,7 @@
 '''
 
 
-from head.models import Book, Lend, Author, KeyWord, Publisher, Gifter
-from head.models import BookSaver
+from head.models import BookSaver, Book, Lend
 from account.models import ModUser
 from settings.models import Globals, AccessionNumberCount, addGlobalContext
 from settings.models import no_to_en
@@ -40,6 +39,7 @@ from django.utils.text import slugify
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.db.models import Q
 
 import datetime
 import json
@@ -116,9 +116,8 @@ def toint(val, lang="EN"):
 
 @login_required(login_url="/login/")
 def does_the_accession_number_exist(request, accNo):
-    if Book.objects.filter(accession_number=accNo).count() > 0:
-        return JsonResponse({'exists': 1})
-    return JsonResponse({'exists': 0})
+	books_no = Book.objects.filter(accession_number=accNo, state=0).count()
+        return JsonResponse({'exists': books_no})
 
 
 @login_required(login_url="/login/")
@@ -501,7 +500,7 @@ def dashboard(request):
 
 
 @login_required(login_url="/login")
-@permission_required("delete_book")
+@permission_required("head.delete_book")
 def deleteBookConfirm(request, id):
     config.reload()
     if id.isdigit():
@@ -529,7 +528,7 @@ def deleteBookConfirm(request, id):
 
 
 @login_required(login_url="/login")
-@permission_required("delete_book")
+@permission_required("head.delete_book")
 def deleteBook(request, id):
     config.reload()
     book = Book.objects.get(id=id)
@@ -552,7 +551,7 @@ def searchBook(request):
               in the query
     Step 2c : If no book matches all the words in the book then find the book(s) which matches
               most of the words in the query
-    < Note : In Step 2c, meaning the word "most" is very flexible. >
+    < Note : In Step 2c, meaning of the word "most" is very flexible. >
     '''
     page = request.GET.get("page", 1)
     all_books = Book.objects.filter(state=0)    # state - 0 is books which are available
@@ -567,18 +566,17 @@ def searchBook(request):
         if type_ == config.text['title']:
             books = searchBookTitle(" ".join(value), all_books)
         elif type_ == config.text['call_number']:
-            books = Book.objects.filter(call_number__contains=value[0], state=0).order_by("call_number")
+            books = Book.objects.filter(call_number__contains=value[0], state=0)
         elif type_ == config.text['accession_number']:
-            books = Book.objects.filter(
-                state=0,
-                accession_number__contains=no_to_en(value[0])).order_by("-accession_number")
+            books = Book.objects.filter(Q(accession_number=no_to_en(value[0])),
+                Q(state=0))
 
         elif type_ == config.text['keyword']:
             books = searchBookKeywords(" ".join(value), all_books)
         elif type_ == config.text['publisher']:
-            books = Book.objects.filter(publisher__name__contains=value[0], state=0).order_by("publisher__name")
+            books = Book.objects.filter(publisher__name__contains=value[0], state=0)
             for each in value[1:]:
-                bookf = books.filter(publisher__name__contains=each, state=0).order_by("publisher__name")
+                bookf = books.filter(publisher__name__contains=each, state=0)
                 if bookf.count() > 0:
                     books = bookf
                 else:
@@ -696,7 +694,7 @@ def bookInfo(request, id):
 
 
 @login_required(login_url="/login")
-@permission_required(("change_lend", "add_lend"))
+@permission_required(("head.change_lend", "head.add_lend"))
 def __borrow__(request, acc_no=None, username=None):
     config.reload()
     username = request.POST.get("username", None)
@@ -759,25 +757,25 @@ def __borrow__(request, acc_no=None, username=None):
 
 
 @login_required(login_url="/login")
-@permission_required(("change_lend", "add_lend"))
+@permission_required(("head.change_lend", "head.add_lend"))
 def borrow(request):
     return __borrow__(request)
 
 
 @login_required(login_url="/login")
-@permission_required(("change_lend", "add_lend"))
+@permission_required(("head.change_lend", "head.add_lend"))
 def borrow_with_acc_no(request, acc_no):
     return __borrow__(acc_no=acc_no)
 
 
 @login_required(login_url="/login")
-@permission_required(("change_lend", "add_lend"))
+@permission_required(("head.change_lend", "head.add_lend"))
 def borrow_with_username(request, username):
     return __borrow__(username=username)
 
 
 @login_required(login_url="/login")
-@permission_required("delete_lend")
+@permission_required("head.change_lend")
 def return_check_fees(request):
     config.reload()
     bookID = request.GET.get("bookID", None)

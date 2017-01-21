@@ -3,10 +3,10 @@ from difflib import SequenceMatcher
 
 from django.utils.encoding import smart_str
 
-
+'''
 def search(needle, heystack):
-    needle = smart_str(needle.lower().strip(" "))
-    heystack = smart_str(heystack.lower().strip(" "))
+    needle = smart_str(needle.lower())
+    heystack = smart_str(heystack.lower())
     if len(needle) == 0:
         return heystack
     needlel = needle.split(" ") ## get a list of all the words in the needle
@@ -15,22 +15,21 @@ def search(needle, heystack):
     if len(needlel) == 1:
         for each in heystackl:
             if needle in each:
-                ranks.append(1 - 1./(len(heystack) - heystack.index(each)))
+                ranks.append(1./(len(heystack) - heystack.index(each)))
             else:
                 seq = SequenceMatcher(None, needle, each)
                 ranks.append(round(seq.ratio(), 3))
         return max(ranks) ## return the highest rank
-    else:
-        for _ in range(0,len(needlel)): ranks.append([])
-        
+    else:        
         for needeach in needlel:
             for heyeach in heystackl:
-                if needeach in heyeach:
-                    ranks[needlel.index(needeach)].append(
+		ranks.append([])
+                if needeach in enumerate(heyeach):
+                    ranks[-1].append(
                             1 - 1./max(len(heystack) - heystack.index(heyeach),1))
                 else:
                     seq = SequenceMatcher(None, needeach, heyeach)
-                    ranks[needlel.index(needeach)].append(seq.ratio())
+                    ranks[-1].append(seq.ratio())
         rank_out = []
         for each in ranks:
             if each.__class__ == float:
@@ -40,7 +39,7 @@ def search(needle, heystack):
         return sum(rank_out) / len(rank_out)
 
     return None
-
+'''
 
 def searchGenericField(searchstr, genericField):
     books = []
@@ -56,38 +55,45 @@ def searchGenericField(searchstr, genericField):
 
 
 def searchBookAuthor(searchstr, bookQuerySet):
+    searchstr = searchstr.strip(" ")
     books = []
-    for book in bookQuerySet:
-        rank = search(searchstr, book.get_authors())
-        if rank > 0.6:
-            books.append((book, rank))
-    books = sorted(books, key=lambda book: book[1], reverse=True)
-    books = [book[0] for book in books]
-    return books
+    directSearch =  bookQuerySet.filter(author__name__contains = searchstr)
+    perWordSearch = [ bookQuerySet.filter(author__name__contains = _) for _ in searchstr.split(" ")]
+    if directSearch.count() > 0:
+        return directSearch
+    else:
+        for _ in perWordSearch:
+            if _.count() > 0:
+                for book in _:
+                    books.append(book)
+        return books
 
 
 def searchBookTitle(searchstr, bookQuerySet):
+    searchstr = searchstr.strip(" ")
     books = []
-    for book in bookQuerySet:
-        rank = search(searchstr, book.get_title())
-        if rank > 0.6:
-            books.append((book, rank))
-    books = sorted(books, key=lambda book:book[1],reverse=True)
-    books = [book[0] for book in books]
-    return books
+    directSearch =  bookQuerySet.filter(title__contains = searchstr)
+    perWordSearch = [ bookQuerySet.filter(title__contains = _) for _ in searchstr.split(" ")]
+    if directSearch.count() > 0:
+        return directSearch
+    else:
+        for _ in perWordSearch:
+            if _.count() > 0:
+                for book in _:
+                    books.append(book)
+        return books
 
 
 def searchBookKeywords(searchstr, bookQuerySet):
+    searchstr = searchstr.strip(" ")
     books = []
-    ranks = []
-    for book in bookQuerySet:
-        rank = search(searchstr, book.get_keywords())
-        if rank > 0.6:
-            books.append((book, rank))
-        ranks.append(rank)
-    books = sorted(books, key=lambda book:book[1],reverse=True)
-    books = [book[0] for book in books]
-    if max(ranks) < 0.85:
-        return searchBookTitle(searchstr, bookQuerySet) + searchBookAuthor(searchstr, bookQuerySet)
+    directSearch =  bookQuerySet.filter(keywords__name__contains = searchstr)
+    perWordSearch = [ bookQuerySet.filter(keywords__name__contains = _) for _ in searchstr.split(" ")]
+    if directSearch.count() > 0:
+        return directSearch
     else:
+        for _ in perWordSearch:
+            if _.count() > 0:
+                for book in _:
+                    books.append(book)
         return books

@@ -10,13 +10,15 @@ searchInputBody.css("height", (searchInputBodyHeight + 10).toString() + "px");
 
 $('.initHide').hide();
 
-function checkIfAccessionNumberExists(inputField, outputFieldSuccess,outputFieldFail)
+function checkIfAccessionNumberExists(inputField, outputFieldSuccess,outputFieldFail, outputFieldNoOfBooks)
 {
   $.getJSON(
       '/head/book/does_the_accession_number_exist/'+$("#"+inputField.toString())[0].value.toString(),
       function(data){
-        if (data.exists == 1)
+        if (data.exists > 0){
+		  $("#" + outputFieldNoOfBooks.toString()).text(data.exists);
           $("#" + outputFieldSuccess.toString()).show('slow').delay(2000).hide('fast');
+	    }
         else
           $("#"+outputFieldFail.toString()).show('slow').delay(2000).hide('fast');
       }
