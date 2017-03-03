@@ -103,11 +103,29 @@
           </div>
           <div class="container-fluid"> 
             <div class="col-sm-6">
+              <label for="form.telephone_mobile.id_for_label">{{ form.telephone_mobile.label|nepali }}</label>
+              {% render_field form.telephone_mobile placeholder=form.telephone_mobile.label|nepali class="form-control" %}
+            </div>	
+            <div class="col-sm-6">
+              <span class="errorlist">    {% if form.telephone_mobile.errors %}         {{form.telephone_mobile.label|nepali}} - {{ form.telephone_mobile.errors.as_text|nepali }} {% endif %}</span>
+            </div>
+          </div>
+          <div class="container-fluid"> 
+            <div class="col-sm-6">
               <label for="form.school_name.id_for_label">{{ form.school_name.label|nepali }}</label>
               {% render_field form.school_name placeholder=form.school_name.label|nepali class="form-control" %}
             </div>	
             <div class="col-sm-6">
               <span class="errorlist">    {% if form.school_name.errors %}         {{form.school_name.label|nepali}} - {{ form.school_name.errors.as_text|nepali }} {% endif %}</span>
+            </div>
+          </div>
+          <div class="container-fluid"> 
+            <div class="col-sm-6">
+              <label for="form.school_number.id_for_label">{{ form.school_number.label|nepali }}</label>
+              {% render_field form.school_number placeholder=form.school_number.label|nepali class="form-control" %}
+            </div>	
+            <div class="col-sm-6">
+              <span class="errorlist">    {% if form.school_number.errors %}         {{form.school_number.label|nepali}} - {{ form.school_number.errors.as_text|nepali }} {% endif %}</span>
             </div>
           </div>
           <div class="container-fluid"> 
@@ -137,7 +155,15 @@
               <span class="errorlist">   {% if form.date_of_birth.errors %}    {{form.date_of_birth.label|nepali}} - {{ form.date_of_birth.errors.as_text|nepali }} {% endif %} </span>
             </div>
           </div>
-
+          <div class="container-fluid"> 
+            <div class="col-sm-6">
+              <label for="form.date_of_expiration.id_for_label">{{form.date_of_expiration.label|nepali}}</label>
+              {% render_field form.date_of_expiration placeholder=form.date_of_expiration.label|nepali class="form-control vDateField" %}
+            </div>	
+            <div class="col-sm-6">
+              <span class="errorlist">   {% if form.date_of_expiration.errors %}    {{form.date_of_expiration.label|nepali}} - {{ form.date_of_expiration.errors.as_text|nepali }} {% endif %} </span>
+            </div>
+          </div>
         <div class="form-group">
           <div class="col-md-4 col-md-offset-4">
             <button class="btn btn btn-primary btn-block" type="submit" id="id_submit">{{ globals.text.create_member }}</button>

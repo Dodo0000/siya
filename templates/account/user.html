@@ -35,13 +35,20 @@
   <div class="well">
     <h1>{% if search_user.has_expired %} <span class="text-danger">{% else %} <span class="text-primary">{% endif %} {{ search_user.get_name|title }}</span></h1>
     <h4>{{ search_user.user_type.type|title }} {{ search_user.date_joined|tobs }} देखी  {{ globals.text.member }}  {% if search_user.has_expired %} (<span class="text-danger">सदस्यता सकिसक्यो</span>) {% endif %}</h4>
+    <h4> अन्तिम नविकरणको मिति {{ search_user.last_renew_date | tobs }} </h4>
     <p>उहाँले <span class="label label-info">{{ len_books_borrowed }}</span> {% if len_books_borrowed == 1 %}{{ globals.text.book }}{% else %}{{ globals.text.books }}{% endif %} {{ globals.text.borrow }} गर्नु भयेको छ।</p>
     <p> {{ globals.text.group }} - {% for group in search_user.groups.all %} {{ group.name }} {% endfor %}</p>
+    <p> खाता रद्द हुने मिति - {{ search_user.date_of_expiration | tobs }}</p>
     <p> उँहाको खाताको नवीकरण <span class="label label-info"> {{ search_user.how_old_am_i }}</span> दिन अघि गरिएको थियो </p>
     {% if search_user.is_staff and user.is_staff %}
     <p>{{ books_saved|length }} दिनमा {{ len_books_saved }} किताबहरु दर्ता गर्नुभयो। <a class="btn btn-primary" href="{% url 'spreadsheetSavedBooks' username=search_user.username %}">दर्ता गरेका किताबहरुको स्प्रेड-शिट निकाल्नुहोस्।</a></p>
-    <p><button data-target="#monthlyReport" data-toggle="modal" class="btn btn-primary"> मासिक दर्ता गरिएका किताबहरु </button></p>
+    <p>
+        <button data-target="#monthlyReport" data-toggle="modal" class="btn btn-primary"> मासिक दर्ता गरिएका किताबहरु </button>
+        </p>
     {% endif %}
+    <p>
+        <a class="btn btn-primary" href="{% url 'renewUser' userName=search_user.username %}">  सदत्य नवीकरण गर  </a>
+    </p>
   </div> <!-- jumbotron -->
   </div>
 </div><!-- container -->

@@ -154,7 +154,7 @@ def create_username(*args):
     vals = []
     for each in args:
         vals.append(smart_str(each))
-    return "".join(vals)
+    return "".join(vals).replace(" ", "_")
 
 
 
@@ -168,7 +168,7 @@ def renewUser(request, userName):
     if users.count() == 1:
         users[0].renew()
         users[0].save()
-    return profile(request, username=userName)
+    return HttpResponseRedirect(reverse("profile", kwargs={"username": userName}))
 
 
 @login_required(login_url="/login")
@@ -259,8 +259,11 @@ def addMemberWithArgs(request, created):
                 parent_name = smart_str(data['parent_name'].strip(' ').lower())
                 school_name = smart_str(data['school_name'].strip(' ').lower())
                 school_class = smart_str(data['school_class'].strip(' ').lower())
+                school_number = data['school_number']
+                telephone_mobile = data['telephone_mobile']
                 roll_no = smart_str(data['roll_no'].strip(' ').lower())
                 date_of_birth = data['date_of_birth']
+                date_of_expiration = data['date_of_expiration']
 
                 ## creating the username
                 username = create_username(first_name, last_name,ModUser.objects.all().count())
@@ -291,6 +294,12 @@ def addMemberWithArgs(request, created):
                     member.school_roll_no = roll_no
                 if date_of_birth not in ['']:
                     member.date_of_birth = date_of_birth
+                if date_of_expiration not in ['']:
+                    member.date_of_expiration = date_of_expiration
+                if school_number not in ['']:
+                    member.school_number = school_number
+                if telephone_mobile not in ['']:
+                    member.telephone_mobile = telephone_mobile
                 # school_number and telephone_mobile are not added
                 member.groups.add(Group.objects.get(name="Member"))
                 member.save()

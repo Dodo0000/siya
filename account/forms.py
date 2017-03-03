@@ -18,10 +18,13 @@ class CreateMemberForm(forms.Form):
     city = forms.CharField(label="City")
     home_phone = forms.CharField(label="Home Phone No.")
     parent_name = forms.CharField(label="Parent's Name")
+    telephone_mobile = forms.IntegerField(label="Parent's Mobile Number")
     school_name = forms.CharField(label="School Name")
     school_class = forms.CharField(label="Class")
+    school_number = forms.IntegerField(label="School Phone Number")
     roll_no = forms.CharField(label="Roll No.")
     date_of_birth = forms.DateTimeField(widget=widgets.AdminDateWidget(), label="Date Of Birth")
+    date_of_expiration = forms.DateTimeField(widget=widgets.AdminDateWidget(), label="Account Expiry Date")
 
 
 def getAllGroups():

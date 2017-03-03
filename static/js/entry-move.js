@@ -64,6 +64,7 @@ function saveBook(){
       console.log(post_data);
 
       $.post('/head/book/add', post_data, function(data){
+		console.log(data.status);
         if (data.success === true){
           max_accession_number = data.acc_no;
           $(".current_acc_no").text(max_accession_number);

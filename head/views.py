@@ -20,7 +20,7 @@
 '''
 
 
-from head.models import BookSaver, Book, Lend
+from head.models import BookSaver, Book, Lend, Publisher, Gifter
 from account.models import ModUser
 from settings.models import Globals, AccessionNumberCount, addGlobalContext
 from settings.models import no_to_en
@@ -238,13 +238,13 @@ def add_book(request):
 
         authors = each['auth'].lower().split(",")
 
-	book.author.clear()
-	for author_name in each['auth'].lower().split(","):
-		# when saving, author names are seperated by a ,
-		author_name = author_name.strip(" ")
-		author = book.author.get_or_create(
-			name=author_name,
-			slug=slugify(author_name))
+    book.author.clear()
+    for author_name in each['auth'].lower().split(","):
+        # when saving, author names are seperated by a ,
+        author_name = author_name.strip(" ")
+        author = book.author.get_or_create(
+            name=author_name,
+            slug=slugify(author_name))
         if (
                 each['pub_place'] is None or
                 each['pub_year'] is None or
@@ -302,12 +302,12 @@ def add_book(request):
             book.volume = acc_list.index(val) + 1
 
         keywords = each['kwds'].split(",")
-	book.keywords.clear()
-	for keyword in keywords:
-	    keyword = keyword.strip(' ')
-	    book.keywords.get_or_create(
-	        name=keyword,
-		slug=slugify(keyword))
+    book.keywords.clear()
+    for keyword in keywords:
+        keyword = keyword.strip(' ')
+        book.keywords.get_or_create(
+            name=keyword,
+        slug=slugify(keyword))
 
         # this stores the name of the person who uodated the book, along with
         # the date and time of modification
@@ -330,6 +330,7 @@ def add_book(request):
     print t1 - t0
 
     for book in books_list:
+        book.state = 0
         book.save()
 
     if STATE == 0:

@@ -44,6 +44,7 @@ from django.core.urlresolvers import reverse
 from settings.models import Globals
 
 import datetime
+from pyBSDate import BSDate
 
 # Create your models here.
 
@@ -114,6 +115,13 @@ class UserManager(BaseUserManager):
         self.viewers.add(user.viewer)
 
 
+def get_last_day_of_year():
+    date = datetime.date.today()
+    np_date = BSDate.convert_to_bs(date.strftime("%Y-%m-%d")).split("-")
+    np_year = int(np_date[0]) + 1
+    return datetime.datetime.strptime("-".join([str(np_year),'1','1']), "%Y-%m-%d")
+
+
 class ModUser(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(max_length=90,null=True,blank=True)
     last_name = models.CharField(max_length=90,null=True,blank=True)
@@ -149,6 +157,8 @@ class ModUser(AbstractBaseUser, PermissionsMixin):
     last_renew_date = models.DateField(default=timezone.now)
 
     is_staff = models.BooleanField(default=False)
+    
+    date_of_expiration = models.DateField(null=True, blank=True)
 
     objects = UserManager()
 
@@ -159,10 +169,13 @@ class ModUser(AbstractBaseUser, PermissionsMixin):
 		
 		
     def has_expired(self):
-        return self.how_old_am_i() > int(config.misc['membership_valid_days'])
+        return datetime.date.today() > self.date_of_expiration
 	
     def renew(self):
 	self.last_renew_date = datetime.datetime.today()
+	np_date = BSDate.convert_to_bs(self.last_renew_date.isoformat()).split('-')
+	en_date = BSDate.convert_to_ad('-'.join([str(int(np_date[0]) + 1), '1', '1']))
+	self.date_of_expiration = datetime.datetime.strptime(en_date, "%Y-%m-%d")
 	self.save()
 
     def get_address(self):
