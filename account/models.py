@@ -119,7 +119,8 @@ def get_last_day_of_year():
     date = datetime.date.today()
     np_date = BSDate.convert_to_bs(date.strftime("%Y-%m-%d")).split("-")
     np_year = int(np_date[0]) + 1
-    return datetime.datetime.strptime("-".join([str(np_year),'1','1']), "%Y-%m-%d")
+    en_date = BSDate.convert_to_ad("-".join([str(np_year),'1','1']))
+    return datetime.datetime.strptime(en_date, "%Y-%m-%d")
 
 
 class ModUser(AbstractBaseUser, PermissionsMixin):
@@ -165,11 +166,12 @@ class ModUser(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = "username"
     
     def how_old_am_i(self):
-	return (datetime.date.today() - self.last_renew_date).days
+	return abs((datetime.date.today() - self.last_renew_date).days)
 		
 		
     def has_expired(self):
-        return datetime.date.today() > self.date_of_expiration
+        if self.date_of_expiration is not None:
+            return datetime.date.today() > self.date_of_expiration
 	
     def renew(self):
 	self.last_renew_date = datetime.datetime.today()

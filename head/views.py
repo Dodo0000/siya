@@ -789,7 +789,7 @@ def return_check_fees(request):
             lends = Lend.objects.filter(book=book)  # code to return book
             for _ in lends:
                 _.set_returned()
-                _.save()
+
             return render(request,
                           'head/return.html',
                           addGlobalContext({

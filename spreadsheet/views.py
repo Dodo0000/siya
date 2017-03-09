@@ -31,7 +31,7 @@ def returnSpreadSheet(queryset, filename, title):
     return response
 
 def getSavedBooks(request, username):
-   saved_books_obj = Book.objects.filter(saved_by__user__username=username)
+   saved_books_obj = Book.objects.filter(state=2)
    all_attr = [_[0] for _ in saved_books_obj[0].get_all_attr_for_spreadsheet()]
    return returnSpreadSheet(queryset=saved_books_obj,filename=username+"_Saved_Books.xls", title=all_attr)
 

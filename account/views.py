@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
-from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.views.decorators.csrf import csrf_protect
@@ -19,13 +19,26 @@ from settings.models  import addGlobalContext
 
 from settings.models import Globals
 
+from pyBSDate import BSDate
+
 import datetime
 # Create your views here.
 
 config = Globals()
 
+'''
+returns true if the user has permission - add_moduser
+else returns false
+'''
+def can_add_member(user):
+    groups = user.groups.all()
+    for _ in groups:
+        if (_.permissions.filter(codename="add_moduser").count() > 0):
+            return True
+    return False
 
-@login_required(login_url="/login")
+
+@login_required()
 def profile(request, username):
     config.refresh()
     user = get_object_or_404(ModUser, username=username)
@@ -53,7 +66,7 @@ def profile(request, username):
             ))
 
 
-@login_required(login_url="/login")
+@login_required()
 def search_member(request):
     config.refresh()
     import string
@@ -159,8 +172,8 @@ def create_username(*args):
 
 
 
-@login_required(login_url="/login")
-@permission_required(("add_moduser"))
+@login_required()
+@user_passes_test(can_add_member)
 def renewUser(request, userName):
     config.refresh()
     print userName
@@ -172,7 +185,7 @@ def renewUser(request, userName):
 
 
 @login_required(login_url="/login")
-@permission_required(("add_moduser"))
+@user_passes_test(can_add_member)
 def addWorkerWithArgs(request, created):
     config.refresh()
     form = CreateWorkerForm()
@@ -227,16 +240,16 @@ def addWorkerWithArgs(request, created):
                   )
 
 
-@login_required(login_url="/login/")
-@permission_required(("add_moduser"))
+@login_required()
+@user_passes_test(can_add_member)
 def addWorker(request):
     config.refresh()
     return addWorkerWithArgs(request, created=False)
 
 
 
-@login_required(login_url="/login")
-@permission_required(("add_moduser"))
+@login_required()
+@user_passes_test(can_add_member)
 def addMemberWithArgs(request, created):
     config.refresh()
     form = CreateMemberForm()
@@ -293,7 +306,7 @@ def addMemberWithArgs(request, created):
                 if roll_no not in ['']:
                     member.school_roll_no = roll_no
                 if date_of_birth not in ['']:
-                    member.date_of_birth = date_of_birth
+                    member.date_of_birth = BSDate.convert_to_ad(date_of_birth)
                 if date_of_expiration not in ['']:
                     member.date_of_expiration = date_of_expiration
                 if school_number not in ['']:
@@ -317,14 +330,15 @@ def addMemberWithArgs(request, created):
                 })
                 )
 
-@login_required(login_url="/login/")
-@permission_required(("add_moduser"))
+@login_required()
+@user_passes_test(can_add_member)
 def addMember(request):
     config.refresh()
     return addMemberWithArgs(request,created=False)
 
 
-@login_required(login_url="/login/")
+@login_required()
+@user_passes_test(can_add_member)
 def verifySchool(request, userName):
     user = get_object_or_404(ModUser, username=userName)
     user.school_varified = True
