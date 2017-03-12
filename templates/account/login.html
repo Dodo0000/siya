@@ -24,16 +24,16 @@
 
 {% if code == 0 %}
 <div class="container">
-  <div class="alert alert-danger" align=center><strong>Oh, no! </strong>{{ code_msg }} </div>
+  <div class="alert alert-danger" align=center><strong>{{ code_msg }}</strong> </div>
 </div>
 {% endif %}
 
 <div class="col col-sm-offset-3 col-sm-6">
   <form class="form-signin" method="POST">
     {% csrf_token %}
-    <label for="username">username</label>
+    <label for="username">{{ globals.text.username }}</label>
     <input class="form-control" name="username" type="text" value="{{username}}" aria-label="" required autofocus>
-    <label for="password">password</label>
+    <label for="password">{{ globals.text.password }}</label>
     <input class="form-control" name="password" type="password" aria-label+"" required>
     <hr>
     <input type="submit" class="btn btn-success form-control" value="login">

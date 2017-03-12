@@ -16,14 +16,14 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">मासिक दर्ता गरिएका किताबहरु</h4>
+        <h4 class="modal-title">{{ globals.text.monthly_accessioned_books }}</h4>
       </div>
       <div class="modal-body">
     <figure>
       <embed type="image/svg+xml" src="{% url 'graphGetMonthlyBooksSavedGraph' username=search_user.username %}" />
     </figure>      </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">बन्द</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">{{ globals.text.close }}</button>
       </div>
     </div>
 
@@ -34,20 +34,20 @@
   <div align=center class="col col-sm-offset-3 col-sm-6">
   <div class="well">
     <h1>{% if search_user.has_expired %} <span class="text-danger">{% else %} <span class="text-primary">{% endif %} {{ search_user.get_name|title }}</span></h1>
-    <h4>{{ search_user.user_type.type|title }} {{ search_user.date_joined|tobs }} देखी  {{ globals.text.member }}  {% if search_user.has_expired %} (<span class="text-danger">सदस्यता सकिसक्यो</span>) {% endif %}</h4>
-    <h4> अन्तिम नविकरणको मिति {{ search_user.last_renew_date | tobs }} </h4>
+    <h4>{{ search_user.user_type.type|title }} {{ search_user.date_joined|tobs }} देखी  {{ globals.text.member }}  {% if search_user.has_expired %} (<span class="text-danger">{{ globals.text.membership_has_terminated }}</span>) {% endif %}</h4>
+    <h4>{{ globals.text.last_date_of_renewal }} {{ search_user.last_renew_date | tobs }} </h4>
     <p>उहाँले <span class="label label-info">{{ len_books_borrowed }}</span> {% if len_books_borrowed == 1 %}{{ globals.text.book }}{% else %}{{ globals.text.books }}{% endif %} {{ globals.text.borrow }} गर्नु भयेको छ।</p>
     <p> {{ globals.text.group }} - {% for group in search_user.groups.all %} {{ group.name }} {% endfor %}</p>
-    <p> खाता रद्द हुने मिति - {{ search_user.date_of_expiration | tobs }}</p>
+    <p>{{ globals.text.date_of_account_expiry }}- {{ search_user.date_of_expiration | tobs }}</p>
     <p> उँहाको खाताको नवीकरण <span class="label label-info"> {{ search_user.how_old_am_i }}</span> दिन अघि गरिएको थियो </p>
     {% if search_user.is_staff and user.is_staff %}
     <p>{{ books_saved|length }} दिनमा {{ len_books_saved }} किताबहरु दर्ता गर्नुभयो। <a class="btn btn-primary" href="{% url 'spreadsheetSavedBooks' username=search_user.username %}">दर्ता गरेका किताबहरुको स्प्रेड-शिट निकाल्नुहोस्।</a></p>
     <p>
-        <button data-target="#monthlyReport" data-toggle="modal" class="btn btn-primary"> मासिक दर्ता गरिएका किताबहरु </button>
+        <button data-target="#monthlyReport" data-toggle="modal" class="btn btn-primary"> {{ globals.text.monthly_accessioned_books }} </button>
         </p>
     {% endif %}
     <p>
-        <a class="btn btn-primary" href="{% url 'renewUser' userName=search_user.username %}">  सदत्य नवीकरण गर  </a>
+        <a class="btn btn-primary" href="{% url 'renewUser' userName=search_user.username %}">  {{ globals.text.renew_account }}  </a>
     </p>
   </div> <!-- jumbotron -->
   </div>
@@ -73,13 +73,13 @@
     <tr>
      <td>School is Varified</td>
     {% if search_user.school_varified == False %}
-    <td><span class="text-danger"><b>{{ globals.text.no }}<a href="{% url 'verifySchool' userName=search_user.username %}"><i>Varify School?</i></a></b></span></td>
+    <td><span class="text-danger"><b>{{ globals.text.no }}<a href="{% url 'verifySchool' userName=search_user.username %}"><i>Varify School</i></a></b></span></td>
      {% else %}
      <td><span class="text-success"><b>{{ globals.text.yes }}</b></span></td>
      {% endif %}
     </tr>
     <tr>
-      <td>Books Borrowed</td>
+      <td>{{ globals.text.books_borrowed }}</td>
       <td>
 	{% for each in books_borrowed %}
 	<p>

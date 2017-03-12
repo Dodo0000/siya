@@ -9,10 +9,10 @@
 
 <form class="form" method="POST">
   {% csrf_token %}
-  <h4>Are You sure your want to delete this field?</h4>
+  <h4>{{ globals.text.are_you_sure_you_want_to_delete_this_field }}</h4>
   <input type="hidden" name="delete" value="1">
   <input type=submit class="btn btn-primary" value="Yes">
-  <a href="{% url 'miscFieldsHome' %}" class="btn btn-primary">No</a>
+  <a href="{% url 'miscFieldsHome' %}" class="btn btn-primary">{{ globals.text.dont_do_it }}</a>
 </form>
 
 {% endblock %}

@@ -13,56 +13,56 @@
 
 <table class="table table-striped">
   <thead>
-    <td>Description</td>
-    <td>Command</td>
+    <td>{{ globals.text.description }}</td>
+    <td>{{ globals.text.information }}</td>
   </thead>
   <tbody>
   <tr>
     <td>
-      <label> Get All the books in spreadsheet format (.xls)</label>
+      <label> {{ globals.text.get_all_books_in_spreadsheet_format }} (.xls)</label>
     </td>
     <td>
-      <a href="{% url 'spreadsheetGetAllBookData'%}" class="btn btn-primary">Get All Books' Data</a>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <label>Get Books Without Call Number in spreadsheet format (.xls)</label>
-    </td>
-    <td>
-      <a href="{% url 'spreadsheetBooksWithoutCallNumber' %}" class="btn btn-primary">Get Books Without Call Number</a>
+      <a href="{% url 'spreadsheetGetAllBookData'%}" class="btn btn-primary">{{ globals.text.get_all_books_data }}</a>
     </td>
   </tr>
   <tr>
     <td>
-      <label>Get Borrowed Books in spreadsheet format (.xls)</label>
+      <label>{{ globals.text.get_books_without_call_number_in_spreadsheet_format }} (.xls)</label>
     </td>
     <td>
-      <a href="{% url 'spreadsheetGetBorrowedBookData' %}" class="btn btn-primary">Get Borrowed Books</a>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <label>Get Books Accessioned in the last week in spreadsheet format (.xls)</label>
-    </td>
-    <td>
-      <a href="" class="btn btn-primary">Get Books Accessioned This Week</a>
+      <a href="{% url 'spreadsheetBooksWithoutCallNumber' %}" class="btn btn-primary">{{ globals.text.get_books_without_call_number_data }}</a>
     </td>
   </tr>
   <tr>
     <td>
-      <label>Get All Publishers in spreadsheet format (.xls)</label>
+      <label>{{ globals.text.get_borrowed_books_in_spreadsheet_format }} (.xls)</label>
     </td>
     <td>
-      <a href="{% url 'spreadsheetGetAllPublisherData' %}" class="btn btn-primary">Get All Publishers' Data</a>
+      <a href="{% url 'spreadsheetGetBorrowedBookData' %}" class="btn btn-primary">{{ globals.text.get_borrowed_books_data }}</a>
     </td>
   </tr>
   <tr>
     <td>
-      <label>Get All Authors in spreadsheet format (.xls)</label>
+      <label>{{ globals.text.get_books_accesioned_this_week_in_spreadsheet_format }} (.xls)</label>
     </td>
     <td>
-      <a href="{% url 'spreadsheetGetAllAuthorData' %}" class="btn btn-primary">Get All Authors' Data</a>
+      <a href="" class="btn btn-primary">{{ globals.text.get_books_accessioned_this_weeks_data }}</a>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <label>{{globals.text.get_all_publishers_data_in_spreadsheet_format}} (.xls)</label>
+    </td>
+    <td>
+      <a href="{% url 'spreadsheetGetAllPublisherData' %}" class="btn btn-primary">{{ globals.text.get_all_publishers_data }}</a>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <label>{{ globals.text.get_all_authors_data_in_spreadsheet_format }} (.xls)</label>
+    </td>
+    <td>
+      <a href="{% url 'spreadsheetGetAllAuthorData' %}" class="btn btn-primary">{{ globals.text.get_all_authors_data }}</a>
     </td>
   </tr>
   </tbody>

@@ -91,7 +91,7 @@ body{font-family: "kalimati";background-color:#fff;height:100%;}.errorlist{color
           <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{globals.text.address}} <span class="glyphicon glyphicon-menu-down"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="http://{{ ip_addr }}" class="navbar-inactive" ><font face="monospace">http://{{ ip_addr }}:8000</font></a></li>
+            <li><a href="http://{{ ip_addr }}" class="navbar-inactive" ><font face="monospace">http://{{ ip_addr }}</font></a></li>
           </ul>
           </li>
           <li><a class="navbar-inactive" title="{{ date|date:"d M Y"}}" href="javascript:swapDate();" id="navDateElement">{{date|tobs|pdate}} </a></li>
@@ -155,7 +155,7 @@ body{font-family: "kalimati";background-color:#fff;height:100%;}.errorlist{color
         </li>
         <li>
         <button class="btn btn-primary" onclick="checkIfAccessionNumberExists('checkIfAccessionNumberExistsInput','accNoExistsSpan','accNoDoesNotExistSpan', 'accNoExistsNoOfBooksSpan')">
-          {{ globals.text.accession_number }} छ?
+          {{ globals.text.accession_number }} {{ globals.text.check }}
         </button>
         </li>
         <li>

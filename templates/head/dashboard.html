@@ -28,10 +28,10 @@
   -->
   <div class="actions" align=center>
     <div class="btn-group">
-      <a title="Manage Permission Groups" href="{% url 'almsGroupsHome' %}" class="btn btn-lg btn-primary">{{ globals.text.permissions }}</a>
-      <a title="Manage Book Data" href="{% url 'booktoolHome'%}" class="btn btn-lg btn-primary">{{ globals.text.books }}</a>
+      <a href="{% url 'almsGroupsHome' %}" class="btn btn-lg btn-primary">{{ globals.text.permissions }}</a>
+      <a href="{% url 'booktoolHome'%}" class="btn btn-lg btn-primary">{{ globals.text.books }}</a>
       {% if request.user.is_staff %}
-      <a title="Manage Home Page" href="{% url 'writeHomeBody' %}" class="btn btn-lg btn-primary">{{ globals.text.home }}</a>
+      <a href="{% url 'writeHomeBody' %}" class="btn btn-lg btn-primary">{{ globals.text.home }}</a>
       {% endif %}
       <a href="" class="btn btn-lg btn-primary">{{ globals.text.groups }}</a>
       {% if request.user.is_superuser %}
@@ -53,7 +53,7 @@
     <tbody>
       <tr>
         <td>
-          {{ start_date|tobs }} सम्म
+          {{ start_date|tobs }} {{ globals.text.till }}
         </td>
         <td>
           {{ members_added_before_tp|length }}
@@ -67,7 +67,7 @@
       </tr>
       <tr>
         <td>
-          अघिल्लो {{ time_period }} महिना - {{ start_date|tobs|no_to_np}} देखि {{ date|tobs|no_to_np}} सम्म
+          {{ globals.text.previous }} {{ time_period }} {{ globals.text.month }} - {{ start_date|tobs|no_to_np}} {{ globals.text.from }} {{ date|tobs|no_to_np}} {{ globals.text.till }}
         </td>
         <td>
           {{ members_added_during_tp|length }}

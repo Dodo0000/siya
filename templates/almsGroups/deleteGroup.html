@@ -31,7 +31,7 @@
 <div class="container-fluid">
   <div class="col col-sm-6 col-sm-offset-2">
     <h4>
-      Do You Really Want To Delete This Group?
+      {{}}
     </h4>
   </div>
 </div>
@@ -40,18 +40,18 @@
     <form method="POST">{% csrf_token %}
       <input type="hidden" value="1" name="really_delete">
       <input type="submit" class="btn btn-success" value="Yes">
-      <a href="{% url 'almsGroupsHome' %}" class="btn btn-primary">No</a>
+      <a href="{% url 'almsGroupsHome' %}" class="btn btn-primary">{{ globals.text.dont_do_it }}</a>
     </form>
   </div>
 </div>
 
 {% elif group_found == False %}
 <div class="well">
-  Oops! The group you are looking for was not found :P
+  {{{ globals.text.group_was_not_found }}
 </div>
 {% elif deleted == True %}
 <div class="well">
-  group "{{ group.name }}" was successfully deleted! <a href="{% url 'almsGroupsHome'%}"> <span class="text-primary">Go Back To Groups</span></a>
+  group "{{ group.name }}" {{ globals.text.group__was_successfully_deleted }} <a href="{% url 'almsGroupsHome'%}"> <span class="text-primary">{{ globals.text.return_to_groups }}</span></a>
 </div>
 {% endif %}
 {% endblock %}

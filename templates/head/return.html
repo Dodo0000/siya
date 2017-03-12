@@ -1,8 +1,5 @@
 {% extends 'base.html' %}
-
-
 {% block content %}
-
 <div class="text-primary" align=center>
   <h3><span class="label label-primary">Return a book to {{ globals.yalms.org_short_name }} archives</span></h3>
 </div>
@@ -11,7 +8,6 @@
 <div class="alert alert-warning">
   There was an error in the input
 </div>
-
 {% elif code == "None" %}
 <div class="col col-sm-offset-3 col-sm-6" align=center>
   <form method="GET" class="form">
@@ -44,12 +40,9 @@
     <h4>Call Number : {{ lend_obj.book.call_number }}</h4>
   </div>
 </div>				      
-
-
 <div class="alert alert-success">
   Return the book {{ lend_obj.book.title }} from {{ lend_obj.user.get_name }} with late fees <span class="text-warning">Rs.{{ late_fees }}</span>?
 </div>
-
   <form class="form" method="post">
     {% csrf_token %}
     <input classs="form-control" name="bookID" type="hidden" value="{{ lend_obj.book.accession_number }}">

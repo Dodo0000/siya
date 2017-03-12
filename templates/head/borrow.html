@@ -14,7 +14,7 @@
 {% if borrowed == 4 %}
 
 <div class="text-primary" align=center>
-  <h3><span class="label label-primary">Lend a book from {{ globals.yalms.org_short_name }} archives</span></h3>
+  <h3><span class="label label-primary">{{ globals.text.lend_a_book_form }} {{ globals.yalms.org_short_name }} {{ globals.text.archives }}</span></h3>
 </div>
 <hr>
 <div class="container-fluid">
@@ -46,7 +46,7 @@
 <div class="container-fluid">
   {% if borrowed == 1 %}
   <div class="alert alert-success"><h3>
-      <a href="{% url 'profile' username=got_user.username %}"><div class="label label-info">{{ got_user.get_name }}</div></a> has borrowed the book <a href="{% url 'book' id=book.id %}"><div class="label label-info">{{book.title}}</div>
+      <a href="{% url 'profile' username=got_user.username %}"><div class="label label-info">{{ got_user.get_name }}</div></a> {{ globals.text.has_borrowed_the_book }} <a href="{% url 'book' id=book.id %}"><div class="label label-info">{{book.title}}</div>
         {% elif borrowed == 2 %}
         <div class="alert alert-danger"><h3>
             The Book <div class="label label-warning"><a href="{% url 'book' id=book.id %}">{{book.title}}</a></div> is already being borrowed by <div class="label label-warning"><a href="{% url 'profile' username=book.get_borrower.username %}">{{ book.get_borrower.get_name }} ({{ book.get_borrower.username }})</a></div>

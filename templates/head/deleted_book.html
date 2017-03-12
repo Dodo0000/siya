@@ -3,6 +3,6 @@
 
 {% block content %}
 <div class="jumbotron">
-किताब <a href="{% url 'book' id=book.id %}">{{ book.title|title }}</a> हट्यो। </a>
+{{ globals.text.book }} <a href="{% url 'book' id=book.id %}">{{ book.title|title }}</a> {{ globals.text.was_removed }} </a>
 </div>
 {% endblock %}

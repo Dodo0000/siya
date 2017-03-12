@@ -29,7 +29,7 @@
 {% if group_added == 1 %}
 <span class="well">
   <span class="text-success">
-    The Group <span class="label">{{ group.name }}</label> was created :)
+    {{ globals.text.group }} <span class="label">{{ group.name }}</label> {{ globals.text.group__was_created }}
   </span>
 </span>
 {% endif %}
