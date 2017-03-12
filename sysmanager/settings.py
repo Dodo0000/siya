@@ -39,8 +39,7 @@ ROOT_URLCONF = []
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
-
-ALLOWED_HOSTS = ["192.168.*", "localhost"]
+ALLOWED_HOSTS = ["192.168.*", "localhost", os.uname()[1]+".local"]
 
 
 try:
