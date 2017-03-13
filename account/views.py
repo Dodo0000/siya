@@ -306,7 +306,10 @@ def addMemberWithArgs(request, created):
                 if roll_no not in ['']:
                     member.school_roll_no = roll_no
                 if date_of_birth not in ['']:
-                    member.date_of_birth = BSDate.convert_to_ad(date_of_birth)
+                    if date_of_birth.__class__ == str:
+                        member.date_of_birth = BSDate.convert_to_ad(date_of_birth)
+                    else:
+                        member.date_of_birth = date_of_birth
                 if date_of_expiration not in ['']:
                     member.date_of_expiration = date_of_expiration
                 if school_number not in ['']:

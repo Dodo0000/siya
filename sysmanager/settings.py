@@ -38,7 +38,7 @@ ROOT_URLCONF = []
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 ALLOWED_HOSTS = ["192.168.*", "localhost", os.uname()[1]+".local"]
 
 
@@ -63,7 +63,6 @@ INSTALLED_APPS = (
     'account',
     'head',
     'settings',
-    'configs',
     'ledger',
     'almsGroups',
     'miscFields',

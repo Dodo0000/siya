@@ -46,7 +46,7 @@
 <div class="container-fluid">
   {% if borrowed == 1 %}
   <div class="alert alert-success"><h3>
-      <a href="{% url 'profile' username=got_user.username %}"><div class="label label-info">{{ got_user.get_name }}</div></a> {{ globals.text.has_borrowed_the_book }} <a href="{% url 'book' id=book.id %}"><div class="label label-info">{{book.title}}</div>
+      <div class="label label-info">{{book.title}}</div> {{ globals.text.book }} <a href="{% url 'profile' username=got_user.username %}"><div class="label label-info">{{ got_user.get_name }}</div></a> {{ globals.text.has_borrowed_the_book }} <a href="{% url 'book' id=book.id %}">
         {% elif borrowed == 2 %}
         <div class="alert alert-danger"><h3>
             The Book <div class="label label-warning"><a href="{% url 'book' id=book.id %}">{{book.title}}</a></div> is already being borrowed by <div class="label label-warning"><a href="{% url 'profile' username=book.get_borrower.username %}">{{ book.get_borrower.get_name }} ({{ book.get_borrower.username }})</a></div>

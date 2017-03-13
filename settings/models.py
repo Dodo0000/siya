@@ -28,9 +28,9 @@ def md5Checksum(filePath):
 GET_MAIN_COLOR = "SELECT main_color FROM org_configs"
 GET_ACCENT_COLOR = "SELECT accent_color FROM org_configs"
 
-CONFIG_INI = os.path.join(settings.BASE_DIR, "config.ini")
-CONFIG_SQLITE = os.path.join(settings.BASE_DIR, "config.sqlite")
-TEXT_INI = os.path.join(settings.BASE_DIR, "text.ini.np")
+CONFIG_INI = os.path.join(settings.BASE_DIR, "configurations/config.ini")
+CONFIG_SQLITE = os.path.join(settings.BASE_DIR, "configurations/config.sqlite")
+TEXT_INI = os.path.join(settings.BASE_DIR, "configurations/text.ini.np")
 
 
 class Globals:
