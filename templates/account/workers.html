@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load nepali %}
+{% load datefilters %}
+{% load group_filters %}
+
+{% block post-js-internal %}
+{% endblock %}
+
+{% block content %}
+{% for worker in workers %}
+<div class="well book">
+  <div class="container-fluid">
+    <div class="col col-sm-12">
+      <div>
+        <a href="{% url 'profile' username=worker.username %}"> 
+          <span class="glyphicon glyphicon-user text-primary"></span>
+          {{ worker.get_name }}
+        </a>
+      </div> <!-- title div -->
+    </div>
+  </div>
+</div>
+{% endfor %}
+{% endblock %}

@@ -347,3 +347,20 @@ def verifySchool(request, userName):
     user.school_varified = True
     user.save()
     return HttpResponseRedirect(reverse("profile", kwargs={"username":userName}))
+
+
+
+@login_required()
+def list_all_workers(request):
+    config.refresh()
+    workers = ModUser.objects.filter(is_staff = True)
+    return render(
+        request,
+        'account/workers.html',
+        addGlobalContext(
+            {
+                'globals': config,
+                'date': datetime.date.today(),
+                'workers': workers
+                }
+            ))

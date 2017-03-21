@@ -13,4 +13,5 @@ urlpatterns = [
     url(r'^account/(?P<username>.+)/$', 'account.views.profile', name='profile'),
     url(r'^verifySchool/(?P<userName>.+)/$', 'account.views.verifySchool', name='verifySchool'),
     url(r'^renew/(?P<userName>.+)/$', 'account.views.renewUser', name='renewUser'),
+    url(r'^workers/$', 'account.views.list_all_workers', name='workers'),
         ]
